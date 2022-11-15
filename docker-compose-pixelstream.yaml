@@ -1,0 +1,26 @@
+version: '2'
+services:
+  runtime-pixel-streaming:
+    hostname: runtime-pixel-streaming
+    container_name: runtime-pixel-streaming
+    restart: always
+    image: adamrehn/ue4-runtime:20.04-cudagl11.4.2-virtualgl #ghcr.io/epicgames/unreal-engine:runtime-pixel-streaming
+    privileged: true
+    ipc: host
+    tty: true
+    working_dir: /workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [ gpu ]
+              count: 1
+
+#    entrypoint: ["/workspace/UnrealEngine-4.27/Engine/Extras/Containers/Examples/PixelStreaming/firstpersoncxx/dist/LinuxNoEditor/FirstPersonCxx.sh", "-opengl4","-RenderOffscreen", "-Windowed", "-ForceRes", "-ResX=1920", "-ResY=1080", "-PixelStreamingIP=127.0.0.1", "-PixelStreamingPort=8888"]
+    volumes:
+      - /home/sxkj/luoyulong/meta_be/UnrealEngine-4.27/Engine/Extras/Containers/Examples/PixelStreaming/firstpersoncxx/dist/LinuxNoEditor/:/workspace
+
+#    ports:
+#      - '20080:8080'
+

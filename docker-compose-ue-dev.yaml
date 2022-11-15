@@ -1,0 +1,16 @@
+version: '2'
+services:
+  ue-dev:
+    hostname: ue-dev
+    container_name: ue-dev
+    restart: always
+    image: registry.cn-hangzhou.aliyuncs.com/sxkj/ghcr.io.epicgames.unreal-engine:dev-4.27
+    privileged: true
+    ipc: host
+    tty: true
+    working_dir: /workspace
+    volumes:
+      - /home/sxkj/luoyulong/meta_be:/workspace
+#    ports:
+#      - '20080:8080'
+

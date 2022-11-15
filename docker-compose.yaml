@@ -1,0 +1,16 @@
+version: '2'
+services:
+  meta_be:
+    hostname: meta_be
+    container_name: meta_be
+    restart: always
+    image: registry.cn-hangzhou.aliyuncs.com/sxtest/datax-admin:latest
+    privileged: true
+    ipc: host
+    tty: true
+    working_dir: /workspace
+    volumes:
+      - /home/sxkj/luoyulong/meta_be:/workspace
+    ports:
+      - '20080:8080'
+
