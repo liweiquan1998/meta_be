@@ -1,6 +1,3 @@
-
-
-
 # Dependency
 def get_db():
     try:

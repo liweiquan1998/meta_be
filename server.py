@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from configs.database import Base, engine
+from app.models.database import Base, engine
 from app.routers.customer import router_customer
 from utils.sx_log import format_print
 

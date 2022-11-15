@@ -12,17 +12,14 @@ PWD = config.get('DATABASE', 'pwd')
 DB_NAME = config.get('DATABASE', 'DB_NAME')
 HOST = config.get('DATABASE', 'HOST')
 PORT = config.get('DATABASE', 'PORT')
-SSL_DISABLED = config.get('DATABASE', 'SSL_DISABLED')
 
-SQLALCHEMY_DATABASE_URL = f'mysql+mysqlconnector://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}?ssl_disabled={SSL_DISABLED}&charset=utf8&auth_plugin=mysql_native_password'
-engine = create_engine(
-    SQLALCHEMY_DATABASE_URL, pool_pre_ping=True
-)
+SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}"
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-
 Base = declarative_base()
+
 
 
 

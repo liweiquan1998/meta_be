@@ -9,6 +9,7 @@ class CustomerBase(BaseModel):
 class CustomerCreate(CustomerBase):
     password_hash: str
     username: str
+    auth_token: str
 
 
 class CustomerUpdate(CustomerBase):
