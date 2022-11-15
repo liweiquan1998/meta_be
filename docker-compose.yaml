@@ -2,7 +2,7 @@ version: '2'
 services:
   meta_be:
     hostname: meta_be
-    container_name: t_meta_be
+    container_name: meta_be
     restart: always
     image: SXKJ:32775/meta_be:dev
     privileged: true

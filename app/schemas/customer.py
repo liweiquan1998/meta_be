@@ -13,7 +13,6 @@ class CustomerCreate(CustomerBase):
 
 class CustomerUpdate(CustomerBase):
     password_hash: str
-    username: str
 
 
 class Customer(CustomerBase):
