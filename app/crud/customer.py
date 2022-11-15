@@ -3,10 +3,12 @@ from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-
+from utils.user import *
 
 def create_customer(db: Session, item: schemas.CustomerCreate):
     db_item = models.Customer(**item.dict(), **{"create_time": int(time.time()), "update_time": int(time.time()), "last_login": int(time.time())})
+    db_item.password_hash = get_password_hash(item.password_hash)
+    db_item.auth_token = create_access_token(item.auth_token)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

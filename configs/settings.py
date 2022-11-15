@@ -24,11 +24,11 @@ config = configparser.ConfigParser()
 
 if os.environ.get('APP_ENV', 'development') == 'development':
     print('open config from dev')
-    config.readfp(open('development.ini'))
+    config.read_file(open('development.ini'))
 elif os.environ.get('APP_ENV') == 'production':
-    config.readfp(open('production.ini'))
+    config.read_file(open('production.ini'))
 elif os.environ.get('APP_ENV') == 'idctest':
-    config.readfp(open('idctest.ini'))
+    config.read_file(open('idctest.ini'))
 
 print(f"get config of {os.environ.get('APP_ENV')}")
 print(config.get('DATABASE', 'host'))
