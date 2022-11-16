@@ -7,7 +7,7 @@ from utils import web_try, sxtimeit
 
 router_customer = APIRouter(
     prefix="/customer",
-    tags=["customer-顾客管理"],
+    tags=["customer-商户管理"],
 )
 
 

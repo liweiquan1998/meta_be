@@ -2,12 +2,13 @@ from pydantic import BaseModel
 from faker import Faker
 faker = Faker(locale='zh_CN')
 
-class CustomerBase(BaseModel):
+class UserBase(BaseModel):
     tel_phone: str
     email_address: str
 
 
-class CustomerCreate(CustomerBase):
+
+class UserCreate(UserBase):
     username: str
     password_hash: str
 
@@ -20,11 +21,11 @@ class CustomerCreate(CustomerBase):
                 "email_address": faker.email()}}
 
 
-class CustomerUpdate(CustomerBase):
+class UserUpdate(UserBase):
     password_hash: str
 
 
-class Customer(CustomerBase):
+class User(UserBase):
     id: int
     username: str
     password_hash: str
@@ -32,6 +33,7 @@ class Customer(CustomerBase):
     create_time: int
     update_time: int
     last_login: int
+    grope_id: int
 
     class Config:
         orm_mode = True
