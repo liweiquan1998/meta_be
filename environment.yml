@@ -1,0 +1,50 @@
+name: py38
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/ # Anocanda清华镜像
+  - defaults
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+dependencies:
+  - python=3.8
+  - ipython
+  - sasl=0.3.1
+  - pip
+  - psycopg2
+  - pip:
+      - cmake
+      - opencv-python
+      - cython
+      - fastapi
+      - uvicorn
+      - pytest
+      - jinja2
+      - aiofiles
+      - python-multipart
+      - requests
+      - gunicorn
+      - fastapi-pagination==0.9.3
+      - pymysql==1.0.2
+      - pylint==2.5.3
+      - sqlfluff==1.3.1
+      - PyHive==0.6.5
+      - pure-sasl==0.6.2
+      - thrift==0.16.0
+      - thrift-sasl==0.4.3
+      - mysql-connector==2.2.9
+      - mysql-connector-python==8.0.29
+      - SQLAlchemy==1.4.9
+      - numpy
+      - pandas
+      - minio==5.0.1
+      - Pillow==9.1.1
+      - croniter==1.3.7
+      - uvloop
+      - kubernetes
+      - httptools
+      - apscheduler
+      - python-jose[cryptography]
+      - passlib[bcrypt]
+      - python-multipart
+      - faker
+      - python-magic
+      - -i https://mirror.baidu.com/pypi/simple
+prefix: /opt/conda/envs/py38
