@@ -4,7 +4,7 @@ services:
     hostname: meta_be
     container_name: meta_be
     restart: always
-    image: SXKJ:32775/meta_be:dev
+    image: SXKJ:32775/meta_be:latest
     privileged: true
     ipc: host
     tty: true
