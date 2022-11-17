@@ -7,7 +7,8 @@ from app.routers.admin import router_admin
 from app.routers.product import router_product
 from app.routers.sku import router_sku
 from app.routers.scene import router_scene
-
+from app.routers.order import router_order
+from app.routers.logistics import router_logistics
 from utils.sx_log import format_print
 
 format_print()
@@ -30,6 +31,8 @@ app.include_router(router_admin)
 app.include_router(router_product)
 app.include_router(router_sku)
 app.include_router(router_scene)
+app.include_router(router_order)
+app.include_router(router_logistics)
 
 
 # Get 健康检查

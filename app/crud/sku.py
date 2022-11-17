@@ -36,7 +36,7 @@ def get_skus(db: Session):
 def delete_sku(db: Session, item_id: int):
     item = get_sku_once(item_id=item_id, db=db)
     if not item:
-        raise Exception(f"delete failed, customer {item_id} not found")
+        raise Exception(f"delete failed, sku {item_id} not found")
     db.delete(item)
     db.commit()
     db.flush()

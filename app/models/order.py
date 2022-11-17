@@ -16,17 +16,23 @@ class Order(BaseModel):
     close_time = Column(Integer,comment='结束时间')
     pay_count = Column(Float,comment='支付金额')
     except_id = Column(Integer,comment='退货id')
-    business_id = Column(Integer,comment='商家ID')
+    business_id = Column(Integer,comment='商家ID',index=True)
     customer_id = Column(Integer,comment='买家ID')
     receiver_phone = Column(String(12),comment='收货电话')
     deliver_address = Column(VARCHAR(150),comment='发货地址')
     logistic_id = Column(Integer,comment='物流商id')
     logistic_name = Column(VARCHAR(15),comment='物流商名称')
     back_reason = Column(VARCHAR(400),comment='退款原因')
-    logistic_order_id = Column(Integer,comment='物流商快递物流ID')
+    logistic_order_id = Column(VARCHAR(30),comment='物流商快递物流ID')
     receiver_address = Column(VARCHAR(300),comment='收货地址')
     receiver_name = Column(VARCHAR(30),comment='收货人姓名')
 
+    @classmethod
+    def get_status_define(cls):
+        return {
+            0: "待付款", 1:"待发货", 2: "已发货", 3: "已完成", 4: "已关闭",
+            -1: "申请退货", -2: "同意退货", -3:"退货成功",-4: "退款成功"
+        }
 
 
 

@@ -6,6 +6,9 @@ import time
 
 def create_product(db: Session, item: schemas.ProductCreate):
     db_item = models.Product(**item.dict())
+    business = db.query(models.User).filter(models.User.id == db_item.business_id).first()
+    if not business:
+        raise Exception(422,'商品绑定的商户Id不存在')
     db_item.create_time = time.time()
     db.add(db_item)
     db.commit()
@@ -30,7 +33,7 @@ def get_products(db: Session):
 def delete_product(db: Session, item_id: int):
     item = get_product_once(item_id=item_id, db=db)
     if not item:
-        raise Exception(f"delete failed, customer {item_id} not found")
+        raise Exception(f"delete failed, product {item_id} not found")
     db.delete(item)
     db.commit()
     db.flush()
