@@ -15,7 +15,7 @@ router_product = APIRouter(
 @router_product.get("/")
 @web_try()
 @sxtimeit
-def get_customers(params: Params = Depends(), db: Session = Depends(get_db)):
+def get_product(params: Params = Depends(), db: Session = Depends(get_db)):
     return paginate(crud.get_products(db), params)
 
 
@@ -29,17 +29,17 @@ def get_product_once(item_id: int, db: Session = Depends(get_db)):
 @router_product.put("/{item_id}")
 @web_try()
 @sxtimeit
-def update_customer(item_id: int, update_item: schemas.ProductUpdate, db: Session = Depends(get_db)):
+def update_product(item_id: int, update_item: schemas.ProductUpdate, db: Session = Depends(get_db)):
     return crud.update_product(db=db,item_id=item_id,update_item=update_item)
 
 @router_product.delete("/{item_id}")
 @web_try()
 @sxtimeit
-def update_customer(item_id: int, db: Session = Depends(get_db)):
+def delete_product(item_id: int, db: Session = Depends(get_db)):
     return crud.delete_product(db=db,item_id=item_id)
 
 @router_product.post("/")
 @web_try()
 @sxtimeit
-def add_customer(item: schemas.ProductCreate, db: Session = Depends(get_db)):
+def add_product(item: schemas.ProductCreate, db: Session = Depends(get_db)):
     return crud.create_product(db=db, item=item)

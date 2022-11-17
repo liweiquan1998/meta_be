@@ -8,7 +8,7 @@ import time
 
 router_sku = APIRouter(
     prefix="/sku",
-    tags=["sku-商品管理"],
+    tags=["sku-库存管理"],
 )
 
 
@@ -36,7 +36,7 @@ def update_sku(item_id: int, update_item: schemas.SkuUpdate, db: Session = Depen
 @router_sku.delete("/{item_id}")
 @web_try()
 @sxtimeit
-def update_sku(item_id: int, db: Session = Depends(get_db)):
+def delete_sku(item_id: int, db: Session = Depends(get_db)):
     return crud.delete_sku(db=db,item_id=item_id)
 
 @router_sku.post("/")
@@ -44,5 +44,6 @@ def update_sku(item_id: int, db: Session = Depends(get_db)):
 @sxtimeit
 def add_sku(item: schemas.SkuCreate, db: Session = Depends(get_db)):
     if item.product_id not in [i.id for i in product.get_products(db)]:
-        raise Exception(422,"This sku doesn't match any product!")
+        raise Exception(422,"添加失败，要绑定的货物不存在")
     return crud.create_sku(db=db, item=item)
+
