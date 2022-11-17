@@ -6,4 +6,4 @@ import cv2
 import numpy as np
 import requests
 
-url = 'http://localhost:8080/user'
+url = 'http://192.168.199.27:50003/user'

@@ -28,7 +28,7 @@ def web_try(exception_ret=None):
             else:
                 error_code = 400
             print('--------------------------------')
-            print ('Get Exception in web try :( \n{}\n'.format(msg))
+            print('Get Exception in web try :( \n{}\n'.format(msg))
             print('--------------------------------')
             if callable(exception_ret):
                 ret = exception_ret()

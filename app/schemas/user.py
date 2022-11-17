@@ -1,41 +1,61 @@
+from typing import Union
+
 from pydantic import BaseModel
 from faker import Faker
+
 faker = Faker(locale='zh_CN')
 
-class UserBase(BaseModel):
-    tel_phone: str
-    email_address: str
 
+class UserBase(BaseModel):
+    storename: str
 
 
 class UserCreate(UserBase):
     username: str
-    password_hash: str
+    password: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "storename": f"{faker.company_prefix()}元宇宙旗舰店",
+                "username": faker.name(),
+                "password": faker.password()}}
+
+
+class UserUpdate(UserBase):
+    username: str
+    password: str
+    status: int
+
+
+class UserGet(UserBase):
+    storename: Union[str, None] = None
+    create_time: Union[str, None] = None
+    last_login: Union[str, None] = None
+    status: Union[int, None] = None
+
+
+class UserLogin(BaseModel):
+    username: str
+    password: str
 
     class Config:
         schema_extra = {
             "example": {
                 "username": faker.name(),
-                "password_hash": faker.password(),
-                "tel_phone": faker.phone_number(),
-                "email_address": faker.email()}}
-
-
-class UserUpdate(UserBase):
-    password_hash: str
+                "password": faker.password()}}
 
 
 class User(UserBase):
     id: int
+    storename: str
+    status: int
     username: str
-    password_hash: str
+    password: str
     auth_token: str
     create_time: int
     update_time: int
     last_login: int
-    grope_id: int
 
     class Config:
         orm_mode = True
-
-

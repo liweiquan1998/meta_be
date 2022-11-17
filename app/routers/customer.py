@@ -7,7 +7,7 @@ from utils import web_try, sxtimeit
 
 router_customer = APIRouter(
     prefix="/customer",
-    tags=["customer-商户管理"],
+    tags=["customer-用户管理"],
 )
 
 
@@ -33,7 +33,7 @@ def update_customer(item_id: int, update_item: schemas.CustomerUpdate, db: Sessi
     return crud.update_customer(db=db,item_id=item_id,update_item=update_item)
 
 
-@router_customer.post("/")
+@router_customer.post("/create")
 @web_try()
 @sxtimeit
 def add_customer(item: schemas.CustomerCreate, db: Session = Depends(get_db)):
