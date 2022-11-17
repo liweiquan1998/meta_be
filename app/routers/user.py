@@ -32,8 +32,9 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
 @router_user.delete("/delete/{item_id}", summary="删除商户")
 @web_try()
 @sxtimeit
-def delete_user(item_id: int, db: Session = Depends(get_db)):
-    return crud.delete_user(item_id=item_id, db=db, )
+def delete_user(item_id: int, db: Session = Depends(get_db),):
+                # user=Depends(check_admin)):
+    return crud.delete_user(item_id=item_id, db=db)
 
 
 @router_user.put("/{item_id}", summary="更新商户信息")
@@ -47,11 +48,13 @@ def update_user(item_id: int, update_item: schemas.UserUpdate, db: Session = Dep
 @web_try()
 @sxtimeit
 def get_users(get_item: schemas.UserGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db),):
+              # user=Depends(check_admin)):
     return paginate(crud.get_users(db, get_item), params)
 
 
 @router_user.get("/getOnce/{item_id}", summary="获取商户信息")
 @web_try()
 @sxtimeit
-def get_user_once(item_id: int, db: Session = Depends(get_db)):
+def get_user_once(item_id: int, db: Session = Depends(get_db),):
+                  # user=Depends(check_admin)):
     return crud.get_user_once(db=db, item_id=item_id)

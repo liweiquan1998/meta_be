@@ -12,27 +12,27 @@ router_customer = APIRouter(
 
 
 
-@router_customer.get("/")
+@router_customer.get("/", summary="获取用户列表")
 @web_try()
 @sxtimeit
-def get_customers(params: Params = Depends(), db: Session = Depends(get_db)):
-    return paginate(crud.get_customers(db), params)
+def get_customers(get_item: schemas.CustomerGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db)):
+    return paginate(crud.get_customers(db, get_item), params)
 
-
-@router_customer.get("/getOnce/{item_id}")
-@web_try()
-@sxtimeit
-def get_customer_once(item_id: int, db: Session = Depends(get_db)):
-    return crud.get_customer_once(db=db, item_id=item_id)
-
-
-@router_customer.put("/{item_id}")
-@web_try()
-@sxtimeit
-def update_customer(item_id: int, update_item: schemas.CustomerUpdate, db: Session = Depends(get_db)):
-    return crud.update_customer(db=db,item_id=item_id,update_item=update_item)
-
-
+#
+# @router_customer.get("/getOnce/{item_id}")
+# @web_try()
+# @sxtimeit
+# def get_customer_once(item_id: int, db: Session = Depends(get_db)):
+#     return crud.get_customer_once(db=db, item_id=item_id)
+#
+#
+# @router_customer.put("/{item_id}")
+# @web_try()
+# @sxtimeit
+# def update_customer(item_id: int, update_item: schemas.CustomerUpdate, db: Session = Depends(get_db)):
+#     return crud.update_customer(db=db,item_id=item_id,update_item=update_item)
+#
+#
 @router_customer.post("/create")
 @web_try()
 @sxtimeit

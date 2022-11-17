@@ -1,3 +1,5 @@
+from typing import Union
+
 from pydantic import BaseModel
 from faker import Faker
 
@@ -8,40 +10,26 @@ class CustomerBase(BaseModel):
     tel_phone: str
     email_address: str
 
-
 class CustomerCreate(CustomerBase):
     username: str
-    password_hash: str
+    password: str
 
     class Config:
         schema_extra = {
             "example": {
                 "username": faker.name(),
-                "password_hash": faker.password(),
+                "password": faker.password(),
                 "tel_phone": faker.phone_number(),
                 "email_address": faker.email()}}
 
-
-class CustomerLogin(BaseModel):
-    username: str
-    password_hash: str
-
-    class Config:
-        schema_extra = {
-            "example": {
-                "username": faker.name(),
-                "password_hash": faker.password()}}
-
-
-class CustomerUpdate(CustomerBase):
-    password_hash: str
+class CustomerGet(BaseModel):
+    username: Union[str, None] = None
+    last_login: Union[int, None] = None
 
 
 class Customer(CustomerBase):
     id: int
     username: str
-    password_hash: str
-    auth_token: str
     create_time: int
     update_time: int
     last_login: int
