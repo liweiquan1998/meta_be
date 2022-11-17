@@ -13,13 +13,11 @@ class ProductBase(BaseModel):
 
 class ProductCreate(ProductBase):
     business_id: int
-    create_time: int
 
     class Config:
         schema_extra = {
             "example": {
                 "business_id": faker.pyint(),
-                "create_time": faker.unix_time(start_datetime="-7d",end_datetime="now"),
                 "unit": "件",
                 "name": faker.email(),
                 "meta_obj_id": faker.pyint(),
@@ -28,7 +26,7 @@ class ProductCreate(ProductBase):
 
 
 class ProductUpdate(ProductBase):
-    last_update: int
+    pass
 
 
 class Product(ProductBase):

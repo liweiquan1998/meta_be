@@ -15,6 +15,10 @@ class Sku(BaseModel):
     status = Column(Integer,comment='状态')
     stock = Column(Integer,comment='库存量')
 
+    def get_status_define(self):
+        res = {1:{"status":"有货"},0:{"status":"缺货"}}
+        return res
+
 if __name__ == '__main__':
     ...
     # s = Sku()

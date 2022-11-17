@@ -4,6 +4,7 @@ from app.models.database import Base, engine
 from app.routers.customer import router_customer
 from app.routers.user import router_user
 from app.routers.product import router_product
+from app.routers.sku import router_sku
 
 from utils.sx_log import format_print
 
@@ -24,6 +25,7 @@ print('server init finish:)!!!')
 app.include_router(router_customer)
 app.include_router(router_user)
 app.include_router(router_product)
+app.include_router(router_sku)
 
 
 

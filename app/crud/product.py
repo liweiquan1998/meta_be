@@ -2,10 +2,11 @@ from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-
+import time
 
 def create_product(db: Session, item: schemas.ProductCreate):
     db_item = models.Product(**item.dict())
+    db_item.create_time = time.time()
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -13,7 +14,8 @@ def create_product(db: Session, item: schemas.ProductCreate):
 
 
 def update_product(db: Session, item_id: int, update_item: schemas.ProductUpdate):
-    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Product)
+    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Product,
+                        extra=('last_update', time.time()))
 
 def get_product_once(db: Session, item_id: int):
     res: models.Product = db.query(models.Product).filter(models.Product.id == item_id).first()
