@@ -3,16 +3,46 @@ from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-from utils.user import *
+from app.common.validation import *
+
 
 def create_user(db: Session, item: schemas.UserCreate):
-    db_item = models.User(**item.dict(), **{"create_time": int(time.time()), "update_time": int(time.time()), "last_login": int(time.time())})
-    db_item.password_hash = get_password_hash(item.password_hash)
-    db_item.auth_token = create_access_token(item.password_hash)
+    # 重复用户名检查
+    res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
+    if res:
+        raise Exception(f"用户 {item.username} 已存在")
+    # 重复店铺名检查
+    res: models.User = db.query(models.User).filter(models.User.storename == item.storename).first()
+    if res:
+        raise Exception(f"店铺名 {item.storename} 已存在")
+    # 创建
+    password = item.password
+    del item.password
+    db_item = models.User(**item.dict(), **{'password_hash': get_password_hash(password),
+                                            "create_time": int(time.time()),
+                                            "update_time": int(time.time()),
+                                            "last_login": int(time.time()),
+                                            "status": 0})
+    db_item.auth_token = create_access_token(db_item.id)
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
     return db_item
+
+
+def login_user(db: Session, item: schemas.UserLogin):
+    res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
+    # 用户不存在
+    if not res:
+        raise Exception(404, f"用户 {item.username} 不存在")
+    # 密码错误
+    if not verify_password(item.password, res.password_hash):
+        raise Exception(401, f"用户密码错误")
+    res.auth_token = create_access_token(res.id)
+    res.last_login = int(time.time())
+    db.commit()
+    db.flush()
+    return TokenSchemas(**{"access_token": res.auth_token, "token_type": "bearer"})
 
 
 def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):
@@ -24,16 +54,24 @@ def get_user_once(db: Session, item_id: int):
     return res
 
 
-def get_users(db: Session):
-    res: List[models.User] = db.query(models.User).all()
-    return res
+def get_users(db: Session, item: schemas.UserGet):
+    db_query = db.query(models.User)
+    if item.storename:
+        db_query = db_query.filter(models.User.storename.like(f"%{item.storename}%"))
+    if item.create_time:
+        db_query = db_query.filter(models.User.create_time == item.create_time)
+    if item.last_login:
+        db_query = db_query.filter(models.User.last_login == item.last_login)
+    if item.status:
+        db_query = db_query.filter(models.User.status == item.status)
+    return db_query.all()
 
 
 def delete_user(db: Session, item_id: int):
     item = get_user_once(item_id=item_id, db=db)
     if not item:
-        raise Exception(f"delete failed, user {item_id} not found")
+        raise Exception(404, f"删除失败, 用户 {item_id} 不存在")
     db.delete(item)
     db.commit()
     db.flush()
-
+    return f'用户 {item_id} 删除成功'

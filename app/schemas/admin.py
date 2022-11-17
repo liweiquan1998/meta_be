@@ -1,15 +1,13 @@
 from pydantic import BaseModel
 from faker import Faker
-
 faker = Faker(locale='zh_CN')
 
-
-class CustomerBase(BaseModel):
+class AdminBase(BaseModel):
     tel_phone: str
     email_address: str
 
 
-class CustomerCreate(CustomerBase):
+class AdminCreate(AdminBase):
     username: str
     password_hash: str
 
@@ -21,23 +19,10 @@ class CustomerCreate(CustomerBase):
                 "tel_phone": faker.phone_number(),
                 "email_address": faker.email()}}
 
-
-class CustomerLogin(BaseModel):
-    username: str
+class AdminUpdate(AdminBase):
     password_hash: str
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "username": faker.name(),
-                "password_hash": faker.password()}}
-
-
-class CustomerUpdate(CustomerBase):
-    password_hash: str
-
-
-class Customer(CustomerBase):
+class Admin(AdminBase):
     id: int
     username: str
     password_hash: str
