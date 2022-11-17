@@ -32,6 +32,9 @@ class ExceptOrderUpdate(ExceptOrderBase):
     recv_time: int
     close_time: int
 
+class BusinessExceptOrderUpdate(BaseModel):
+    remark: str
+    status: int
 
 class ExceptOrder(ExceptOrderBase):
     back_reason: str

@@ -8,6 +8,7 @@ from app.routers.product import router_product
 from app.routers.sku import router_sku
 from app.routers.order import router_order
 from app.routers.logistics import router_logistics
+from app.routers.except_order import router_except_order
 from utils.sx_log import format_print
 
 format_print()
@@ -31,6 +32,7 @@ app.include_router(router_product)
 app.include_router(router_sku)
 app.include_router(router_order)
 app.include_router(router_logistics)
+app.include_router(router_except_order)
 
 
 
