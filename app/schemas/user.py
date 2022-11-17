@@ -30,8 +30,8 @@ class UserUpdate(UserBase):
 
 class UserGet(UserBase):
     storename: Union[str, None] = None
-    create_time: Union[str, None] = None
-    last_login: Union[str, None] = None
+    create_time: Union[int, None] = None
+    last_login: Union[int, None] = None
     status: Union[int, None] = None
 
 

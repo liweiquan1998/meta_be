@@ -7,6 +7,7 @@ from app.common.validation import *
 
 
 def create_user(db: Session, item: schemas.UserCreate):
+    # sourcery skip: use-named-expression
     # 重复用户名检查
     res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
     if res:
@@ -23,7 +24,7 @@ def create_user(db: Session, item: schemas.UserCreate):
                                             "update_time": int(time.time()),
                                             "last_login": int(time.time()),
                                             "status": 0})
-    db_item.auth_token = create_access_token(db_item.id)
+    db_item.auth_token = create_access_token(db_item.id, 'user')
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -37,8 +38,9 @@ def login_user(db: Session, item: schemas.UserLogin):
         raise Exception(404, f"用户 {item.username} 不存在")
     # 密码错误
     if not verify_password(item.password, res.password_hash):
-        raise Exception(401, f"用户密码错误")
-    res.auth_token = create_access_token(res.id)
+        raise Exception(401, "用户密码错误")
+    # 更新登录时间
+    res.auth_token = create_access_token(res.id, 'user')
     res.last_login = int(time.time())
     db.commit()
     db.flush()
@@ -53,15 +55,21 @@ def get_user_once(db: Session, item_id: int):
     res: models.User = db.query(models.User).filter(models.User.id == item_id).first()
     return res
 
+def get_user_once_by_username(db: Session, username: str):
+    res: models.User = db.query(models.User).filter(models.User.username == username).first()
+    return res
+
 
 def get_users(db: Session, item: schemas.UserGet):
     db_query = db.query(models.User)
     if item.storename:
         db_query = db_query.filter(models.User.storename.like(f"%{item.storename}%"))
-    if item.create_time:
-        db_query = db_query.filter(models.User.create_time == item.create_time)
-    if item.last_login:
-        db_query = db_query.filter(models.User.last_login == item.last_login)
+    if item.create_time is not None and item.create_time != 0:
+        db_query = db_query.filter(models.User.create_time <= item.create_time + 86400)
+        db_query = db_query.filter(models.User.create_time >= item.create_time)
+    if item.last_login is not None and item.last_login != 0:
+        db_query = db_query.filter(models.User.last_login <= item.last_login + 86400)
+        db_query = db_query.filter(models.User.last_login >= item.last_login)
     if item.status:
         db_query = db_query.filter(models.User.status == item.status)
     return db_query.all()
