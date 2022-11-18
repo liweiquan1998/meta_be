@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.database import Base, engine
 from app.routers.customer import router_customer
+from app.routers.file import router_file
 from app.routers.user import router_user
 from app.routers.admin import router_admin
 from app.routers.product import router_product
@@ -37,6 +38,7 @@ app.include_router(router_scene_base)
 app.include_router(router_order)
 app.include_router(router_logistics)
 app.include_router(router_except_order)
+app.include_router(router_file)
 
 
 # Get 健康检查

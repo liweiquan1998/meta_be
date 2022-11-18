@@ -14,4 +14,5 @@ services:
       - ./be.conf:/etc/supervisor/conf.d/be.conf
     ports:
       - '20080:8080'
+      - '22110:22'
 

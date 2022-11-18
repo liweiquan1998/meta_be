@@ -76,7 +76,7 @@ redirect_stderr=true\n\
 stdout_logfile=/var/log/be.log\n\
 stdout_logfile_maxbytes=50MB\n\
 environment=PYTHONUNBUFFERED=1, PYTHONIOENCODING=utf-8\n\
-" > /etc/supervisor/conf.d/be.conf \
+" > /etc/supervisor/conf.d/be.conf
 
 EXPOSE 8080
 
@@ -98,5 +98,5 @@ redirect_stderr = true\n\
 " > /etc/supervisor/conf.d/sshd.conf
 
 
-FROM builder3 as builder4
-EXPOSE 22
+#FROM builder3 as builder4
+#RUN   && rpc.statd  && mount -t nfs 192.168.199.31:/volume1/k8s_pv /mnt/nfs
