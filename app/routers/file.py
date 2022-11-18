@@ -22,8 +22,8 @@ router_file = APIRouter(
 def upload_file(file: UploadFile = File(...)):
     return crud.upload_file(file)
 
+
 @router_file.get("/getNfsFile/{uri:path}", summary="nfs获取文件")
 @sxtimeit
 def get_nfs_file(uri):
     return crud.get_nfs_file(uri)
-
