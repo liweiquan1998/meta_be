@@ -97,4 +97,6 @@ autostart=True\n\
 redirect_stderr = true\n\
 " > /etc/supervisor/conf.d/sshd.conf
 
+
+FROM builder3 as builder4
 EXPOSE 22

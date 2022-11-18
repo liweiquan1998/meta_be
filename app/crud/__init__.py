@@ -4,4 +4,5 @@ from app.crud.admin import *
 from app.crud.product import *
 from app.crud.sku import *
 from app.crud.scene import *
+from app.crud.scene_base import *
 from app.crud.order import *
