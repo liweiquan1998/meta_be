@@ -20,17 +20,17 @@ router_order = APIRouter(
 def get_orders(params: Params = Depends(), db: Session = Depends(get_db)):
     return paginate(crud.get_orders(db), params)
 
-@router_order.get("/businesses/{business_id}")
+@router_order.get("/businesses")
 @web_try()
 @sxtimeit
-def get_business_orders(business_id:int,params: Params = Depends(), db: Session = Depends(get_db)):
-    return paginate(crud.get_business_orders(db,business_id), params)
+def get_business_orders(params: schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db)):
+    return paginate(crud.get_business_orders(db,params.business_id), params)
 
-@router_order.get("/customer/{customer_id}")
+@router_order.get("/customer")
 @web_try()
 @sxtimeit
-def get_customer_orders(customer_id:int,params: Params = Depends(), db: Session = Depends(get_db)):
-    return paginate(crud.get_customer_orders(db,customer_id), params)
+def get_customer_orders(params: schemas.CustomerPageParams = Depends(),db: Session = Depends(get_db)):
+    return paginate(crud.get_customer_orders(db,params.customer_id), params)
 
 
 @router_order.get("/getOnce/{item_id}")

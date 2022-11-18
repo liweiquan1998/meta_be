@@ -30,11 +30,11 @@ def get_orders(db: Session):
     return res
 
 def get_business_orders(db: Session, business_id:int):
-    res: List[models.Order] = db.query(models.Order.business_id == business_id).all()
+    res: List[models.Order] = db.query(models.Order).filter(models.Order.business_id == business_id).all()
     return res
 
 def get_customer_orders(db: Session, customer_id:int):
-    res: List[models.Order] = db.query(models.Order.customer_id == customer_id).all()
+    res: List[models.Order] = db.query(models.Order).filter(models.Order.customer_id == customer_id).all()
     return res
 
 def delete_order(db: Session, item_id: int):

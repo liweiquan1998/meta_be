@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from faker import Faker
 
 faker = Faker(locale='zh_CN')
-import random as rd
 
 
 class ExceptOrderBase(BaseModel):

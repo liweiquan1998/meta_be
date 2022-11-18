@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from faker import Faker
+from fastapi_pagination import Params
 
 faker = Faker(locale='zh_CN')
 import random as rd
@@ -56,6 +57,8 @@ class OrderUpdate(OrderBase):
     back_reason: str
 
 
+
+
 class Order(OrderBase):
     logistic_id: int
     logistic_name: str
@@ -69,3 +72,8 @@ class Order(OrderBase):
     class Config:
         orm_mode = True
 
+class BusinessPageParams(Params):
+    business_id: int
+
+class CustomerPageParams(Params):
+    customer_id: int

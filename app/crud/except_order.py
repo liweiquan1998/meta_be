@@ -39,11 +39,11 @@ def get_except_orders(db: Session):
     return res
 
 def get_business_except_orders(db: Session,business_id:int):
-    res: List[models.ExceptOrder] = db.query(models.ExceptOrder.business_id == business_id).all()
+    res: List[models.ExceptOrder] = db.query(models.ExceptOrder).filter(models.ExceptOrder.business_id == business_id).all()
     return res
 
 def get_customer_except_orders(db: Session,customer_id:int):
-    res: List[models.ExceptOrder] = db.query(models.ExceptOrder.customer_id == customer_id).all()
+    res: List[models.ExceptOrder] = db.query(models.ExceptOrder).filter(models.ExceptOrder.customer_id == customer_id).all()
     return res
 
 def delete_except_order(db: Session, item_id: int):
