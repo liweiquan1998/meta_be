@@ -14,6 +14,8 @@ def create_except_order(db: Session,order_id:int, item: schemas.ExceptOrderCreat
     order_item = order.get_order_once(db,order_id)
     if not order_item:
         raise Exception(404,'创建服务失败，找不到原订单')
+    if order_item.except_id:
+        raise Exception(422,'已经创建过异常服务，不可重复')
     db_item.order_id = order_item.id
     db.add(db_item)
     db.commit()
@@ -37,17 +39,28 @@ def get_except_orders(db: Session):
     return res
 
 def get_business_except_orders(db: Session,business_id:int):
-    res: List[models.ExceptOrder] = db.query(models.ExceptOrder.business_id == business_id).all()
+    res: List[models.ExceptOrder] = db.query(models.ExceptOrder).filter(models.ExceptOrder.business_id == business_id).all()
     return res
 
 def get_customer_except_orders(db: Session,customer_id:int):
-    res: List[models.ExceptOrder] = db.query(models.ExceptOrder.customer_id == customer_id).all()
+    res: List[models.ExceptOrder] = db.query(models.ExceptOrder).filter(models.ExceptOrder.customer_id == customer_id).all()
     return res
 
-def delete_order(db: Session, item_id: int):
+def delete_except_order(db: Session, item_id: int):
     item = get_except_order_once(item_id=item_id, db=db)
     if not item:
         raise Exception(f"delete failed, order {item_id} not found")
     db.delete(item)
     db.commit()
     db.flush()
+
+def business_handle_except_order(db:Session,item_id:int,update_item:schemas.BusinessExceptOrderUpdate):
+    item = get_except_order_once(item_id=item_id, db=db)
+    if not item:
+        raise Exception(f"delete failed, order {item_id} not found")
+    if item.status != 0:
+        raise Exception(403,'退货已经确认或者拒绝，不可重复提交')
+    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.ExceptOrder)
+
+
+
