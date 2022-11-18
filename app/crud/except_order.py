@@ -33,6 +33,16 @@ def get_except_order_once(db: Session, item_id: int):
     res: models.ExceptOrder = db.query(models.ExceptOrder).filter(models.ExceptOrder.id == item_id).first()
     return res
 
+def get_except_order_once_(db: Session, item_id: int) -> dict:
+    res: models.ExceptOrder = db.query(models.ExceptOrder).filter(models.ExceptOrder.id == item_id).first()
+    if not res:
+        return {}
+    res_dict = res.to_dict()
+    ori_order = order.get_order_once(db, res.order_id)
+    if ori_order:
+        res_dict.update({'receiver_phone':ori_order.receiver_phone,
+                         'receiver_name':ori_order.receiver_name})
+    return res_dict
 
 def get_except_orders(db: Session):
     res: List[models.ExceptOrder] = db.query(models.ExceptOrder).all()

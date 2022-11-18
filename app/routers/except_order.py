@@ -37,7 +37,7 @@ def get_customer_except_orders(params: schemas.CustomerPageParams = Depends(),db
 @web_try()
 @sxtimeit
 def get_except_order_once(item_id: int, db: Session = Depends(get_db)):
-    return crud.get_except_order_once(db=db, item_id=item_id)
+    return crud.get_except_order_once_(db=db, item_id=item_id)
 
 
 @router_except_order.put("/{item_id}")
