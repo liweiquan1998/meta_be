@@ -1,8 +1,9 @@
-from testing.product.utils import *
-
 import unittest
 import requests
-from faker import Faker
+from testing.sku.utils import *
+from app.models.product import Product as Product_model
+from app.models.database import SessionLocal
+db = SessionLocal()
 
 def send_request(data):
     r = requests.post(f'{url}/', json=data)
@@ -12,13 +13,16 @@ def send_request(data):
 class TestIdCardOcr(unittest.TestCase):
 
     def test_test(self):
-        faker = Faker(locale='zh_CN')
-        example = {
-                "product_id": faker.pyint(),
-                "sku_attr": faker.pystr(),
-                "sku_name": faker.pystr(),
-                "price": faker.pyint(5,2000),
-                "stock" : faker.pyint(1,100),
-            }
-        r = send_request(example)
-        self.assertEqual(r['code'], 200, 'status should be 200')
+        for i in range(300):
+            item = faker.sku()
+            item.name += db.query(Product_model).filter(Product_model.id==item.product_id).first().name
+            example = {
+                    "product_id": item.product_id,
+                    "sku_attr": item.attr,
+                    "sku_name": item.name,
+                    "price": item.price,
+                    "stock": item.stock,
+                }
+            print(example)
+            r = send_request(example)
+            self.assertEqual(r['code'], 200, 'status should be 200')

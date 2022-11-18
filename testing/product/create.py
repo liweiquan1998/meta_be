@@ -2,24 +2,25 @@ from testing.product.utils import *
 
 import unittest
 import requests
-from faker import Faker
+from testing.product.utils import faker
+
 
 def send_request(data):
     r = requests.post(f'{url}/', json=data)
     print(r.json())
     return r.json()
 
-class TestIdCardOcr(unittest.TestCase):
+class TestProduct(unittest.TestCase):
 
     def test_test(self):
-        faker = Faker(locale='zh_CN')
-        example = {
-                "business_id": faker.pyint(),
-                "create_time": faker.unix_time(start_datetime="-7d",end_datetime="now"),
-                "unit": "件",
-                "name": faker.license_plate(),
-                "meta_obj_id": faker.pyint(),
-                "desc" : faker.pystr()
-            }
-        r = send_request(example)
-        self.assertEqual(r['code'], 200, 'status should be 200')
+        for i in range(120):
+            product = faker.product()
+            example = {
+                    "business_id": faker.pyint(50,100),
+                    "unit": product.item,
+                    "name": product.name,
+                    "desc" : product.desc
+                }
+            r = send_request(example)
+            self.assertEqual(r['code'], 200, 'status should be 200')
+
