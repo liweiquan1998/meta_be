@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
 
+
 def create_customer(db: Session, item: schemas.CustomerCreate):
     # 重复用户名检查
     res: models.Customer = db.query(models.Customer).filter(models.Customer.username == item.username).first()
@@ -25,13 +26,10 @@ def create_customer(db: Session, item: schemas.CustomerCreate):
     return db_item
 
 
-# def update_customer(db: Session, item_id: int, update_item: schemas.CustomerUpdate):
-#     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Customer)
-
-
 def get_customer_once(db: Session, item_id: int):
     res: models.Customer = db.query(models.Customer).filter(models.Customer.id == item_id).first()
     return res
+
 
 def get_customer_once_by_username(db: Session, username: str):
     res: models.Customer = db.query(models.Customer).filter(models.Customer.username == username).first()
@@ -55,4 +53,3 @@ def delete_customer(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-

@@ -35,7 +35,7 @@ def get_scenes(db: Session, item: schemas.SceneGet):
         db_query = db_query.filter(models.Scene.name.like(f"%{item.name}%"))
     if item.tag:
         db_query = db_query.filter(models.Scene.tag == item.tag)
-    return db_query.all()
+    return db_query.order_by(models.Scene.id).all()
 
 
 def delete_scene(db: Session, item_id: int):

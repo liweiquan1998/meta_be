@@ -59,6 +59,7 @@ RUN conda init zsh
 RUN conda install mamba -n base -c conda-forge
 RUN ln /opt/conda/bin/mamba /usr/local/bin/mamba && mamba init zsh
 
+
 FROM builder1 as builder2
 
 ENV WORKDIR /workspace
@@ -97,6 +98,6 @@ autostart=True\n\
 redirect_stderr = true\n\
 " > /etc/supervisor/conf.d/sshd.conf
 
-
-#FROM builder3 as builder4
-#RUN   && rpc.statd  && mount -t nfs 192.168.199.31:/volume1/k8s_pv /mnt/nfs
+FROM builder3 as builder4
+ADD . /workspace
+RUN mkdir "/mnt/nfs" && mount -t nfs 192.168.199.31:/volume1/k8s_pv /mnt/nfs
