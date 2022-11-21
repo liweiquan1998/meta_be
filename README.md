@@ -63,7 +63,7 @@ supervisorctl tail -f be
 |remark|VARCHAR(400)|退款原因|
 |status|INTEGER|服务状态|
 
-###sku
+### sku
 | 名称   | 类型  | 备注  |
 |------|-----|-----|
 |id|INTEGER|id|
