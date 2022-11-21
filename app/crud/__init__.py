@@ -8,3 +8,4 @@ from app.crud.scene_base import *
 from app.crud.order import *
 from app.crud.except_order import *
 from app.crud.file import *
+from app.crud.meta_obj import *

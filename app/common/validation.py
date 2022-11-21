@@ -8,8 +8,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
-from app import get_db
-import app.crud as crud
+from app import get_db, models
 from configs.settings import config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -49,7 +48,7 @@ def create_access_token(subject: Union[str, Any], user_type: str, expires_delta:
     if expires_delta is not None:
         expires_delta = datetime.now(timezone.utc) + timedelta(seconds=expires_delta)
     else:
-        expires_delta = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expires_delta = datetime.now(timezone.utc) + timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
 
     to_encode = {"sub": str(subject), "exp": expires_delta}
     return jwt.encode(to_encode, JWT_SECRET_KEY[user_type], ALGORITHM)
@@ -70,7 +69,7 @@ def check_access_token(token: str, user_type: str):
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     username, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在
-    user = crud.get_user_once_by_username(db, username)
+    user = db.query(models.User).filter(models.User.username == username).first()
     if user is None:
         raise HTTPException(status_code=401, detail="商户不存在")
     return user
@@ -79,7 +78,7 @@ async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
 async def check_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     username, expire_time = check_access_token(token, 'admin')
     # 验证用户是否存在
-    user = crud.get_admin_once_by_username(db, username)
+    user = db.query(models.Admin).filter(models.Admin.username == username).first()
     if user is None:
         raise HTTPException(status_code=401, detail="超管不存在")
     return user
@@ -88,7 +87,7 @@ async def check_admin(token: str = Depends(oauth2_scheme), db: Session = Depends
 async def check_customer(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     username, expire_time = check_access_token(token, 'customer')
     # 验证用户是否存在
-    user = crud.get_customer_once_by_username(db, username)
+    user = db.query(models.Customer).filter(models.Customer.username == username).first()
     if user is None:
         raise HTTPException(status_code=401, detail="用户不存在")
     return user
