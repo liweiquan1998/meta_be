@@ -43,7 +43,11 @@ app.include_router(router_scene_base)
 app.include_router(router_order)
 app.include_router(router_logistics)
 app.include_router(router_except_order)
+app.include_router(router_meta_obj)
+app.include_router(router_meta_obj_tag)
+app.include_router(router_shelves)
 app.include_router(router_file)
+app.include_router(router_product_sku)
 
 
 # Get 健康检查
