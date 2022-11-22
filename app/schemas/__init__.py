@@ -8,3 +8,5 @@ from app.schemas.order import *
 from app.schemas.except_order import *
 from app.schemas.admin import *
 from app.schemas.meta_obj import *
+from app.schemas.meta_obj_tag import *
+from app.schemas.shelves import *

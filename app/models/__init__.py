@@ -9,3 +9,4 @@ from app.models.except_order import *
 from app.models.admin import *
 from app.models.meta_obj import *
 from app.models.meta_obj_tag import *
+from app.models.shelves import *

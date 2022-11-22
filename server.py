@@ -5,6 +5,7 @@ from app.routers.customer import router_customer
 from app.routers.file import router_file
 from app.routers.meta_obj import router_meta_obj
 from app.routers.meta_obj_tag import router_meta_obj_tag
+from app.routers.shelves import router_shelves
 from app.routers.user import router_user
 from app.routers.admin import router_admin
 from app.routers.product import router_product
@@ -43,9 +44,10 @@ app.include_router(router_except_order)
 app.include_router(router_file)
 app.include_router(router_meta_obj)
 app.include_router(router_meta_obj_tag)
+app.include_router(router_shelves)
 
 
 # Get 健康检查
-@app.get("/jpt/ping", description="健康检查")
+@app.get("/ping", description="健康检查")
 def ping():
     return "pong!!"
