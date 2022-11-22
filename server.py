@@ -12,6 +12,7 @@ from app.routers.scene_base import router_scene_base
 from app.routers.order import router_order
 from app.routers.logistics import router_logistics
 from app.routers.except_order import router_except_order
+from app.routers.product_sku import router_product_sku
 from utils.sx_log import format_print
 
 format_print()
@@ -39,6 +40,7 @@ app.include_router(router_order)
 app.include_router(router_logistics)
 app.include_router(router_except_order)
 app.include_router(router_file)
+app.include_router(router_product_sku)
 
 
 # Get 健康检查
