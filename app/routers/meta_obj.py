@@ -37,7 +37,7 @@ def add_meta_obj_by_model(item: schemas.MetaObjByModelCreate, db: Session = Depe
     return crud.create_meta_obj(db=db, item=item)
 
 
-@router_meta_obj.get("/getOnce/{item_id}", summary="获取单个元对象信息")
+@router_meta_obj.get("/{item_id}", summary="获取单个元对象信息")
 @web_try()
 @sxtimeit
 def get_meta_obj_once(item_id: int, db: Session = Depends(get_db), ):
