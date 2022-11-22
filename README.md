@@ -129,3 +129,12 @@ supervisorctl tail -f be
 |storename|VARCHAR(50)|店铺名称|
 |update_time|INTEGER|更新时间|
 |username|VARCHAR(255)|用户名|
+
+## 数据库配置
+| key   | value  |
+|------|-----|
+|host | 47.114.107.70|
+|port | 5432|
+|user | dbatest|
+|pwd | sxwldba|
+|db_name | dbatest|
