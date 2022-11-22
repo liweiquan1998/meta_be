@@ -38,3 +38,11 @@ class BaseModel(Base):
         db.commit()
         db.flush()
         db.refresh(self)
+
+    def set_field(self, data: Optional[dict] = None):
+        for key in self.__class__.__dict__.keys():
+            if not key.startswith('_') and key in data:
+                setattr(self, key, data[key])
+            if hasattr(self, 'update_time'):
+                setattr(self, 'update_time',time.time())
+

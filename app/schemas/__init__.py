@@ -10,3 +10,4 @@ from app.schemas.admin import *
 from app.schemas.meta_obj import *
 from app.schemas.meta_obj_tag import *
 from app.schemas.shelves import *
+from app.schemas.product_sku import *

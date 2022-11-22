@@ -2,7 +2,7 @@
 # @Author  : WanJinHong
 # @File  : product.py
 # @Email  : w1145253034@163.com
-from sqlalchemy import Column, Integer, String,VARCHAR
+from sqlalchemy import Column, Integer, String,VARCHAR,TEXT
 from app.models.database import BaseModel,Base
 
 class Product(BaseModel):
@@ -15,6 +15,7 @@ class Product(BaseModel):
     meta_obj_id = Column(Integer,comment='模型id')
     desc = Column(VARCHAR(150),comment='商品描述')
     unit = Column(VARCHAR(5),comment='单位名称')
+    remarks = Column(TEXT,comment='备注')
 
 if __name__ == '__main__':
     Base.metadata.create_all()

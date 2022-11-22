@@ -3,9 +3,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.models.database import Base, engine
 from app.routers.customer import router_customer
 from app.routers.file import router_file
-from app.routers.meta_obj import router_meta_obj
-from app.routers.meta_obj_tag import router_meta_obj_tag
-from app.routers.shelves import router_shelves
 from app.routers.user import router_user
 from app.routers.admin import router_admin
 from app.routers.product import router_product
@@ -15,7 +12,12 @@ from app.routers.scene_base import router_scene_base
 from app.routers.order import router_order
 from app.routers.logistics import router_logistics
 from app.routers.except_order import router_except_order
+from app.routers.meta_obj import router_meta_obj
+from app.routers.meta_obj_tag import router_meta_obj_tag
+from app.routers.shelves import router_shelves
+from app.routers.product_sku import router_product_sku
 from utils.sx_log import format_print
+
 
 format_print()
 Base.metadata.create_all(bind=engine)
@@ -41,13 +43,14 @@ app.include_router(router_scene_base)
 app.include_router(router_order)
 app.include_router(router_logistics)
 app.include_router(router_except_order)
-app.include_router(router_file)
 app.include_router(router_meta_obj)
 app.include_router(router_meta_obj_tag)
 app.include_router(router_shelves)
+app.include_router(router_file)
+app.include_router(router_product_sku)
 
 
 # Get 健康检查
-@app.get("/ping", description="健康检查")
+@app.get("/jpt/ping", description="健康检查")
 def ping():
     return "pong!!"
