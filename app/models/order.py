@@ -26,6 +26,7 @@ class Order(BaseModel):
     logistic_order_id = Column(VARCHAR(30),comment='物流商快递物流ID')
     receiver_address = Column(VARCHAR(300),comment='收货地址')
     receiver_name = Column(VARCHAR(30),comment='收货人姓名')
+    postal_code = Column(VARCHAR(10),comment='邮编')
 
     @classmethod
     def get_status_define(cls):
