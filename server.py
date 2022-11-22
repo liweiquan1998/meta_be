@@ -12,8 +12,12 @@ from app.routers.scene_base import router_scene_base
 from app.routers.order import router_order
 from app.routers.logistics import router_logistics
 from app.routers.except_order import router_except_order
+from app.routers.meta_obj import router_meta_obj
+from app.routers.meta_obj_tag import router_meta_obj_tag
+from app.routers.shelves import router_shelves
 from app.routers.product_sku import router_product_sku
 from utils.sx_log import format_print
+
 
 format_print()
 Base.metadata.create_all(bind=engine)
@@ -40,7 +44,6 @@ app.include_router(router_order)
 app.include_router(router_logistics)
 app.include_router(router_except_order)
 app.include_router(router_file)
-app.include_router(router_product_sku)
 
 
 # Get 健康检查

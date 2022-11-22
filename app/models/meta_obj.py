@@ -10,3 +10,9 @@ class MetaObj(BaseModel):
     aigc = Column(String(255), comment='aigc源地址')
     model = Column(String(255), comment='模型文件地址')
     thumbnail = Column(String(255), comment='缩略图地址')
+    create_time = Column(Integer, comment='创建时间')
+    status = Column(Integer, comment='商品状态 0:已创建 1:已上传 2:渲染中 3:已完成')
+    tag = Column(String(255), comment='物品种类')
+    creator_id = Column(Integer, comment='创建者id')
+    height = Column(Integer, comment='物品高度')
+
