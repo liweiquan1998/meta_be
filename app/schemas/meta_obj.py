@@ -10,6 +10,7 @@ faker = Faker(locale='zh_CN')
 class MetaObjCreateBase(BaseModel):
     name: str
     type: int
+    kind: int
     creator_id: int
     height: int
 
@@ -23,6 +24,7 @@ class MetaObjByImageCreate(MetaObjCreateBase):
             "example": {
                 "name": f"{faker.company_prefix()}的商品",
                 "type": 1,
+                "kind": 1,
                 "aigc": "xxx,xxx,xxx",
                 "status": 0,
                 "creator_id": faker.pyint(1, 10),
@@ -39,6 +41,7 @@ class MetaObjByVideoCreate(MetaObjCreateBase):
             "example": {
                 "name": f"{faker.company_prefix()}的商品",
                 "type": 1,
+                "kind": 1,
                 "aigc": "xxxxx",
                 "status": 0,
                 "creator_id": faker.pyint(1, 10),
@@ -56,6 +59,7 @@ class MetaObjByModelCreate(MetaObjCreateBase):
             "example": {
                 "name": f"{faker.company_prefix()}的摆放物品",
                 "type": 0,
+                "kind": 0,
                 "model": "xxxxx",
                 "thumbnail": "xxxxx",
                 "tag": "桌子",
@@ -77,6 +81,7 @@ class MetaObjUpdate(BaseModel):
 class MetaObjGet(BaseModel):
     name: Union[str, None] = None
     type: Union[int, None] = None
+    kind: Union[int, None] = None
     create_time: Union[int, None] = None
     status: Union[int, None] = None
     tag: Union[str, None] = None
@@ -86,6 +91,7 @@ class MetaObj(BaseModel):
     id: int
     name: str
     type: int
+    kind: int
     aigc: str
     model: str
     thumbnail: str

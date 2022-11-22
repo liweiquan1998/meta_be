@@ -8,6 +8,7 @@ class MetaObj(BaseModel):
     name = Column(String(255), comment='名称')
     type = Column(Integer, comment='类型 0: upload 1: aigc')
     aigc = Column(String(255), comment='aigc源地址')
+    kind = Column(Integer, comment='种类 0:场景素材 1:商品')
     model = Column(String(255), comment='模型文件地址')
     thumbnail = Column(String(255), comment='缩略图地址')
     create_time = Column(Integer, comment='创建时间')

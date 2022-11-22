@@ -36,6 +36,8 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     db_query = db.query(models.MetaObj)
     if item.name:
         db_query = db_query.filter(models.MetaObj.name.like(f"%{item.name}%"))
+    if item.kind is not None and item.kind != -1:
+        db_query = db_query.filter(models.MetaObj.kind == item.kind)
     if item.type is not None and item.type != -1:
         db_query = db_query.filter(models.MetaObj.type == item.type)
     if item.status is not None and item.status != -1:
