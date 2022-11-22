@@ -16,7 +16,7 @@ class OrderBase(BaseModel):
     logistic_order_id: str
     receiver_address: str
     receiver_name: str
-
+    postal_code: str
 
 class OrderCreate(OrderBase):
     class Config:
