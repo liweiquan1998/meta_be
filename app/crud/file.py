@@ -13,7 +13,7 @@ from app.common.validation import *
 
 
 def get_nfs_file(path: str):
-    file_path = Path('/mnt/nfs/') / Path(path)
+    file_path = Path('/mnt/nfs') / Path(path)
     with file_path.open('rb') as f:
         file_byte = f.read()
     content_type = magic.from_buffer(file_byte, mime=True)
