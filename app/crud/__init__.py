@@ -9,3 +9,4 @@ from app.crud.order import *
 from app.crud.except_order import *
 from app.crud.file import *
 from app.crud.meta_obj import *
+from app.crud.meta_obj_tag import *

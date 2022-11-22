@@ -7,3 +7,5 @@ from app.models.scene_base import *
 from app.models.order import *
 from app.models.except_order import *
 from app.models.admin import *
+from app.models.meta_obj import *
+from app.models.meta_obj_tag import *
