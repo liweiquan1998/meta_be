@@ -31,7 +31,7 @@ def get_businesses_product_skus(business_id, params: Params = Depends(), db: Ses
 @web_try()
 @sxtimeit
 def get_product_sku_once(item_id: int, db: Session = Depends(get_db)):
-    return crud.get_product_sku_once(db=db, item_id=item_id)
+    return crud.get_product_sku_once_withmeta(db=db, item_id=item_id)
 
 
 @router_product_sku.put("/{item_id}")
