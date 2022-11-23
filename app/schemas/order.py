@@ -8,7 +8,6 @@ import random as rd
 
 class OrderBase(BaseModel):
     sku_name: str
-
     pay_count: float
     business_id: int
     customer_id: int
@@ -72,6 +71,7 @@ class Order(OrderBase):
     close_time: int
     order_id: int
     back_reason: str
+    sku_snapshot: str
 
     class Config:
         orm_mode = True

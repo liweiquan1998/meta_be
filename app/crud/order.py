@@ -4,7 +4,7 @@ from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-
+from app.crud.product_sku import *
 
 def create_order(db: Session, item: schemas.OrderCreate):
     db_item = models.Order(**item.dict())
@@ -22,6 +22,12 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
 def get_order_once(db: Session, item_id: int):
     res: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
     return res
+
+def get_order_once_dict(db:Session, item_id:int):
+    res: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
+    res_dict:dict = res.to_dict()
+    res_dict['sku_snapshot'] = json.loads(res_dict.get('sku_snapshot','{}'))
+    return res_dict
 
 
 def get_orders(db: Session):

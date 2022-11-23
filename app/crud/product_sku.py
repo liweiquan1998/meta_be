@@ -68,7 +68,7 @@ def get_product_sku_once_withmeta(db: Session, item_id: int):
     res: models.Sku = db.query(models.Sku).filter(models.Sku.id == item_id).first()
     if res:
         product_res: models.Product = db.query(models.Product).filter(models.Product.id == res.product_id).first()
-        res = res.to_dict()
+        res:dict = res.to_dict()
         sku_res = product_res.to_dict()
         sku_res.pop('id')
         res.update(sku_res)

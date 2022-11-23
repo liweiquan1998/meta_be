@@ -37,7 +37,7 @@ def get_customer_orders(params: schemas.CustomerPageParams = Depends(),db: Sessi
 @web_try()
 @sxtimeit
 def get_order_once(item_id: int, db: Session = Depends(get_db)):
-    return crud.get_order_once(db=db, item_id=item_id)
+    return crud.get_order_once_dict(db=db, item_id=item_id)
 
 
 @router_order.put("/{item_id}")
