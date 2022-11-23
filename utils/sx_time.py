@@ -112,7 +112,7 @@ def sxtimeit(func):
 def t2date(t):
     import datetime
     date = datetime.datetime.fromtimestamp(t)
-    return '{}_{}_{}_{}:{}:{}'.format(date.year, date.month, date.day, date.hour, date.minute, date.second)
+    return '{}/{}/{} {}:{}:{}'.format(date.year, date.month, date.day, date.hour, date.minute, date.second)
 
 
 def day_begin(t):
