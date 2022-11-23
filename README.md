@@ -34,7 +34,7 @@ supervisorctl tail -f be
 | recv_time         | INTEGER      | 收货时间      |
 | status            | INTEGER      | 订单状态      |
 |order_number       |VARCHAR(30)    |订单号        |
-|sku_name           |VARCHAR(30)    |商品名称       |
+|sku_snapshot       |VARCHAR(1000)    |商品名称       |
 |sku_id             |INTEGER        |库存ID       |
 |num                |INTEGER        |购买数量|
 

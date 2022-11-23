@@ -7,7 +7,6 @@ import random as rd
 
 
 class OrderBase(BaseModel):
-    sku_name: str
     pay_count: float
     business_id: int
     customer_id: int
