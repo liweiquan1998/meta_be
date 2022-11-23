@@ -33,6 +33,10 @@ supervisorctl tail -f be
 | receiver_phone    | VARCHAR(12)  | 收货电话      |
 | recv_time         | INTEGER      | 收货时间      |
 | status            | INTEGER      | 订单状态      |
+|order_number       |VARCHAR(30)    |订单号        |
+|sku_name           |VARCHAR(30)    |商品名称       |
+|sku_id             |INTEGER        |库存ID       |
+|num                |INTEGER        |购买数量|
 
 ### product
 | 名称          | 类型           | 备注   |
@@ -62,6 +66,7 @@ supervisorctl tail -f be
 | recv_time          | INTEGER      | 收货时间   |
 | remark             | VARCHAR(400) | 退款原因   |
 | status             | INTEGER      | 服务状态   |
+| back_cost             | FLOAT      | 退款金额   |
 
 ### sku
 | 名称         | 类型           | 备注    |
