@@ -9,7 +9,6 @@ class Order(BaseModel):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, comment='id',autoincrement=True)
     status = Column(Integer,comment='订单状态')
-    sku_list = Column(JSON,comment='sku和对应的数量')  # 加密后的登录密码
     create_time = Column(Integer,comment='创建时间')
     deliver_time = Column(Integer,comment='发货时间')
     recv_time = Column(Integer,comment='收货时间')
@@ -27,6 +26,11 @@ class Order(BaseModel):
     receiver_address = Column(VARCHAR(300),comment='收货地址')
     receiver_name = Column(VARCHAR(30),comment='收货人姓名')
     postal_code = Column(VARCHAR(10),comment='邮编')
+
+    order_number = Column(VARCHAR(30),comment='订单编号')
+    sku_name =  Column(VARCHAR(30),comment='库存名称')
+    sku_id = Column(Integer,comment='库存id')
+    num = Column(Integer,comment='购买数量')
 
     @classmethod
     def get_status_define(cls):

@@ -7,7 +7,6 @@ from app.crud.basic import update_to_db
 
 
 def create_order(db: Session, item: schemas.OrderCreate):
-    item.sku_list = json.loads(item.sku_list)
     db_item = models.Order(**item.dict())
     db_item.create_time = time.time()
     db_item.status = 0

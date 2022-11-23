@@ -19,13 +19,12 @@ def deliver_order(db: Session, item_id: int,item:schemas.OrderDeliver):
                 setattr(order, k, v)
             order.status = 2
             order.deliver_time = time.time()
-            for sku_num_dic in order.sku_list:
-                sku_id = sku_num_dic['sku_id']
-                sku = get_sku_once(db,sku_id)
-                if sku.stock < sku_num_dic['num']:
-                    raise Exception(422,f'发货失败，{sku.sku_name}库存不足')
-                else:
-                    sku.stock -= sku_num_dic['num']
+            sku_id = order.sku_id
+            sku = get_sku_once(db,sku_id)
+            if sku.stock < order.num:
+                raise Exception(422,f'发货失败，{sku.sku_name}库存不足')
+            else:
+                sku.stock -= order.num
             db.commit()
             db.refresh(order)
             return order
