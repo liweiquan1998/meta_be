@@ -15,6 +15,7 @@ class User(BaseModel):
     update_time = Column(Integer, comment='更新时间')
     last_login = Column(Integer, comment='最近时间')
     status = Column(Integer, comment='状态 0:正常 1:禁用')
+    tel_phone = Column(String(255), comment='电话')
 
 
 
