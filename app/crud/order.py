@@ -40,6 +40,9 @@ def get_orders(db: Session):
 
 def get_business_orders(db: Session, business_id:int):
     res: List[models.Order] = db.query(models.Order).filter(models.Order.business_id == business_id).all()
+    for item in res:
+        if item.sku_snapshot:
+            item.sku_snapshot = json.loads(item.sku_snapshot)
     return res
 
 def get_customer_orders(db: Session, customer_id:int):
