@@ -27,6 +27,7 @@ def get_order_once_dict(db:Session, item_id:int):
     res: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
     res_dict:dict = res.to_dict()
     res_dict['sku_snapshot'] = json.loads(res_dict.get('sku_snapshot','{}'))
+    res_dict['except_order'] = db.query(models.ExceptOrder).filter(models.ExceptOrder.id == res.except_id).first()
     return res_dict
 
 
