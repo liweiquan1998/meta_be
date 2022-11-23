@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.models.database import Base, engine
 from app.routers.customer import router_customer
 from app.routers.file import router_file
+from app.routers.store import router_store
 from app.routers.user import router_user
 from app.routers.admin import router_admin
 from app.routers.product import router_product
@@ -48,7 +49,7 @@ app.include_router(router_meta_obj_tag)
 app.include_router(router_shelves)
 app.include_router(router_file)
 app.include_router(router_product_sku)
-
+app.include_router(router_store)
 
 # Get 健康检查
 @app.get("/jpt/ping", description="健康检查")
