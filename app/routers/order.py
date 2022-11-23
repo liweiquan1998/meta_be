@@ -64,3 +64,9 @@ def add_order(item: schemas.OrderCreate, db: Session = Depends(get_db)):
 @sxtimeit
 def deliver_order(item_id: int,item: schemas.OrderDeliver,db: Session = Depends(get_db)):
     return order.deliver_order(db,item_id,item)
+
+@router_order.put("/{item_id}/except_status")
+@web_try()
+@sxtimeit
+def except_order(item_id: int,item: schemas.OrderExcept,db: Session = Depends(get_db)):
+    return order.except_order(db,item_id,item)

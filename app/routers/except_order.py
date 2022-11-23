@@ -33,7 +33,7 @@ def get_customer_except_orders(params: schemas.CustomerPageParams = Depends(),db
     return paginate(crud.get_customer_except_orders(db,params.customer_id), params)
 
 
-@router_except_order.get("/getOnce/{item_id}")
+@router_except_order.get("/{item_id}")
 @web_try()
 @sxtimeit
 def get_except_order_once(item_id: int, db: Session = Depends(get_db)):
