@@ -3,6 +3,7 @@
 # @File  : order.py
 # @Email  : w1145253034@163.com
 from app.crud.order import *
+from app.crud.except_order import *
 from app.crud.sku import *
 from app.models import Order,Sku
 import time
@@ -36,3 +37,24 @@ def deliver_order(db: Session, item_id: int,item:schemas.OrderDeliver):
 
 def deliver_check(order:Order):
     return True
+
+
+def except_order(db: Session, item_id: int,item:schemas.OrderExcept):
+    order_db_item = get_order_once(db,item_id)
+    if not order_db_item:
+        raise Exception(404,'未找到该任务')
+    if order_db_item.status == -1:  # 服务中
+        except_order_db_item = get_except_order_once(db,order_db_item.except_id)
+        if not except_order_db_item:
+            raise Exception(404,'找不到服务号')
+        except_order_db_item.set_field(item.dict())
+        except_order_db_item.status = 1
+        order_db_item.status = 2  # 已完成(退货退款)
+        db.commit()
+        db.flush()
+        res:dict = except_order_db_item.to_dict()
+        res.update(order_db_item.to_dict())
+        return res
+    else:
+        raise Exception('该订单不是服务中状态，不可退货退款')
+

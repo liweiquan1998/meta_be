@@ -19,7 +19,8 @@ class ExceptOrder(BaseModel):
     logistics_id = Column(Integer,comment='物流商家ID')
     business_id = Column(Integer,comment='卖家id',index=True)
     back_reason = Column(VARCHAR(400),comment='退款原因')
-    remark = Column(VARCHAR(400),comment='退款原因')
+    remark = Column(VARCHAR(400),comment='退款备注')
+    back_cost = Column(Float,comment='退款金额')
 
     @classmethod
     def get_status_define(cls):

@@ -7,7 +7,8 @@ import random as rd
 
 
 class OrderBase(BaseModel):
-    sku_list: str
+    sku_name: str
+
     pay_count: float
     business_id: int
     customer_id: int
@@ -22,7 +23,6 @@ class OrderCreate(OrderBase):
     class Config:
         schema_extra = {
             "example": {
-                "sku_list": '[{"sku_id":%s,"num":%s}]' % (faker.pyint(1, 5), faker.pyint(1, 5)),
                 "pay_count": faker.pyint(1, 100),
                 "business_id": faker.pyint(1, 100),
                 "customer_id": faker.pyint(1, 100),
@@ -47,9 +47,13 @@ class OrderDeliver(BaseModel):
                 "logistic_order_id": str(faker.pyint(100000,200000))
             }}
 
+class OrderExcept(BaseModel):
+    status: int
+    back_cost: float
+    remark: str
+
 
 class OrderUpdate(OrderBase):
-    create_time: int
     deliver_time: int
     recv_time: int
     close_time: int

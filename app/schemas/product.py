@@ -24,7 +24,7 @@ class ProductCreate(ProductBase):
 
 
 class ProductUpdate(ProductBase):
-    pass
+    meta_obj_id: int
 
 
 class Product(ProductBase):
