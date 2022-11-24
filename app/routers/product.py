@@ -6,8 +6,8 @@ from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
 
 router_product = APIRouter(
-    prefix="/product",
-    tags=["product-商品管理"],
+    prefix="/products",
+    tags=["products-商品管理"],
 )
 
 
@@ -19,7 +19,7 @@ def get_product(params: Params = Depends(), db: Session = Depends(get_db)):
     return paginate(crud.get_products(db), params)
 
 
-@router_product.get("/getOnce/{item_id}")
+@router_product.get("/{item_id}")
 @web_try()
 @sxtimeit
 def get_product_once(item_id: int, db: Session = Depends(get_db)):

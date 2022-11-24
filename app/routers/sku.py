@@ -7,8 +7,8 @@ from utils import web_try, sxtimeit
 import time
 
 router_sku = APIRouter(
-    prefix="/sku",
-    tags=["sku-库存管理"],
+    prefix="/skus",
+    tags=["skus-库存管理"],
 )
 
 
@@ -20,7 +20,7 @@ def get_skus(params: Params = Depends(), db: Session = Depends(get_db)):
     return paginate(crud.get_skus(db), params)
 
 
-@router_sku.get("/getOnce/{item_id}")
+@router_sku.get("/{item_id}")
 @web_try()
 @sxtimeit
 def get_sku_once(item_id: int, db: Session = Depends(get_db)):

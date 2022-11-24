@@ -50,6 +50,7 @@ def except_order(db: Session, item_id: int,item:schemas.OrderExcept):
         except_order_db_item.set_field(item.dict())
         except_order_db_item.status = 1
         order_db_item.status = 2  # 已完成(退货退款)
+        order_db_item.close_time = time.time()
         db.commit()
         db.flush()
         res:dict = except_order_db_item.to_dict()

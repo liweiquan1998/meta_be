@@ -22,13 +22,6 @@ def get_product_skus(total: int = 0, params: Params = Depends(), db: Session = D
     return paginate(crud.get_product_skus(db), params)
 
 
-@router_product_sku.get("/businesses")
-@web_try()
-@sxtimeit
-def get_businesses_product_skus(business_id, params: Params = Depends(), db: Session = Depends(get_db)):
-    return paginate(crud.get_business_product_skus(db,business_id), params)
-
-
 @router_product_sku.get("/{item_id}")
 @web_try()
 @sxtimeit
