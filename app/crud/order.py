@@ -1,6 +1,5 @@
 import json
 import time
-from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
