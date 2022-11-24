@@ -47,6 +47,9 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
         db_query = db_query.filter(models.MetaObj.create_time >= item.create_time)
     if item.tag:
         db_query = db_query.filter(models.MetaObj.tag == item.tag)
+    if item.creator_id:
+        db_query = db_query.filter(models.MetaObj.creator_id == item.creator_id)
+
     return db_query.all()
 
 
