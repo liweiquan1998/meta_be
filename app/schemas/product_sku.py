@@ -4,7 +4,6 @@ faker = Faker(locale='zh_CN')
 
 
 class ProductSkuBase(BaseModel):
-    sku_name: str
     price: float
     stock: int
     desc: str
@@ -21,7 +20,6 @@ class ProductSkuCreate(ProductSkuBase):
     class Config:
         schema_extra = {
             "example": {
-                "sku_name": faker.pystr(),
                 "price": faker.pyint(5,2000),
                 "stock": faker.pyint(1,100),
                 "desc": faker.pystr(),

@@ -28,9 +28,9 @@ class Order(BaseModel):
     postal_code = Column(VARCHAR(10),comment='邮编')
 
     order_number = Column(VARCHAR(30),comment='订单编号')
-    sku_name =  Column(VARCHAR(30),comment='库存名称')
     sku_id = Column(Integer,comment='库存id')
     num = Column(Integer,comment='购买数量')
+    sku_snapshot = Column(VARCHAR(500),comment='sku快照')
 
     @classmethod
     def get_status_define(cls):

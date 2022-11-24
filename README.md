@@ -34,7 +34,7 @@ supervisorctl tail -f be
 | recv_time         | INTEGER      | 收货时间      |
 | status            | INTEGER      | 订单状态      |
 |order_number       |VARCHAR(30)    |订单号        |
-|sku_name           |VARCHAR(30)    |商品名称       |
+|sku_snapshot       |VARCHAR(1000)    |商品名称       |
 |sku_id             |INTEGER        |库存ID       |
 |num                |INTEGER        |购买数量|
 
@@ -143,3 +143,19 @@ supervisorctl tail -f be
 |user | dbatest|
 |pwd | sxwldba|
 |db_name | dbatest|
+
+## 状态定义
+|作用域| 状态   | 定义  |
+|-----|------|-----|
+|订单  | 0    |  待发货   |
+|订单  | 1    |  待收货   |
+|订单  | 2    |  已完成    |
+|订单  | 3    |  已完成(退货退款)    |
+|订单  | 4    |  已完成(拒绝退货退款)    |
+|订单  | -1    |  退款中    |
+|服务单 | 0 |  退款中  | 
+|服务单 | 1 |  商家同意  | 
+|服务单 | 2 |  商家拒绝  |
+|sku    |0  |缺货 | 
+|sku    |1  |有货 | 
+
