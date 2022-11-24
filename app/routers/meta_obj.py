@@ -48,7 +48,9 @@ def get_meta_obj_once(item_id: int, db: Session = Depends(get_db), ):
 @web_try()
 @sxtimeit
 def get_meta_objs(get_item: schemas.MetaObjGet = Depends(), params: Params = Depends(),
-                  db: Session = Depends(get_db), ):
+                  db: Session = Depends(get_db), total: int = 0):
+    if total:
+        return crud.get_meta_objs(db, get_item)
     return paginate(crud.get_meta_objs(db, get_item), params)
 
 
