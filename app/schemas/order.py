@@ -78,6 +78,10 @@ class Order(OrderBase):
 
 class BusinessPageParams(Params):
     business_id: int
+    status: Union[int,None] = None
+    order_num : Union[str,None] = None
+    create_time : Union[str,None] = None
+
 
 class CustomerPageParams(Params):
     customer_id: int

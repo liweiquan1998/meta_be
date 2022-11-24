@@ -49,8 +49,11 @@ def except_order(db: Session, item_id: int,item:schemas.OrderExcept):
             raise Exception(404,'未找到服务号')
         except_order_db_item.set_field(item.dict())
         except_order_db_item.status = 1
-        order_db_item.status = 2  # 已完成(退货退款)
+        order_db_item.status = item.status  # 已完成(退货退款)
         order_db_item.close_time = time.time()
+        sku_db_item = get_sku_once(db,order_db_item.sku_id)
+        num = order_db_item.num
+        sku_db_item.stock += num
         db.commit()
         db.flush()
         res:dict = except_order_db_item.to_dict()

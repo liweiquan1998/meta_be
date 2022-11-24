@@ -24,7 +24,7 @@ def get_orders(params: Params = Depends(), db: Session = Depends(get_db)):
 @web_try()
 @sxtimeit
 def get_business_orders(params: schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db)):
-    return paginate(crud.get_business_orders(db,params.business_id), params)
+    return paginate(crud.get_business_orders(db,params), params)
 
 
 @router_order.get("/{item_id}")

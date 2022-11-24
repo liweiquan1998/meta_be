@@ -39,11 +39,21 @@ def get_order_once_dict(db:Session, item_id:int):
 
 
 def get_orders(db: Session):
-    res: List[models.Order] = db.query(models.Order).all()
+    res: List[models.Order] = db.query(models.Order).order_by(models.Order.id).all()
     return res
 
-def get_business_orders(db: Session, business_id:int):
-    res: List[models.Order] = db.query(models.Order).filter(models.Order.business_id == business_id).all()
+def get_business_orders(db: Session, params: schemas.BusinessPageParams):
+    query = db.query(models.Order).filter(models.Order.business_id == params.business_id)
+    if params.status:
+        query = query.filter(models.Order.status == params.status)
+    if params.order_num:
+        query = query.filter(models.Order.order_number.like(f'%{params.order_num}%'))
+    if params.create_time:
+        time_format = '%Y-%m-%d'
+        day_begin = time.mktime(time.strptime(params.create_time,time_format))
+        day_end = day_begin + 3600 * 24
+        query = query.filter(models.Order.create_time.between(day_begin,day_end))
+    res: List[models.Order] = query.order_by(models.Order.id).all()
     for item in res:
         if item.sku_snapshot:
             item.sku_snapshot = json.loads(item.sku_snapshot)
