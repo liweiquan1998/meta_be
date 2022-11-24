@@ -44,6 +44,6 @@ def delete_sku(item_id: int, db: Session = Depends(get_db)):
 @sxtimeit
 def add_sku(item: schemas.SkuCreate, db: Session = Depends(get_db)):
     if item.product_id not in [i.id for i in product.get_products(db)]:
-        raise Exception(422,"添加失败，要绑定的货物不存在")
+        raise Exception(404,"添加失败，要绑定的货物不存在")
     return crud.create_sku(db=db, item=item)
 

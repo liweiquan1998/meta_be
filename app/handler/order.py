@@ -23,16 +23,16 @@ def deliver_order(db: Session, item_id: int,item:schemas.OrderDeliver):
             sku_id = order.sku_id
             sku = get_sku_once(db,sku_id)
             if sku.stock < order.num:
-                raise Exception(422,f'发货失败，{sku.sku_name}库存不足')
+                raise Exception(405,f'发货失败，{sku.sku_name}库存不足')
             else:
                 sku.stock -= order.num
             db.commit()
             db.refresh(order)
             return order
         else:
-            raise Exception(422,f'选择发货的订单状态为:{status_define.get(order.status)}')
+            raise Exception(400,f'选择发货的订单状态为:{status_define.get(order.status)}')
     else:
-        raise Exception(422,f'选择发货的订单状态为:{status_define.get(order.status)}')
+        raise Exception(400,f'选择发货的订单状态为:{status_define.get(order.status)}')
 
 
 def deliver_check(order:Order):
