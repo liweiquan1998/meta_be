@@ -14,11 +14,11 @@ def deliver_order(db: Session, item_id: int,item:schemas.OrderDeliver):
     order = get_order_once(db,item_id)
     if not order:
         raise Exception(404,'未找到该任务')
-    if order.status == 1:
+    if order.status == 0:
         if deliver_check(order):
             for k,v in item.dict(exclude_unset=True).items():
                 setattr(order, k, v)
-            order.status = 2
+            order.status = 1
             order.deliver_time = time.time()
             sku_id = order.sku_id
             sku = get_sku_once(db,sku_id)
