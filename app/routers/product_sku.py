@@ -18,7 +18,7 @@ router_product_sku = APIRouter(
 @sxtimeit
 def get_product_skus(total: int = 0, params: Params = Depends(), db: Session = Depends(get_db)):
     if total:
-        return crud.get_product_skus(db), params
+        return crud.get_product_skus(db)
     return paginate(crud.get_product_skus(db), params)
 
 
