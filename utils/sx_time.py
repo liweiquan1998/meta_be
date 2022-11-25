@@ -113,6 +113,14 @@ def t2date(t):
     import time
     return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(t))
 
+def trans_t2date(item):
+    time_var_list = ['create_time','update_time','deliver_time','close_time','recv_time']
+    for time_var in time_var_list:
+        if hasattr(item,time_var):
+            time_stamp = getattr(item,time_var)
+            if isinstance(time_stamp,int):
+                setattr(item,time_var,t2date(time_stamp))
+
 
 def day_begin(t):
     dsecs = 24 * 3600

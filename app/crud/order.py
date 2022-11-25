@@ -4,7 +4,7 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.crud.product_sku import *
-from utils import t2date
+from utils import t2date,trans_t2date
 
 def create_order(db: Session, item: schemas.OrderCreate):
     db_item = models.Order(**item.dict())
@@ -44,23 +44,21 @@ def get_orders(db: Session):
 
 def get_business_orders(db: Session, params: schemas.BusinessPageParams):
     query = db.query(models.Order).filter(models.Order.business_id == params.business_id)
-    if params.status:
+    if params.status is not None:
         query = query.filter(models.Order.status == params.status)
     if params.order_num:
         query = query.filter(models.Order.order_number.like(f'%{params.order_num}%'))
     if params.create_time:
-        time_format = '%Y-%m-%d'
-        day_begin = time.mktime(time.strptime(params.create_time,time_format))
+        day_begin = int(params.create_time)
         day_end = day_begin + 3600 * 24
         query = query.filter(models.Order.create_time.between(day_begin,day_end))
     res: List[models.Order] = query.order_by(models.Order.id).all()
     for item in res:
-        if item.sku_snapshot:
+        if item.sku_snapshot:  # sku快照的反序列化和时间戳转字符串
             item.sku_snapshot = json.loads(item.sku_snapshot)
-        if item.create_time:
-            item.create_time = t2date(item.create_time)
-        if item.deliver_time:
-            item.deliver_time = t2date(item.deliver_time)
+            if item.sku_snapshot.get('create_time'):
+                item.sku_snapshot['create_time'] = t2date(item.sku_snapshot['create_time'])
+        trans_t2date(item)
     return res
 
 def get_customer_orders(db: Session, customer_id:int):
