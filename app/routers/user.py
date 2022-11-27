@@ -23,10 +23,17 @@ def add_user(item: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, item=item)
 
 
-@router_user.post("/login", response_model=TokenSchemas, summary="商户登录")
+@router_user.post("/login", summary="商户登录")
+@web_try()
+@sxtimeit
+def login_user(item: schemas.UserLogin, db: Session = Depends(get_db)):
+    return crud.login_user(db=db, item=item)
+
+
+@router_user.post("/swagger/login", response_model=TokenSchemas, summary="商户登录")
 def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     item = schemas.UserLogin(**{'username': form_data.username, 'password': form_data.password})
-    return crud.login_user(db=db, item=item)
+    return crud.login_user_swagger(db=db, item=item)
 
 
 @router_user.delete("/delete/{item_id}", summary="删除商户")

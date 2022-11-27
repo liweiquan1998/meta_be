@@ -13,7 +13,7 @@ from configs.settings import config
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/swagger/login")
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
 ALGORITHM = config.get('USER', 'ALGORITHM')
