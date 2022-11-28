@@ -68,11 +68,11 @@ def check_access_token(token: str, user_type: str):
 
 def check_user_id(token: str , db: Session = Depends(get_db)):
     try:
-        username, expire_time = check_access_token(token, 'user')
+        userid, expire_time = check_access_token(token, 'user')
         # 验证用户是否存在
-        user = db.query(models.User).filter(models.User.username == username).first()
+        user = db.query(models.User).filter(models.User.id == userid).first()
         if user:
-            return user.id
+            return int(userid)
         else:
             return None
     except fastapi.exceptions.HTTPException:
@@ -81,9 +81,9 @@ def check_user_id(token: str , db: Session = Depends(get_db)):
 
 # 验证
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    username, expire_time = check_access_token(token, 'user')
+    userid, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在
-    user = db.query(models.User).filter(models.User.username == username).first()
+    user = db.query(models.User).filter(models.User.id == userid).first()
     if user is None:
         raise HTTPException(status_code=401, detail="商户不存在")
     return user
