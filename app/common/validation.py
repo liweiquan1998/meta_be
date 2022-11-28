@@ -2,6 +2,8 @@ from datetime import timezone
 from typing import Union, Any
 from datetime import datetime, timedelta
 from typing import Union
+
+import fastapi.exceptions
 from sqlalchemy.orm import Session
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -63,6 +65,18 @@ def check_access_token(token: str, user_type: str):
         raise HTTPException(status_code=401, detail="token 过期")
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="token 错误")
+
+def check_user_id(token: str , db: Session = Depends(get_db)):
+    try:
+        username, expire_time = check_access_token(token, 'user')
+        # 验证用户是否存在
+        user = db.query(models.User).filter(models.User.username == username).first()
+        if user:
+            return user.id
+        else:
+            return None
+    except fastapi.exceptions.HTTPException:
+        return None
 
 
 # 验证

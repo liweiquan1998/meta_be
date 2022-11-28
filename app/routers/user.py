@@ -65,3 +65,12 @@ def get_users(get_item: schemas.UserGet = Depends(), params: Params = Depends(),
 def get_user_once(item_id: int, db: Session = Depends(get_db),):
                   # user=Depends(check_admin)):
     return crud.get_user_once(db=db, item_id=item_id)
+
+
+@router_user.get("/{token}/user_id", summary="获取商户信息")
+@web_try()
+@sxtimeit
+def get_user_id(token: str, db: Session = Depends(get_db)):
+    return check_user_id(token, db)
+
+
