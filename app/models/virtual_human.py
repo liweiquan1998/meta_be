@@ -13,3 +13,4 @@ class VirtualHuman(BaseModel):
     creator_id = Column(Integer, comment='创建者id')
     create_time = Column(Integer, comment='创建时间')
     headimg_uri = Column(String(50), comment='头像地址')
+    work_space = Column(String(50), comment='命名空间')

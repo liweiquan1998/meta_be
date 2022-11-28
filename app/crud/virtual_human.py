@@ -30,8 +30,10 @@ def update_virtual_human(db: Session, item_id: int, update_item: schemas.Virtual
 
 
 def get_virtual_human_once(db: Session, item_id: int):
-    return db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
-
+    item = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
+    if not item:
+        raise Exception(f"虚拟人id {item_id} 不存在")
+    return item
 
 def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet):
     db_query = db.query(models.VirtualHuman)
@@ -48,4 +50,4 @@ def delete_virtual_human(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-    return f'虚拟人 {item_id} 删除成功'
+    return f'虚拟人 {item.name} 删除成功'
