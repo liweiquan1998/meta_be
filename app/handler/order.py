@@ -14,25 +14,25 @@ def deliver_order(db: Session, item_id: int,item:schemas.OrderDeliver):
     order = get_order_once(db,item_id)
     if not order:
         raise Exception(404,'未找到该任务')
-    if order.status == 1:
+    if order.status == 0:
         if deliver_check(order):
             for k,v in item.dict(exclude_unset=True).items():
                 setattr(order, k, v)
-            order.status = 2
+            order.status = 1
             order.deliver_time = time.time()
             sku_id = order.sku_id
             sku = get_sku_once(db,sku_id)
             if sku.stock < order.num:
-                raise Exception(422,f'发货失败，{sku.sku_name}库存不足')
+                raise Exception(405,f'发货失败，{sku.sku_name}库存不足')
             else:
                 sku.stock -= order.num
             db.commit()
             db.refresh(order)
             return order
         else:
-            raise Exception(422,f'选择发货的订单状态为:{status_define.get(order.status)}')
+            raise Exception(400,f'选择发货的订单状态为:{status_define.get(order.status)}')
     else:
-        raise Exception(422,f'选择发货的订单状态为:{status_define.get(order.status)}')
+        raise Exception(400,f'选择发货的订单状态为:{status_define.get(order.status)}')
 
 
 def deliver_check(order:Order):
@@ -49,7 +49,11 @@ def except_order(db: Session, item_id: int,item:schemas.OrderExcept):
             raise Exception(404,'未找到服务号')
         except_order_db_item.set_field(item.dict())
         except_order_db_item.status = 1
-        order_db_item.status = 2  # 已完成(退货退款)
+        order_db_item.status = item.status  # 已完成(退货退款)
+        order_db_item.close_time = time.time()
+        sku_db_item = get_sku_once(db,order_db_item.sku_id)
+        num = order_db_item.num
+        sku_db_item.stock += num
         db.commit()
         db.flush()
         res:dict = except_order_db_item.to_dict()

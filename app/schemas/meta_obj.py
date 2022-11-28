@@ -85,6 +85,7 @@ class MetaObjGet(BaseModel):
     create_time: Union[int, None] = None
     status: Union[int, None] = None
     tag: Union[str, None] = None
+    creator_id: Union[int,None] = None
 
 
 class MetaObj(BaseModel):

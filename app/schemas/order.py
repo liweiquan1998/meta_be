@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from faker import Faker
 from fastapi_pagination import Params
+from typing import Union
 
 faker = Faker(locale='zh_CN')
 import random as rd
@@ -33,7 +34,7 @@ class OrderCreate(OrderBase):
 
 
 class OrderDeliver(BaseModel):
-    logistic_id: int
+    logistic_id: Union[int,None] = None
     logistic_name: str
     logistic_order_id: str
 
@@ -77,6 +78,10 @@ class Order(OrderBase):
 
 class BusinessPageParams(Params):
     business_id: int
+    status: Union[int,None] = None
+    order_num : Union[str,None] = None
+    create_time : Union[str,None] = None
+
 
 class CustomerPageParams(Params):
     customer_id: int

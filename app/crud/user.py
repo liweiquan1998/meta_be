@@ -31,7 +31,7 @@ def create_user(db: Session, item: schemas.UserCreate):
     return db_item
 
 
-def login_user(db: Session, item: schemas.UserLogin):
+def login_user_swagger(db: Session, item: schemas.UserLogin):
     res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
     # 用户不存在
     if not res:
@@ -45,6 +45,22 @@ def login_user(db: Session, item: schemas.UserLogin):
     db.commit()
     db.flush()
     return TokenSchemas(**{"access_token": res.auth_token, "token_type": "bearer"})
+
+
+def login_user(db: Session, item: schemas.UserLogin):
+    res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
+    # 用户不存在
+    if not res:
+        raise Exception(404, f"用户 {item.username} 不存在")
+    # 密码错误
+    if not verify_password(item.password, res.password_hash):
+        raise Exception(401, "用户密码错误")
+    # 更新登录时间
+    res.auth_token = create_access_token(res.id, 'user')
+    res.last_login = int(time.time())
+    db.commit()
+    db.flush()
+    return {"access_token": res.auth_token, "token_type": "bearer"}
 
 
 def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):

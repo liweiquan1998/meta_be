@@ -4,16 +4,18 @@ faker = Faker(locale='zh_CN')
 
 
 class ProductSkuBase(BaseModel):
+    sku_name: str
+    sku_attr: str
     price: float
     stock: int
-    desc: str
-    unit: str
+    desc: str = ""
+    unit: str = "件"
     business_id: int
     meta_obj_id: int
-    remarks: str
+    remarks: str = ""
 
 class ProductSkuUpdate(ProductSkuBase):
-    pass
+    status: int = 1
 
 
 class ProductSkuCreate(ProductSkuBase):

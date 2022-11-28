@@ -8,8 +8,8 @@ import time
 from app.handler import order
 
 router_except_order = APIRouter(
-    prefix="/except_order",
-    tags=["except_order-异常服务单管理"],
+    prefix="/except_orders",
+    tags=["except_orders-异常服务单管理"],
 )
 
 
@@ -25,12 +25,6 @@ def get_orders(params: Params = Depends(), db: Session = Depends(get_db)):
 @sxtimeit
 def get_business_except_orders(params: schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db)):
     return paginate(crud.get_business_except_orders(db,params.business_id), params)
-
-@router_except_order.get("/customers")
-@web_try()
-@sxtimeit
-def get_customer_except_orders(params: schemas.CustomerPageParams = Depends(),db: Session = Depends(get_db)):
-    return paginate(crud.get_customer_except_orders(db,params.customer_id), params)
 
 
 @router_except_order.get("/{item_id}")
