@@ -8,10 +8,6 @@ from app.common.validation import *
 
 def create_scene(db: Session, item: schemas.SceneCreate):
     # sourcery skip: use-named-expression
-    # 重复场景名检查
-    res: models.Scene = db.query(models.Scene).filter(models.Scene.name == item.name).first()
-    if res:
-        raise Exception(f"场景 {item.name} 已存在")  # todo 场景名字可以重复了，这个if条件删掉
     # 创建
     db_item = models.Scene(**item.dict(), **{'create_time': int(time.time())})
     db.add(db_item)
@@ -44,4 +40,4 @@ def delete_scene(db: Session, item_id: int):
         raise Exception(f"场景 {item_id} 不存在")
     db.delete(res)
     db.commit()
-    return f'场景 {item_id} 删除成功'  # todo 这种不需要返回描述
+    return True

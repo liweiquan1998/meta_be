@@ -31,4 +31,4 @@ def delete_meta_obj_tag(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-    return f"{item.name} 删除成功"
+    return True

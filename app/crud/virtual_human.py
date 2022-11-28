@@ -50,4 +50,4 @@ def delete_virtual_human(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-    return f'虚拟人 {item.name} 删除成功'
+    return True

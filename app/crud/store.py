@@ -41,4 +41,4 @@ def get_stores(db: Session, item: schemas.StoreGet):
 def delete_store(db: Session, item_id: int):
     db.query(models.Store).filter(models.Store.id == item_id).delete()
     db.commit()
-    return f'删除店铺 {item_id} 成功'
+    return True

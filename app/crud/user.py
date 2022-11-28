@@ -98,4 +98,4 @@ def delete_user(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-    return f'用户 {item_id} 删除成功'
+    return True

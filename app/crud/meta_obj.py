@@ -60,5 +60,5 @@ def delete_meta_obj(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-    return item
+    return True
 

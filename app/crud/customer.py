@@ -55,4 +55,6 @@ def delete_customer(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
+    return True
+
 
