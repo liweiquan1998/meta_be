@@ -37,10 +37,15 @@ def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet):
     db_query = db.query(models.VirtualHuman)
     if item.name:
         db_query = db_query.filter(models.VirtualHuman.name.like(f"%{item.name}%"))
-    if item.sex:
+    if item.sex is not None:
         db_query = db_query.filter(models.VirtualHuman.sex == item.sex)
-    return db_query.all()
+    return db_query.order_by(models.VirtualHuman.id).all()
 
 def delete_virtual_human(db: Session, item_id: int):
-    db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).delete()
+    item = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
+    if not item:
+        raise Exception(f"虚拟人 {item_id} 不存在")
+    db.delete(item)
     db.commit()
+    db.flush()
+    return f'虚拟人 {item_id} 删除成功'

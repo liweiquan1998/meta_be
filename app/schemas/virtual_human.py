@@ -10,7 +10,6 @@ class VirtualHumanCreate(BaseModel):
     sex: int
     status: int
     creator_id: int
-    create_time: int
     headimg_uri: str
 
     class Config:

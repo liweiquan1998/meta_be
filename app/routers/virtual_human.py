@@ -12,7 +12,7 @@ from app.common.validation import *
 
 router_virtual_humans = APIRouter(
     prefix="/virtual_humans",
-    tags=["vh-虚拟人管理"],
+    tags=["virtual_humans-虚拟人管理"],
 )
 
 
