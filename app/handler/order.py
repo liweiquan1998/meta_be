@@ -6,7 +6,8 @@ from app.crud.order import *
 from app.crud.except_order import *
 from app.crud.sku import *
 from app.models import Order,Sku
-import time
+import time  # todo
+# todo del all
 
 status_define = Order.get_status_define()
 

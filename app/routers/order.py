@@ -53,14 +53,14 @@ def add_order(item: schemas.OrderCreate, db: Session = Depends(get_db)):
     return crud.create_order(db=db, item=item)
 
 
-@router_order.put("/{item_id}/deliver_status")
+@router_order.put("/{item_id}/deliver_status")  # todo: 发货不需要了，直接该状态就ok
 @web_try()
 @sxtimeit
 def deliver_order(item_id: int,item: schemas.OrderDeliver,db: Session = Depends(get_db)):
     return order.deliver_order(db,item_id,item)
 
-@router_order.put("/{item_id}/except_status")
+@router_order.put("/{item_id}/except_status")  # todo: 确认退货，先不管SKU了也用Order
 @web_try()
 @sxtimeit
-def except_order(item_id: int,item: schemas.OrderExcept,db: Session = Depends(get_db)):
+def except_order(item_id: int,item: schemas.OrderExcept,db: Session = Depends(get_db)): #after care
     return order.except_order(db,item_id,item)
