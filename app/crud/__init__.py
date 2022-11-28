@@ -13,3 +13,4 @@ from app.crud.meta_obj_tag import *
 from app.crud.shelves import *
 from app.crud.product_sku import *
 from app.crud.store import *
+from app.crud.virtual_human import *

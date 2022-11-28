@@ -12,3 +12,4 @@ from app.schemas.meta_obj_tag import *
 from app.schemas.shelves import *
 from app.schemas.product_sku import *
 from app.schemas.store import *
+from app.schemas.virtual_human import *

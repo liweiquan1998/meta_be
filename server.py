@@ -18,6 +18,7 @@ from app.routers.meta_obj_tag import router_meta_obj_tag
 from app.routers.shelves import router_shelves
 from app.routers.product_sku import router_product_sku
 from app.routers.business import router_businesses
+from app.routers.virtual_human import router_virtual_humans
 from utils.sx_log import format_print
 
 
@@ -52,6 +53,7 @@ app.include_router(router_file)
 app.include_router(router_product_sku)
 app.include_router(router_store)
 app.include_router(router_businesses)
+app.include_router(router_virtual_humans)
 
 # Get 健康检查
 @app.get("/jpt/ping", description="健康检查")
