@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String
 
 from app.models.database import BaseModel
 
+
 class MetaObj(BaseModel):
     __tablename__ = "meta_obj"
     id = Column(Integer, primary_key=True, index=True, comment='id')
@@ -15,5 +16,4 @@ class MetaObj(BaseModel):
     status = Column(Integer, comment='商品状态 0:已创建 1:已上传 2:渲染中 3:已完成')
     tag = Column(String(255), comment='物品种类')  # todo  字段名改为tags  json格式，存多个tag
     creator_id = Column(Integer, comment='创建者id')
-    height = Column(Integer, comment='物品高度')  #  todo 类型改为float
-
+    height = Column(Integer, comment='物品高度')  # todo 类型改为float

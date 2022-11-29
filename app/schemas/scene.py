@@ -13,7 +13,7 @@ class SceneCreate(BaseModel):
     base_id: int
     thumbnail: str
     config: str
-    creator: str
+    creator_id: int
 
     class Config:
         schema_extra = {
@@ -23,7 +23,7 @@ class SceneCreate(BaseModel):
                 "base_id": random.choice([1, 2, 3]),  # 基础场景id
                 "thumbnail": 'metaverse_assets/SceneAssets/202211',
                 "config": 'metaverse_assets/SceneAssets/202211',
-                "creator": faker.name()}
+                "creator_id": faker.pyint(5, 10)}
         }
 
 
@@ -47,7 +47,7 @@ class Scene(BaseModel):
     config: str
     create_time: int
     update_time: int
-    creator: str
+    creator_id: int
     create_time: int
 
     class Config:

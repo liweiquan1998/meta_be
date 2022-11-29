@@ -7,3 +7,4 @@ class Shelves(BaseModel):
     id = Column(Integer, primary_key=True, index=True, comment='id')
     scene_id = Column(Integer, comment='场景id')
     config = Column(String(255), comment='配置文件')
+    creator_id = Column(String(255), comment='创建者id')

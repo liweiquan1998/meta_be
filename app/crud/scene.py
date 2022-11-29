@@ -25,6 +25,11 @@ def get_scene_once(db: Session, item_id: int):
     return res
 
 
+def get_scene_once_by_creator_id(db: Session, creator_id: int):
+    res: models.Scene = db.query(models.Scene).filter(models.Scene.creator_id == creator_id).all()
+    return res
+
+
 def get_scenes(db: Session, item: schemas.SceneGet):
     db_query = db.query(models.Scene)
     if item.name is not None and item.name != "":

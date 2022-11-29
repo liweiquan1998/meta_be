@@ -51,3 +51,9 @@ def get_virtual_humans(get_item: schemas.VirtualHumanGet = Depends(), params: Pa
 def get_virtual_human_once(item_id: int, db: Session = Depends(get_db)):
     return crud.get_virtual_human_once(db=db, item_id=item_id)
 
+@router_virtual_humans.get("/{creator_id}/creator_id", summary="由创建者id->获取虚拟人信息")
+@web_try()
+@sxtimeit
+def get_virtual_human_once(creator_id: int, db: Session = Depends(get_db)):
+    return crud.get_virtual_human_once_by_creator_id(db=db, creator_id=creator_id)
+

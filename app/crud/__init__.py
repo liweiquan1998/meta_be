@@ -14,3 +14,6 @@ from app.crud.shelves import *
 from app.crud.product_sku import *
 from app.crud.store import *
 from app.crud.virtual_human import *
+from app.crud.marketing_content import *
+from app.crud.live_account import *
+from app.crud.live_streaming import *
