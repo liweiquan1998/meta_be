@@ -15,3 +15,5 @@ from app.models.virtual_human import *
 from app.models.marketing_content import *
 from app.models.live_account import *
 from app.models.live_streaming import *
+from app.models.background import *
+

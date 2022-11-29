@@ -17,3 +17,4 @@ from app.crud.virtual_human import *
 from app.crud.marketing_content import *
 from app.crud.live_account import *
 from app.crud.live_streaming import *
+from app.crud.background import *

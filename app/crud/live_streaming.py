@@ -14,7 +14,7 @@ def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate):
     # sourcery skip: use-named-expression
     # todo 判断各参数合法性
     # 创建
-    db_item = models.LiveStreaming(**item.dict(), **{'last_time': int(time.time())})
+    db_item = models.LiveStreaming(**item.dict(), **{'create_time': int(time.time())})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
