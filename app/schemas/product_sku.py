@@ -5,10 +5,8 @@ faker = Faker(locale='zh_CN')
 
 class ProductSkuBase(BaseModel):
     sku_name: str
-    sku_attr: str
     price: float
     stock: int
-    desc: str = ""
     unit: str = "件"
     business_id: int
     meta_obj_id: int
@@ -22,9 +20,9 @@ class ProductSkuCreate(ProductSkuBase):
     class Config:
         schema_extra = {
             "example": {
+                "sku_name": faker.pystr(),
                 "price": faker.pyint(5,2000),
                 "stock": faker.pyint(1,100),
-                "desc": faker.pystr(),
                 "unit": "件",
                 "remarks": faker.pystr(),
                 "business_id": faker.pyint(1,100),
@@ -33,7 +31,8 @@ class ProductSkuCreate(ProductSkuBase):
 
 
 class Sku(ProductSkuBase):
-    pass
+    desc: str
+    sku_attr: str
 
     class Config:
         orm_mode = True
