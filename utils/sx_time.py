@@ -111,7 +111,7 @@ def sxtimeit(func):
 
 def t2date(t):
     import time
-    return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(t))
+    return time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(t + 8 * 3600))
 
 def trans_t2date(item):
     time_var_list = ['create_time','update_time','deliver_time','close_time','recv_time']

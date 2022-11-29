@@ -21,12 +21,6 @@ def deliver_order(db: Session, item_id: int,item:schemas.OrderDeliver):
                 setattr(order, k, v)
             order.status = 1
             order.deliver_time = time.time()
-            sku_id = order.sku_id
-            sku = get_sku_once(db,sku_id)
-            if sku.stock < order.num:
-                raise Exception(405,f'发货失败，{sku.sku_name}库存不足')
-            else:
-                sku.stock -= order.num
             db.commit()
             db.refresh(order)
             return order
@@ -52,12 +46,9 @@ def except_order(db: Session, item_id: int,item:schemas.OrderExcept):
         except_order_db_item.status = 1
         order_db_item.status = item.status  # 已完成(退货退款)
         order_db_item.close_time = time.time()
-        sku_db_item = get_sku_once(db,order_db_item.sku_id)
-        num = order_db_item.num
-        sku_db_item.stock += num
         db.commit()
         db.flush()
-        res:dict = except_order_db_item.to_dict()
+        res: dict = except_order_db_item.to_dict()
         res.update(order_db_item.to_dict())
         return res
     else:
