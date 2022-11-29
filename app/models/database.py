@@ -41,6 +41,9 @@ class BaseModel(Base):
 
     def set_field(self, data: Optional[dict] = None):
         for key in self.__class__.__dict__.keys():
+            if key in data:
+                if data[key] is None:
+                    continue
             if not key.startswith('_') and key in data:
                 setattr(self, key, data[key])
             if hasattr(self, 'update_time'):
