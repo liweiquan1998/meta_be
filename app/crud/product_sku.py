@@ -69,15 +69,15 @@ def get_product_sku_once_withmeta(db: Session, item_id: int):
         sku_res = product_res.to_dict()
         sku_res.pop('id')
         res.update(sku_res)
-        meta:models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.id == res.get("meta_obj_id")).first()
-        res['meta_obj'] = meta.to_dict()
+        meta: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.id == res.get("meta_obj_id")).first()
+        res['meta_obj'] = meta.to_dict() if meta else None
     return res
 
 
 def get_product_skus(db: Session):
     sql = '''SELECT  b.*,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id
             FROM product a LEFT JOIN sku b ON a.id=b.product_id'''
-    res: List[models.Sku] = db.execute(sql).fetchall()
+    res: List[models.BaseModel] = db.execute(sql).fetchall()
     return res
 
 
@@ -106,8 +106,16 @@ def delete_product_sku(db: Session, item_id: int):
         raise Exception(f"删除失败, sku  id {item_id}未找到")
     try:
         delete_product(db, item.product_id)
-        delete_sku(db,item.id)
+        delete_sku(db, item.id)
     finally:
         db.delete(item)
         db.commit()
         db.flush()
+        return True
+
+
+
+
+
+
+

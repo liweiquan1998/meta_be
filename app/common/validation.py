@@ -2,6 +2,8 @@ from datetime import timezone
 from typing import Union, Any
 from datetime import datetime, timedelta
 from typing import Union
+
+import fastapi.exceptions
 from sqlalchemy.orm import Session
 from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -64,30 +66,42 @@ def check_access_token(token: str, user_type: str):
     except jwt.JWTError:
         raise HTTPException(status_code=401, detail="token 错误")
 
+def check_user_id(token: str , db: Session = Depends(get_db)):
+    try:
+        userid, expire_time = check_access_token(token, 'user')
+        # 验证用户是否存在
+        user = db.query(models.User).filter(models.User.id == userid).first()
+        if user:
+            return int(userid)
+        else:
+            return None
+    except fastapi.exceptions.HTTPException:
+        return None
+
 
 # 验证
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    username, expire_time = check_access_token(token, 'user')
+    userid, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在
-    user = db.query(models.User).filter(models.User.username == username).first()
+    user = db.query(models.User).filter(models.User.id == userid).first()
     if user is None:
         raise HTTPException(status_code=401, detail="商户不存在")
     return user
 
 
 async def check_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    username, expire_time = check_access_token(token, 'admin')
+    userid, expire_time = check_access_token(token, 'admin')
     # 验证用户是否存在
-    user = db.query(models.Admin).filter(models.Admin.username == username).first()
+    user = db.query(models.Admin).filter(models.Admin.id == userid).first()
     if user is None:
         raise HTTPException(status_code=401, detail="超管不存在")
     return user
 
 
 async def check_customer(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    username, expire_time = check_access_token(token, 'customer')
+    userid, expire_time = check_access_token(token, 'customer')
     # 验证用户是否存在
-    user = db.query(models.Customer).filter(models.Customer.username == username).first()
+    user = db.query(models.Customer).filter(models.Customer.id == userid).first()
     if user is None:
         raise HTTPException(status_code=401, detail="用户不存在")
     return user
