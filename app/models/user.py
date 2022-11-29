@@ -8,7 +8,7 @@ class User(BaseModel):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     storename = Column(String(50), comment='店铺名称')
-    username = Column(String(255), comment='用户名')
+    username = Column(String(255), comment='用户名', unique=True)
     password_hash = Column(String(255), comment='加密后的登录密码')
     auth_token = Column(String(255), comment='登录token')
     create_time = Column(Integer, comment='创建时间')

@@ -29,6 +29,11 @@ def get_shelves_once(db: Session, item_id: int):
     return res
 
 
+def get_shelves_once_by_creator_id(db: Session, creator_id: int):
+    res: models.Shelves = db.query(models.Shelves).filter(models.Shelves.creator_id == creator_id).al()
+    return res
+
+
 def get_shelves(db: Session, item: schemas.ShelvesGet):
     db_query = db.query(models.Shelves)
     if item.scene_id:

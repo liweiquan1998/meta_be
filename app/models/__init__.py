@@ -12,3 +12,8 @@ from app.models.meta_obj_tag import *
 from app.models.shelves import *
 from app.models.store import *
 from app.models.virtual_human import *
+from app.models.marketing_content import *
+from app.models.live_account import *
+from app.models.live_streaming import *
+from app.models.background import *
+

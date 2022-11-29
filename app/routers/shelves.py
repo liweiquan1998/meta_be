@@ -30,6 +30,14 @@ def get_shelves_once(item_id: int, db: Session = Depends(get_db), ):
     return crud.get_shelves_once(db=db, item_id=item_id)
 
 
+@router_shelves.get("/{creator_id}/creator_id", summary="由创建者id->获取货架信息")
+@web_try()
+@sxtimeit
+def get_shelves_once(creator_id: int, db: Session = Depends(get_db)):
+    return crud.get_shelves_once_by_creator_id(db=db, creator_id=creator_id)
+
+
+
 @router_shelves.get("/", summary="获取货架列表")
 @web_try()
 @sxtimeit

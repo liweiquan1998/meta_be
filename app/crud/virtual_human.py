@@ -30,10 +30,18 @@ def update_virtual_human(db: Session, item_id: int, update_item: schemas.Virtual
 
 
 def get_virtual_human_once(db: Session, item_id: int):
-    item = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
-    if not item:
+    if item := db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first():
+        return item
+    else:
         raise Exception(f"虚拟人id {item_id} 不存在")
-    return item
+
+
+def get_virtual_human_once_by_creator_id(db: Session, creator_id: int):
+    if item := db.query(models.VirtualHuman).filter(models.VirtualHuman.creator_id == creator_id).all():
+        return item
+    else:
+        raise Exception(f"虚拟人id {creator_id} 不存在")
+
 
 def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet):
     db_query = db.query(models.VirtualHuman)
@@ -42,6 +50,7 @@ def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet):
     if item.sex is not None:
         db_query = db_query.filter(models.VirtualHuman.sex == item.sex)
     return db_query.order_by(models.VirtualHuman.id).all()
+
 
 def delete_virtual_human(db: Session, item_id: int):
     item = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()

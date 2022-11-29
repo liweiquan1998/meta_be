@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, List, Optional
 
 from pydantic import BaseModel
 from faker import Faker
@@ -26,10 +26,10 @@ class VirtualHumanCreate(BaseModel):
 
 
 class VirtualHumanUpdate(BaseModel):
-    name: str
-    status: int
-    headimg_uri: str
-    work_space: str
+    name: Optional[str] = None
+    status: Optional[int] = None
+    headimg_uri: Optional[str] = None
+    work_space: Optional[str] = None
 
 
 class VirtualHumanGet(BaseModel):

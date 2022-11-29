@@ -11,5 +11,5 @@ class Scene(BaseModel):
     base_id = Column(Integer, comment='基础场景id 1:博物馆 2:教室 3:家具')
     thumbnail = Column(String(255), comment='缩略图')
     config = Column(String(255), comment='配置文件')
-    creator = Column(String(255), comment='创建者')
+    creator_id = Column(String(255), comment='创建者id')
     create_time = Column(Integer, comment='创建时间')

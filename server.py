@@ -19,8 +19,11 @@ from app.routers.shelves import router_shelves
 from app.routers.product_sku import router_product_sku
 from app.routers.business import router_businesses
 from app.routers.virtual_human import router_virtual_humans
+from app.routers.marketing_content import router_marketing_content
+from app.routers.live_account import router_live_account
+from app.routers.live_streaming import router_live_streaming
+from app.routers.background import router_backgrounds
 from utils.sx_log import format_print
-
 
 format_print()
 Base.metadata.create_all(bind=engine)
@@ -54,8 +57,12 @@ app.include_router(router_product_sku)
 app.include_router(router_store)
 app.include_router(router_businesses)
 app.include_router(router_virtual_humans)
+app.include_router(router_marketing_content)
+app.include_router(router_live_account)
+app.include_router(router_live_streaming)
+app.include_router(router_backgrounds)
 
 # Get 健康检查
-@app.get("/jpt/ping", description="健康检查")
+@app.get("/ping", description="健康检查")
 def ping():
     return "pong!!"
