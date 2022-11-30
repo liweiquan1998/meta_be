@@ -44,6 +44,13 @@ def get_meta_obj_once(item_id: int, db: Session = Depends(get_db), ):
     return crud.get_meta_obj_once(db=db, item_id=item_id)
 
 
+@router_meta_obj.get("/{creator_id}/get_by_creator_id", summary="由创建者id->元对象")
+@web_try()
+@sxtimeit
+def get_meta_obj_by_creator_id(creator_id: int, db: Session = Depends(get_db), ):
+    return crud.get_meta_obj_by_creator_id(db=db, creator_id=creator_id)
+
+
 @router_meta_obj.get("/", summary="获取元对象列表")
 @web_try()
 @sxtimeit

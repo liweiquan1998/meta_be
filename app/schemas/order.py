@@ -18,6 +18,7 @@ class OrderBase(BaseModel):
     receiver_name: str
     postal_code: str
 
+
 class OrderCreate(OrderBase):
     class Config:
         schema_extra = {
@@ -34,7 +35,7 @@ class OrderCreate(OrderBase):
 
 
 class OrderDeliver(BaseModel):
-    logistic_id: Union[int,None] = None
+    logistic_id: Union[int, None] = None
     logistic_name: str
     logistic_order_id: str
 
@@ -43,8 +44,9 @@ class OrderDeliver(BaseModel):
             "example": {
                 "logistic_id": faker.pyint(1, 10),
                 "logistic_name": rd.choice(['百世快递', '韵达快递', '圆通快递', '申通快递', '中通快递']),
-                "logistic_order_id": str(faker.pyint(100000,200000))
+                "logistic_order_id": str(faker.pyint(100000, 200000))
             }}
+
 
 class OrderExcept(BaseModel):
     status: int
@@ -58,8 +60,6 @@ class OrderUpdate(OrderBase):
     close_time: int
     except_id: int
     back_reason: str
-
-
 
 
 class Order(OrderBase):
@@ -76,11 +76,12 @@ class Order(OrderBase):
     class Config:
         orm_mode = True
 
+
 class BusinessPageParams(Params):
     business_id: int
-    status: Union[int,None] = None
-    order_num : Union[str,None] = None
-    create_time : Union[str,None] = None
+    status: Union[int, None] = None
+    order_num: Union[str, None] = None
+    create_time: Union[str, None] = None
 
 
 class CustomerPageParams(Params):

@@ -16,7 +16,8 @@ def create_store(db: Session, item: schemas.StoreCreate):
     if db.query(models.User).filter(models.User.id == item.creator_id).first() is None:
         raise Exception(f"创建者id {item.creator_id} 不存在")
     # 创建
-    db_item = models.Store(**item.dict(), **{"create_time": int(time.time())})
+    db_item = models.Store(**item.dict(), **{"create_time": int(time.time()),
+                                             "creator_name": db.query(models.User).filter(models.User.id == item.creator_id).first().name})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

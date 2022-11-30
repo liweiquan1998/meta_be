@@ -28,9 +28,15 @@ def create_meta_obj(db: Session, item):
 def update_meta_obj(db: Session, item_id: int, update_item: schemas.MetaObjUpdate):
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.MetaObj)
 
+
 def get_meta_obj_once(db: Session, item_id: int):
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
     return res
+
+
+def get_meta_obj_by_creator_id(db: Session, creator_id: int):
+    return db.query(models.MetaObj).filter(models.MetaObj.creator_id == creator_id).all()
+
 
 def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     db_query = db.query(models.MetaObj)
@@ -61,4 +67,3 @@ def delete_meta_obj(db: Session, item_id: int):
     db.commit()
     db.flush()
     return True
-

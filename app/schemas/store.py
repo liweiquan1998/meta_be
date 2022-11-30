@@ -51,6 +51,7 @@ class Store(BaseModel):
     config: str
     creator_id: int
     create_time: int
+    creator_name: str
 
     class Config:
         orm_mode = True
