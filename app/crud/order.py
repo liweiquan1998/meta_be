@@ -33,7 +33,7 @@ def get_order_once_dict(db:Session, item_id:int):
     business_info: models.User = db.query(models.User).filter(models.User.id == res.business_id).first()
     res_dict['deliver_name'] = business_info.username if business_info else '商家姓名丢失'
     res_dict['deliver_phone'] = business_info.tel_phone if business_info else '商家电话信息丢失'
-    res_dict['sku_snapshot'] = json.loads(res_dict.get('sku_snapshot','{}'))
+    res_dict['sku_snapshot'] = json.loads(res_dict.get('sku_snapshot', '{}'))
     res_dict['except_order'] = db.query(models.ExceptOrder).filter(models.ExceptOrder.id == res.except_id).first()
     return res_dict
 
@@ -41,6 +41,7 @@ def get_order_once_dict(db:Session, item_id:int):
 def get_orders(db: Session):
     res: List[models.Order] = db.query(models.Order).order_by(models.Order.id).all()
     return res
+
 
 def get_business_orders(db: Session, params: schemas.BusinessPageParams):
     query = db.query(models.Order).filter(models.Order.business_id == params.business_id)
@@ -61,9 +62,11 @@ def get_business_orders(db: Session, params: schemas.BusinessPageParams):
         trans_t2date(item)
     return res
 
+
 def get_customer_orders(db: Session, customer_id:int):
     res: List[models.Order] = db.query(models.Order).filter(models.Order.customer_id == customer_id).all()
     return res
+
 
 def delete_order(db: Session, item_id: int):
     item = get_order_once(item_id=item_id, db=db)

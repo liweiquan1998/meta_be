@@ -13,9 +13,9 @@ router_businesses = APIRouter(
 @router_businesses.get("/{business_id}/product_skus",summary="一个商家下的所有商品类型")
 @web_try()
 @sxtimeit
-def get_businesses_product_skus(business_id:str,name:str=None,status:int=None,
+def get_businesses_product_skus(business_id:str,name:str=None,status:int=None,create_time:int=None,
                                 params: Params = Depends(), db: Session = Depends(get_db)):
-    return paginate(crud.get_business_product_skus(db,int(business_id),name,status), params)
+    return paginate(crud.get_business_product_skus(db,int(business_id),name,status,create_time), params)
 
 
 @router_businesses.get("/{business_id}/orders")
