@@ -14,6 +14,18 @@ def userid2name(user_id: int, db: Session):
     else:
         raise Exception(f"用户 {user_id} 不存在")
 
+
+def meta_obj_add_username(mo, db: Session, ):
+    if type(mo) == list:
+        res = [r.to_dict() for r in mo]
+        for m in res:
+            m['creator_name'] = userid2name(m['creator_id'], db)
+    else:
+        res = mo.to_dict()
+        res['creator_name'] = userid2name(res['creator_id'], db)
+    return res
+
+
 def create_meta_obj(db: Session, item):
     # sourcery skip: use-named-expression
     # 重复名称检查
@@ -37,14 +49,16 @@ def update_meta_obj(db: Session, item_id: int, update_item: schemas.MetaObjUpdat
 
 def get_meta_obj_once(db: Session, item_id: int):
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
-    return res
+    return meta_obj_add_username(res, db)
 
 
 def get_meta_obj_by_creator_id(db: Session, creator_id: int):
-    return db.query(models.MetaObj).filter(models.MetaObj.creator_id == creator_id).all()
+    meta_objs = db.query(models.MetaObj).filter(models.MetaObj.creator_id == creator_id).all()
+    return meta_obj_add_username(meta_objs, db)
 
 
 def get_meta_objs(db: Session, item: schemas.MetaObjGet):
+    # sourcery skip: inline-immediately-returned-variable
     db_query = db.query(models.MetaObj)
     if item.name:
         db_query = db_query.filter(models.MetaObj.name.like(f"%{item.name}%"))
@@ -63,10 +77,7 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
         db_query = db_query.filter(models.MetaObj.creator_id == item.creator_id)
 
     meta_objs = db_query.all()
-    res = [r.to_dict() for r in meta_objs]
-    for mo in res:
-        mo['creator_name'] = userid2name(mo['creator_id'], db)
-    return res
+    return meta_obj_add_username(meta_objs, db)
 
 
 def delete_meta_obj(db: Session, item_id: int):
