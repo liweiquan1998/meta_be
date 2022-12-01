@@ -1,5 +1,5 @@
 import time
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import BaseModel
 from faker import Faker
@@ -69,13 +69,11 @@ class MetaObjByModelCreate(MetaObjCreateBase):
 
 
 class MetaObjUpdate(BaseModel):
-    status: int
+    status: Optional[int] = None
+    model: Optional[str] = None
+    thumbnail: Optional[str] = None
 
-    class Config:
-        schema_extra = {
-            "example": {
-                "status": 3
-            }}
+
 
 
 class MetaObjGet(BaseModel):

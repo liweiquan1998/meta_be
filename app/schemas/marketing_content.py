@@ -25,6 +25,12 @@ class MarketingContentCreate(BaseModel):
                 "work_space": faker.address()}}
 
 
+class ComposeVideo(BaseModel):
+    marketing_content_id: int
+    audio_uri: str
+    video_uri: str
+
+
 class MarketingContentUpdate(BaseModel):
     name: Optional[str] = None
     status: Optional[int] = None

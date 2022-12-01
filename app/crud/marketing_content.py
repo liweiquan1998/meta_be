@@ -8,20 +8,10 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
+from app.crud.aigc import *
 
-audio_url = config.get("AIGC", "audio_url")
 
-
-def send_tty_request(content, vh_id, work_space, db: Session):
-    vh = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == vh_id).first()
-    sound_type = "female" if vh.sex == 1 else "male"
-    data = {
-        "content": content,
-        "sound_type": sound_type,
-        "work_space": work_space
-    }
-    requests.post(audio_url, json=data)
-
+# def send_nerf_request()
 
 def create_marketing_content(db: Session, item: schemas.MarketingContentCreate):
     # sourcery skip: use-named-expression
@@ -42,8 +32,25 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate):
     return db_item
 
 
+def compose_video(db: Session, item: schemas.ComposeVideo):
+    res = db.query(models.MarketingContent).filter(models.MarketingContent.id == item.marketing_content_id).first()
+    res.status = 3
+    db.commit()
+    threading.Thread(target=send_compose_request, args=(item.video_uri, item.audio_uri, item.marketing_content_id)).start()
+    return True
+
+
 def update_marketing_content(db: Session, item_id: int, update_item: schemas.MarketingContentUpdate):
+
     return update_to_db(update_item=update_item, db=db, item_id=item_id, model_cls=models.MarketingContent)
+
+
+def update_marketing_content_by_workspace(db: Session, workspace: str, update_item: schemas.MarketingContentUpdate):
+    db_query = db.query(models.MarketingContent)
+    db_query = db_query.filter(models.MarketingContent.work_space == workspace)
+    db_query.update(update_item.dict(exclude_unset=True))
+    db.commit()
+    return True
 
 
 def get_marketing_content_once(db: Session, item_id: int):
