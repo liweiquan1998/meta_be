@@ -84,7 +84,7 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
 
 
 def delete_meta_obj(db: Session, item_id: int):
-    item = get_meta_obj_once(db, item_id)
+    item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
     if not item:
         raise Exception(f"meta_obj {item_id} 不存在")
     db.delete(item)

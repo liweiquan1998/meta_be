@@ -81,7 +81,7 @@ def get_marketing_contents(db: Session, item: schemas.MarketingContentGet):
 
 
 def delete_marketing_content(db: Session, item_id: int):
-    item = get_marketing_content_once(db, item_id)
+    item = db.query(models.MarketingContent).filter(models.MarketingContent.id == item_id).first()
     if not item:
         raise Exception(f"营销内容id {item_id} 不存在")
     db.delete(item)
