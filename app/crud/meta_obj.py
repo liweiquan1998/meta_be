@@ -8,23 +8,19 @@ from app.common.validation import *
 from app.crud.meta_obj_tag import create_meta_obj_tag
 from utils.valid_name import is_valid_name
 from app.crud.aigc import *
+from app.crud.user import *
 
 
-def userid2name(user_id: int, db: Session):
-    if user := db.query(models.User).filter(models.User.id == user_id).first():
-        return user.name
-    else:
-        raise Exception(f"用户 {user_id} 不存在")
 
 
 def meta_obj_add_username(mo, db: Session, ):
     if type(mo) == list:
         res = [r.to_dict() for r in mo]
         for m in res:
-            m['creator_name'] = userid2name(m['creator_id'], db)
+            m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
     else:
         res = mo.to_dict()
-        res['creator_name'] = userid2name(res['creator_id'], db)
+        res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name
     return res
 
 

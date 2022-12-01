@@ -99,3 +99,9 @@ def delete_user(db: Session, item_id: int):
     db.commit()
     db.flush()
     return True
+
+def userid2name(user_id: int, db: Session):
+    if user := db.query(models.User).filter(models.User.id == user_id).first():
+        return user.name
+    else:
+        raise Exception(f"用户 {user_id} 不存在")
