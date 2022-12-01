@@ -11,25 +11,25 @@ class CustomerBase(BaseModel):
     email_address: str
 
 class CustomerCreate(CustomerBase):
-    username: str
+    name: str
     password: str
 
     class Config:
         schema_extra = {
             "example": {
-                "username": faker.name(),
+                "name": faker.name(),
                 "password": faker.password(),
                 "tel_phone": faker.phone_number(),
                 "email_address": faker.email()}}
 
 class CustomerGet(BaseModel):
-    username: Union[str, None] = None
+    name: Union[str, None] = None
     last_login: Union[int, None] = None
 
 
 class Customer(CustomerBase):
     id: int
-    username: str
+    name: str
     create_time: int
     update_time: int
     last_login: int

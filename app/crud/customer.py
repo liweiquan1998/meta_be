@@ -7,9 +7,9 @@ from app.common.validation import *
 
 def create_customer(db: Session, item: schemas.CustomerCreate):
     # 重复用户名检查
-    res: models.Customer = db.query(models.Customer).filter(models.Customer.username == item.username).first()
+    res: models.Customer = db.query(models.Customer).filter(models.Customer.name == item.name).first()
     if res:
-        raise Exception(f"用户 {item.username} 已存在")
+        raise Exception(f"用户 {item.name} 已存在")
     # 创建
     password = item.password
     del item.password
@@ -18,7 +18,7 @@ def create_customer(db: Session, item: schemas.CustomerCreate):
                                  "create_time": int(time.time()),
                                  "update_time": int(time.time()),
                                  "last_login": int(time.time())})
-    db_item.auth_token = create_access_token(db_item.username, 'customer')
+    db_item.auth_token = create_access_token(db_item.name, 'customer')
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -33,15 +33,15 @@ def get_customer_once(db: Session, item_id: int):
     res: models.Customer = db.query(models.Customer).filter(models.Customer.id == item_id).first()
     return res
 
-def get_customer_once_by_username(db: Session, username: str):
-    res: models.Customer = db.query(models.Customer).filter(models.Customer.username == username).first()
+def get_customer_once_by_name(db: Session, name: str):
+    res: models.Customer = db.query(models.Customer).filter(models.Customer.name == name).first()
     return res
 
 
 def get_customers(db: Session, item: schemas.CustomerGet):
     db_query = db.query(models.Customer)
-    if item.username:
-        db_query = db_query.filter(models.Customer.username.like(f"%{item.username}%"))
+    if item.name:
+        db_query = db_query.filter(models.Customer.name.like(f"%{item.name}%"))
     if item.last_login is not None and item.last_login != 0:
         db_query = db_query.filter(models.Customer.last_login <= item.last_login + 86400)
         db_query = db_query.filter(models.Customer.last_login >= item.last_login)

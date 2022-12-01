@@ -22,7 +22,7 @@ services:
               },
               {
                 "urls": ["turn:${PUBLIC_IP}:3478"],
-                "username": "user",
+                "name": "user",
                 "credential": "password"
               }
             ]

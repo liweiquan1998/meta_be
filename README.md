@@ -88,7 +88,7 @@ supervisorctl tail -f be
 | last_login    | INTEGER      | 最近时间     |
 | password_hash | VARCHAR(255) | 加密后的登录密码 |
 | update_time   | INTEGER      | 更新时间     |
-| username      | VARCHAR(255) | 用户名      |
+| name      | VARCHAR(255) | 用户名      |
 
 ### customer
 | 名称            | 类型           | 备注       |
@@ -101,7 +101,7 @@ supervisorctl tail -f be
 | password_hash | VARCHAR(255) | 加密后的登录密码 |
 | tel_phone     | VARCHAR(11)  | 11位手机号   |
 | update_time   | INTEGER      | 更新时间     |
-| username      | VARCHAR(255) | 用户名      |
+| name      | VARCHAR(255) | 用户名      |
 
 ### scene
 | 名称          | 类型           | 备注                     |
@@ -133,7 +133,7 @@ supervisorctl tail -f be
 | status        | INTEGER      | 状态 0:正常 1:禁用 |
 | storename     | VARCHAR(50)  | 店铺名称         |
 | update_time   | INTEGER      | 更新时间         |
-| username      | VARCHAR(255) | 用户名          |
+| name      | VARCHAR(255) | 用户名          |
 
 ## 数据库配置
 | key     | value         |

@@ -16,7 +16,7 @@ class TestIdCardOcr(unittest.TestCase):
     def test_test(self):
         faker = Faker(locale='zh_CN')
         example = {
-            "username": faker.name(),
+            "name": faker.name(),
             "password_hash": faker.password(),
             "tel_phone": faker.phone_number(),
             "email_address": faker.email(),
@@ -28,7 +28,7 @@ class TestIdCardOcr(unittest.TestCase):
 #     for _ in tqdm(range(50)):
 #         faker = Faker(locale='zh_CN')
 #         example = {
-#             "username": faker.name(),
+#             "name": faker.name(),
 #             "password_hash": faker.password(),
 #             "tel_phone": faker.phone_number(),
 #             "email_address": faker.email(),

@@ -9,9 +9,9 @@ from app.common.validation import *
 def create_user(db: Session, item: schemas.UserCreate):
     # sourcery skip: use-named-expression
     # 重复用户名检查
-    res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
+    res: models.User = db.query(models.User).filter(models.User.name == item.name).first()
     if res:
-        raise Exception(f"用户 {item.username} 已存在")
+        raise Exception(f"用户 {item.name} 已存在")
     # 重复店铺名检查
     res: models.User = db.query(models.User).filter(models.User.storename == item.storename).first()
     if res:
@@ -32,10 +32,10 @@ def create_user(db: Session, item: schemas.UserCreate):
 
 
 def login_user_swagger(db: Session, item: schemas.UserLogin):
-    res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
+    res: models.User = db.query(models.User).filter(models.User.name == item.name).first()
     # 用户不存在
     if not res:
-        raise Exception(404, f"用户 {item.username} 不存在")
+        raise Exception(404, f"用户 {item.name} 不存在")
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
@@ -48,10 +48,10 @@ def login_user_swagger(db: Session, item: schemas.UserLogin):
 
 
 def login_user(db: Session, item: schemas.UserLogin):
-    res: models.User = db.query(models.User).filter(models.User.username == item.username).first()
+    res: models.User = db.query(models.User).filter(models.User.name == item.name).first()
     # 用户不存在
     if not res:
-        raise Exception(404, f"用户 {item.username} 不存在")
+        raise Exception(404, f"用户 {item.name} 不存在")
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
@@ -71,8 +71,8 @@ def get_user_once(db: Session, item_id: int):
     res: models.User = db.query(models.User).filter(models.User.id == item_id).first()
     return res
 
-def get_user_once_by_username(db: Session, username: str):
-    res: models.User = db.query(models.User).filter(models.User.username == username).first()
+def get_user_once_by_name(db: Session, name: str):
+    res: models.User = db.query(models.User).filter(models.User.name == name).first()
     return res
 
 

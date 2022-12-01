@@ -6,7 +6,7 @@ from app.models.database import BaseModel
 class Customer(BaseModel):
     __tablename__ = "customer"
     id = Column(Integer, primary_key=True, index=True, comment='id')
-    username = Column(String(255), comment='用户名')
+    name = Column(String(255), comment='用户名')
     password_hash = Column(String(255), comment='加密后的登录密码')
     auth_token = Column(String(255), comment='登录token')
     tel_phone = Column(String(11), comment='11位手机号')

@@ -8,6 +8,12 @@ from app.crud.meta_obj_tag import create_meta_obj_tag
 from utils.valid_name import is_valid_name
 
 
+def userid2name(user_id: int, db: Session):
+    if user := db.query(models.User).filter(models.User.id == user_id).first():
+        return user.name
+    else:
+        raise Exception(f"用户 {user_id} 不存在")
+
 def create_meta_obj(db: Session, item):
     # sourcery skip: use-named-expression
     # 重复名称检查
@@ -56,7 +62,11 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     if item.creator_id:
         db_query = db_query.filter(models.MetaObj.creator_id == item.creator_id)
 
-    return db_query.all()
+    meta_objs = db_query.all()
+    res = [r.to_dict() for r in meta_objs]
+    for mo in res:
+        mo['creator_name'] = userid2name(mo['creator_id'], db)
+    return res
 
 
 def delete_meta_obj(db: Session, item_id: int):

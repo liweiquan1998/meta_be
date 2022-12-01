@@ -11,19 +11,19 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    username: str
+    name: str
     password: str
 
     class Config:
         schema_extra = {
             "example": {
                 "storename": f"{faker.company_prefix()}元宇宙旗舰店",
-                "username": faker.name(),
+                "name": faker.name(),
                 "password": faker.password()}}
 
 
 class UserUpdate(UserBase):
-    username: str
+    name: str
     password: str
     status: int
 
@@ -36,13 +36,13 @@ class UserGet(UserBase):
 
 
 class UserLogin(BaseModel):
-    username: str
+    name: str
     password: str
 
     class Config:
         schema_extra = {
             "example": {
-                "username": faker.name(),
+                "name": faker.name(),
                 "password": faker.password()}}
 
 
@@ -50,7 +50,7 @@ class User(UserBase):
     id: int
     storename: str
     status: int
-    username: str
+    name: str
     password: str
     auth_token: str
     create_time: int
