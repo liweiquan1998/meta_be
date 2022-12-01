@@ -30,6 +30,7 @@ class SceneCreate(BaseModel):
 class SceneGet(BaseModel):
     name: Union[str, None] = None
     tag: Union[int, None] = None
+    base_id: Union[int, None] = None
 
 
 class SceneUpdate(BaseModel):
