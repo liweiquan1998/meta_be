@@ -35,11 +35,13 @@ def get_product_sku_once(item_id: int, db: Session = Depends(get_db)):
 def update_product_sku(item_id: int, update_item: schemas.ProductSkuUpdate, db: Session = Depends(get_db)):
     return crud.update_product_sku(db=db,item_id=item_id,update_item=update_item)
 
+
 @router_product_sku.delete("/{item_id}")
 @web_try()
 @sxtimeit
 def delete_product_sku(item_id: int, db: Session = Depends(get_db)):
     return crud.delete_product_sku(db=db,item_id=item_id)
+
 
 @router_product_sku.post("/")
 @web_try()
