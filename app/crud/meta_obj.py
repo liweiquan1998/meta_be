@@ -34,7 +34,7 @@ def create_meta_obj(db: Session, item):
     if item.type == 0:
         create_meta_obj_tag(db, item.tag)
     # 由图片流创建模型
-    if item.type in [1, 2]:
+    if item.type == 0:
         item.status = 0
         threading.Thread(target=send_nerf_request, args=(item.aigc, item.id, 'image' if item.status == 1 else 'video')).start()
 

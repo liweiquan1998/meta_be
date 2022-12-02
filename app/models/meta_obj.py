@@ -7,7 +7,7 @@ class MetaObj(BaseModel):
     __tablename__ = "meta_obj"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(255), comment='名称')
-    type = Column(Integer, comment='类型 0: upload 1: image 2: video')
+    type = Column(Integer, comment='类型 0: upload 1: model')
     aigc = Column(String(255), comment='aigc源地址')
     kind = Column(Integer, comment='种类 0:场景素材 1:商品')  # todo  改为category
     model = Column(String(255), comment='模型文件地址')
