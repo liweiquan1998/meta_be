@@ -2,6 +2,8 @@ from pydantic import BaseModel
 from faker import Faker
 from fastapi_pagination import Params
 from typing import Union
+from typing import Optional
+
 
 faker = Faker(locale='zh_CN')
 import random as rd
@@ -54,12 +56,13 @@ class OrderExcept(BaseModel):
     remark: str
 
 
-class OrderUpdate(OrderBase):
-    deliver_time: int
-    recv_time: int
-    close_time: int
-    except_id: int
-    back_reason: str
+class OrderUpdate(BaseModel):
+    logistic_id: Optional[int] = None
+    logistic_name: Optional[str] = None
+    logistic_order_id: Optional[int] = None
+    status: Optional[int] = None
+    back_cost: Optional[float] = None
+    remark: Optional[str] = None
 
 
 class Order(OrderBase):
@@ -78,7 +81,6 @@ class Order(OrderBase):
 
 
 class BusinessPageParams(Params):
-    business_id: int
     status: Union[int, None] = None
     order_num: Union[str, None] = None
     create_time: Union[str, None] = None
