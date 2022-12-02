@@ -19,40 +19,40 @@ router_scene = APIRouter(
 @router_scene.post("/create", summary="创建场景")
 @web_try()
 @sxtimeit
-def add_scene(item: schemas.SceneCreate, db: Session = Depends(get_db)):
+def add_scene(item: schemas.SceneCreate, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.create_scene(db=db, item=item)
 
 
 @router_scene.delete("/delete/{item_id}", summary="删除场景")
 @web_try()
 @sxtimeit
-def delete_scene(item_id: int, db: Session = Depends(get_db)):
+def delete_scene(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_scene(db=db, item_id=item_id)
 
 
 @router_scene.put("/{item_id}", summary="更新场景信息")
 @web_try()
 @sxtimeit
-def update_scene(item_id: int, update_item: schemas.SceneUpdate, db: Session = Depends(get_db)):
+def update_scene(item_id: int, update_item: schemas.SceneUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.update_scene(db=db, item_id=item_id, update_item=update_item)
 
 
 @router_scene.get("/", summary="获取场景列表")
 @web_try()
 @sxtimeit
-def get_scenes(get_item: schemas.SceneGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db)):
+def get_scenes(get_item: schemas.SceneGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_scenes(db, get_item), params)
 
 
 @router_scene.get("/getOnce/{item_id}", summary="获取场景信息")
 @web_try()
 @sxtimeit
-def get_scene_once(item_id: int, db: Session = Depends(get_db)):
+def get_scene_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_scene_once(db=db, item_id=item_id)
 
 
 @router_scene.get("/{creator_id}/creator_id", summary="由创建者id->获取场景信息")
 @web_try()
 @sxtimeit
-def get_scene_once(creator_id: int, db: Session = Depends(get_db)):
+def get_scene_once(creator_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_scene_once_by_creator_id(db=db, creator_id=creator_id)

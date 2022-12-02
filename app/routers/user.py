@@ -36,12 +36,12 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
     return crud.login_user_swagger(db=db, item=item)
 
 
-@router_user.delete("/delete/{item_id}", summary="删除商户")
-@web_try()
-@sxtimeit
-def delete_user(item_id: int, db: Session = Depends(get_db),):
-                # user=Depends(check_admin)):
-    return crud.delete_user(item_id=item_id, db=db)
+# @router_user.delete("/delete/{item_id}", summary="删除商户")
+# @web_try()
+# @sxtimeit
+# def delete_user(item_id: int, db: Session = Depends(get_db),):
+#                 # user=Depends(check_admin)):
+#     return crud.delete_user(item_id=item_id, db=db)
 
 
 @router_user.put("/{item_id}", summary="更新商户信息")

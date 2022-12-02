@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
 from app import schemas, get_db, crud
+from app.common.validation import check_user
 from utils import web_try, sxtimeit
 
 router_businesses = APIRouter(
@@ -14,18 +15,18 @@ router_businesses = APIRouter(
 @web_try()
 @sxtimeit
 def get_businesses_product_skus(business_id:str,name:str=None,status:int=None,create_time:int=None,
-                                params: Params = Depends(), db: Session = Depends(get_db)):
+                                params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_business_product_skus(db,int(business_id),name,status,create_time), params)
 
 
 @router_businesses.get("/{business_id}/orders")
 @web_try()
 @sxtimeit
-def get_business_orders(business_id:str,params: Params = Depends(), db: Session = Depends(get_db)):
+def get_business_orders(business_id:str,params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_business_orders(db,schemas.BusinessPageParams(business_id=int(business_id))), params)
 
 @router_businesses.get("/{business_id}/except_orders")
 @web_try()
 @sxtimeit
-def get_business_except_orders(business_id:str,params:Params = Depends(), db: Session = Depends(get_db)):
+def get_business_except_orders(business_id:str,params:Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_business_except_orders(db,int(business_id)), params)

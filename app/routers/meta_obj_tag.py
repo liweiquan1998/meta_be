@@ -19,12 +19,12 @@ router_meta_obj_tag = APIRouter(
 @router_meta_obj_tag.get('/get', summary='获取元对象标签列表')
 @web_try()
 @sxtimeit
-def get_meta_obj_tag(db: Session = Depends(get_db)):
+def get_meta_obj_tag(db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_meta_obj_tag(db)
 
 
 @router_meta_obj_tag.delete('/delete/{item_id}', summary='删除元对象标签')
 @web_try()
 @sxtimeit
-def delete_meta_obj_tag(item_id: int, db: Session = Depends(get_db)):
+def delete_meta_obj_tag(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_meta_obj_tag(db=db, item_id=item_id)

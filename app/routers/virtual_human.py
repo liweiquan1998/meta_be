@@ -19,21 +19,21 @@ router_virtual_humans = APIRouter(
 @router_virtual_humans.post("/", summary="创建虚拟人")
 @web_try()
 @sxtimeit
-def add_virtual_human(item: schemas.VirtualHumanCreate, db: Session = Depends(get_db)):
+def add_virtual_human(item: schemas.VirtualHumanCreate, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.create_virtual_human(db=db, item=item)
 
 
 @router_virtual_humans.delete("/{item_id}", summary="删除虚拟人")
 @web_try()
 @sxtimeit
-def delete_virtual_human(item_id: int, db: Session = Depends(get_db)):
+def delete_virtual_human(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_virtual_human(item_id=item_id, db=db)
 
 
 @router_virtual_humans.put("/{item_id}", summary="更新虚拟人信息")
 @web_try()
 @sxtimeit
-def update_virtual_human(item_id: int, update_item: schemas.VirtualHumanUpdate, db: Session = Depends(get_db)):
+def update_virtual_human(item_id: int, update_item: schemas.VirtualHumanUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.update_virtual_human(db=db, item_id=item_id, update_item=update_item)
 
 
@@ -41,19 +41,19 @@ def update_virtual_human(item_id: int, update_item: schemas.VirtualHumanUpdate, 
 @web_try()
 @sxtimeit
 def get_virtual_humans(get_item: schemas.VirtualHumanGet = Depends(), params: Params = Depends(),
-                       db: Session = Depends(get_db)):
+                       db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_virtual_humans(db, get_item), params)
 
 
 @router_virtual_humans.get("/{item_id}", summary="获取虚拟人信息")
 @web_try()
 @sxtimeit
-def get_virtual_human_once(item_id: int, db: Session = Depends(get_db)):
+def get_virtual_human_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_virtual_human_once(db=db, item_id=item_id)
 
 @router_virtual_humans.get("/{creator_id}/creator_id", summary="由创建者id->获取虚拟人信息")
 @web_try()
 @sxtimeit
-def get_virtual_human_once(creator_id: int, db: Session = Depends(get_db)):
+def get_virtual_human_once(creator_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_virtual_human_once_by_creator_id(db=db, creator_id=creator_id)
 

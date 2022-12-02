@@ -20,12 +20,12 @@ router_scene_base = APIRouter(
 @web_try()
 @sxtimeit
 def get_scene_bases(get_item: schemas.SceneBaseGet = Depends(), params: Params = Depends(),
-                    db: Session = Depends(get_db)):
+                    db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_scene_base(db, get_item)
 
 
 @router_scene_base.get("/getOnce/{item_id}", summary="获取模版场景信息")
 @web_try()
 @sxtimeit
-def get_scene_base_once(item_id: int, db: Session = Depends(get_db)):
+def get_scene_base_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_scene_base_once(db=db, item_id=item_id)
