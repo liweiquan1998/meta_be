@@ -8,21 +8,18 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
-
-audio_url = config.get("AIGC", "audio_url")
-
-
-def send_tty_request(content, vh_id, work_space, db: Session):
-    vh = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == vh_id).first()
-    sound_type = "female" if vh.sex == 1 else "male"
-    data = {
-        "content": content,
-        "sound_type": sound_type,
-        "work_space": work_space
-    }
-    requests.post(audio_url, json=data)
+from app.crud.aigc import *
 
 
+def mc_add_username(mc, db: Session):
+    if type(mc) == list:
+        res = [r.to_dict() for r in mc]
+        for m in res:
+            m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
+    else:
+        res = mc.to_dict()
+        res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name
+    return res
 def create_marketing_content(db: Session, item: schemas.MarketingContentCreate):
     # sourcery skip: use-named-expression
     # meta_obj 存在检查
@@ -42,13 +39,30 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate):
     return db_item
 
 
+def compose_video(db: Session, item: schemas.ComposeVideo):
+    res = db.query(models.MarketingContent).filter(models.MarketingContent.id == item.marketing_content_id).first()
+    res.status = 3
+    db.commit()
+    threading.Thread(target=send_compose_request, args=(item.video_uri, item.audio_uri, item.marketing_content_id)).start()
+    return True
+
+
 def update_marketing_content(db: Session, item_id: int, update_item: schemas.MarketingContentUpdate):
+
     return update_to_db(update_item=update_item, db=db, item_id=item_id, model_cls=models.MarketingContent)
+
+
+def update_marketing_content_by_workspace(db: Session, workspace: str, update_item: schemas.MarketingContentUpdate):
+    db_query = db.query(models.MarketingContent)
+    db_query = db_query.filter(models.MarketingContent.work_space == workspace)
+    db_query.update(update_item.dict(exclude_unset=True))
+    db.commit()
+    return True
 
 
 def get_marketing_content_once(db: Session, item_id: int):
     if item := db.query(models.MarketingContent).filter(models.MarketingContent.id == item_id).first():
-        return item
+        return mc_add_username(item)
     else:
         raise Exception(f"营销内容id {item_id} 不存在")
 
@@ -62,11 +76,12 @@ def get_marketing_contents(db: Session, item: schemas.MarketingContentGet):
     if item.create_time is not None:
         db_query = db_query.filter(models.MarketingContent.create_time <= item.create_time + 86400)
         db_query = db_query.filter(models.MarketingContent.create_time >= item.create_time)
-    return db_query.order_by(models.MarketingContent.id).all()
+    res = db_query.order_by(models.MarketingContent.id).all()
+    return mc_add_username(res, db)
 
 
 def delete_marketing_content(db: Session, item_id: int):
-    item = get_marketing_content_once(db, item_id)
+    item = db.query(models.MarketingContent).filter(models.MarketingContent.id == item_id).first()
     if not item:
         raise Exception(f"营销内容id {item_id} 不存在")
     db.delete(item)

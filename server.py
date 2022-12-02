@@ -39,9 +39,9 @@ app.add_middleware(
 )
 
 print('server init finish:)!!!')
-app.include_router(router_customer)
+# app.include_router(router_customer)
 app.include_router(router_user)
-app.include_router(router_admin)
+# app.include_router(router_admin)
 app.include_router(router_product)
 app.include_router(router_sku)
 app.include_router(router_scene)

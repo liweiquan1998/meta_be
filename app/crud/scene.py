@@ -36,6 +36,8 @@ def get_scenes(db: Session, item: schemas.SceneGet):
         db_query = db_query.filter(models.Scene.name.like(f"%{item.name}%"))
     if item.tag:
         db_query = db_query.filter(models.Scene.tag == item.tag)
+    if item.base_id:
+        db_query = db_query.filter(models.Scene.base_id == item.base_id)
     return db_query.order_by(models.Scene.id).all()
 
 

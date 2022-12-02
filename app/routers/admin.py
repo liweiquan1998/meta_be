@@ -21,7 +21,7 @@ def add_admin(item: schemas.AdminCreate, db: Session = Depends(get_db)):
 
 @router_admin.post("/login_fastapi", response_model=TokenSchemas, summary="fastapi超级管理员登录")
 def login_admin_api(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
-    item = schemas.AdminLogin(**{'username': form_data.username, 'password': form_data.password})
+    item = schemas.AdminLogin(**{'name': form_data.name, 'password': form_data.password})
     return crud.login_admin_api(db=db, item=item)
 
 

@@ -10,23 +10,23 @@ class AdminBase(BaseModel):
 
 
 class AdminCreate(BaseModel):
-    username: str
+    name: str
     password: str
 
     class Config:
         schema_extra = {
             "example": {
-                "username": faker.name(),
+                "name": faker.name(),
                 "password": faker.password()}}
 
 class AdminLogin(BaseModel):
-    username: str
+    name: str
     password: str
 
     class Config:
         schema_extra = {
             "example": {
-                "username": faker.name(),
+                "name": faker.name(),
                 "password": faker.password()}}
 
 
@@ -36,7 +36,7 @@ class AdminUpdate(AdminBase):
 
 class Admin(AdminBase):
     id: int
-    username: str
+    name: str
     password_hash: str
     auth_token: str
     create_time: int

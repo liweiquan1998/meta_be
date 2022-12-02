@@ -8,7 +8,6 @@ from utils import web_try, sxtimeit
 from fastapi import Depends
 from fastapi import APIRouter
 from app.common.validation import *
-from app.common.validation import *
 
 router_marketing_content = APIRouter(
     prefix="/marketing_content",
@@ -23,6 +22,13 @@ def add_marketing_content(item: schemas.MarketingContentCreate, db: Session = De
     return crud.create_marketing_content(db=db, item=item)
 
 
+@router_marketing_content.post('/compose_video', summary="合成视频")
+@web_try()
+@sxtimeit
+def compose_video(item: schemas.ComposeVideo, db: Session = Depends(get_db)):
+    return crud.compose_video(db=db, item=item)
+
+
 @router_marketing_content.delete("/{item_id}", summary="删除营销内容")
 @web_try()
 @sxtimeit
@@ -35,6 +41,14 @@ def delete_marketing_content(item_id: int, db: Session = Depends(get_db)):
 @sxtimeit
 def update_marketing_content(item_id: int, update_item: schemas.MarketingContentUpdate, db: Session = Depends(get_db)):
     return crud.update_marketing_content(db=db, item_id=item_id, update_item=update_item)
+
+
+@router_marketing_content.put("/{workspace}/workspace", summary="更新营销内容信息 by workspace")
+@web_try()
+@sxtimeit
+def update_marketing_content_by_workspace(workspace: str, update_item: schemas.MarketingContentUpdate,
+                                          db: Session = Depends(get_db)):
+    return crud.update_marketing_content_by_workspace(db=db, workspace=workspace, update_item=update_item)
 
 
 @router_marketing_content.get("/", summary="获取营销内容列表")

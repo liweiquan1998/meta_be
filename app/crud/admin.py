@@ -9,9 +9,9 @@ from app.common.validation import *
 def create_admin(db: Session, item: schemas.AdminCreate):
     # sourcery skip: use-named-expression
     # 重复用户名检查
-    res: models.Admin = db.query(models.Admin).filter(models.Admin.username == item.username).first()
+    res: models.Admin = db.query(models.Admin).filter(models.Admin.name == item.name).first()
     if res:
-        raise Exception(f"用户 {item.username} 已存在")
+        raise Exception(f"用户 {item.name} 已存在")
     # 创建
     password = item.password
     del item.password
@@ -19,7 +19,7 @@ def create_admin(db: Session, item: schemas.AdminCreate):
                                              "create_time": int(time.time()),
                                              "update_time": int(time.time()),
                                              "last_login": int(time.time())})
-    db_item.auth_token = create_access_token(db_item.username, 'admin')
+    db_item.auth_token = create_access_token(db_item.name, 'admin')
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -27,15 +27,15 @@ def create_admin(db: Session, item: schemas.AdminCreate):
 
 
 def login_admin_api(db: Session, item: schemas.AdminLogin):
-    res: models.Admin = db.query(models.Admin).filter(models.Admin.username == item.username).first()
+    res: models.Admin = db.query(models.Admin).filter(models.Admin.name == item.name).first()
     # 用户不存在
     if not res:
-        raise Exception(404, f"用户 {item.username} 不存在")
+        raise Exception(404, f"用户 {item.name} 不存在")
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "密码错误")
     # 更新登录时间
-    res.auth_token = create_access_token(res.username, 'admin')
+    res.auth_token = create_access_token(res.name, 'admin')
     res.last_login = int(time.time())
     db.commit()
     db.flush()
@@ -43,15 +43,15 @@ def login_admin_api(db: Session, item: schemas.AdminLogin):
 
 
 def login_admin(db: Session, item: schemas.AdminLogin):
-    res: models.Admin = db.query(models.Admin).filter(models.Admin.username == item.username).first()
+    res: models.Admin = db.query(models.Admin).filter(models.Admin.name == item.name).first()
     # 用户不存在
     if not res:
-        raise Exception(404, f"用户 {item.username} 不存在")
+        raise Exception(404, f"用户 {item.name} 不存在")
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "密码错误")
     # 更新登录时间
-    res.auth_token = create_access_token(res.username, 'admin')
+    res.auth_token = create_access_token(res.name, 'admin')
     res.last_login = int(time.time())
     db.commit()
     db.flush()
@@ -68,8 +68,8 @@ def get_admin_once(db: Session, item_id: int):
     return res
 
 
-def get_admin_once_by_username(db: Session, username: str):
-    res: models.Admin = db.query(models.Admin).filter(models.Admin.username == username).first()
+def get_admin_once_by_name(db: Session, name: str):
+    res: models.Admin = db.query(models.Admin).filter(models.Admin.name == name).first()
     return res
 
 

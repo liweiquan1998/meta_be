@@ -27,7 +27,7 @@ JWT_SECRET_KEY = {
 
 
 class TokenData(BaseModel):
-    username: str
+    name: str
 
 
 class TokenSchemas(BaseModel):
