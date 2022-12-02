@@ -14,6 +14,7 @@ class ProductSkuBase(BaseModel):
     meta_obj_id: int
     remarks: str = ""
 
+
 class ProductSkuUpdate(ProductSkuBase):
     sku_name: Optional[str] = None
     price: Optional[float] = None
