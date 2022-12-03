@@ -6,6 +6,7 @@ from app.crud.basic import update_to_db
 from app.crud.product_sku import *
 from utils import t2date, trans_t2date
 
+
 def create_order(db: Session, item: schemas.OrderCreate):
     db_item = models.Order(**item.dict())
     db_item.create_time = time.time()
@@ -76,7 +77,7 @@ def get_business_orders(db: Session, business_id: int, params: schemas.BusinessP
     return res
 
 
-def get_customer_orders(db: Session, customer_id:int):
+def get_customer_orders(db: Session, customer_id: int):
     res: List[models.Order] = db.query(models.Order).filter(models.Order.customer_id == customer_id).all()
     return res
 

@@ -5,7 +5,6 @@ from app.crud import product
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
 import time
-from app.handler import order
 from app.common.validation import *
 
 router_order = APIRouter(
@@ -15,7 +14,7 @@ router_order = APIRouter(
 
 
 
-@router_order.get("/")
+@router_order.get("")
 @web_try()
 @sxtimeit
 def get_orders(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
@@ -42,11 +41,6 @@ def update_order(item_id: int, update_item: schemas.OrderUpdate, db: Session = D
 def delete_order(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_order(db=db,item_id=item_id)
 
-@router_order.post("/")
-@web_try()
-@sxtimeit
-def add_order(item: schemas.OrderCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_order(db=db, item=item)
 
 
 

@@ -15,7 +15,7 @@ router_after_care = APIRouter(
 
 
 
-@router_after_care.get("/")
+@router_after_care.get("")
 @web_try()
 @sxtimeit
 def get_orders(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
