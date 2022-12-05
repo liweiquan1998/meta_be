@@ -23,6 +23,7 @@ def web_try(exception_ret=None):
             ret = func(*args, **kwargs)
         except Exception as e:
             msg = traceback.format_exc()
+            return msg
             if len(e.args) > 0 and isinstance(e.args[0], int):
                 error_code = e.args[0]
             else:
