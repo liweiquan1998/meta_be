@@ -11,6 +11,14 @@ router_businesses = APIRouter(
 )
 
 
+@router_businesses.get("/business_id/product_skus", summary="一个商家下的所有商品类型")  # 正式上线前要记得检验token是否是内部服务
+@web_try()
+@sxtimeit
+def get_businesses_product_skus(business_id:int, params: schemas.ProductSkuParamsBase = Depends(),
+                                db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_business_product_skus(db, business_id, params)
+
+
 @router_businesses.get("/business/product_skus", summary="一个商家下的所有商品类型")
 @web_try()
 @sxtimeit
@@ -20,12 +28,6 @@ def get_businesses_product_skus(params: schemas.ProductSkuParams = Depends(),
     return paginate(crud.get_business_product_skus(db, business_id, params), params)
 
 
-@router_businesses.get("/{business_id}/product_skus", summary="一个商家下的所有商品类型")  # 正式上线前要记得检验token是否是内部服务
-@web_try()
-@sxtimeit
-def get_businesses_product_skus(business_id:int, params: schemas.ProductSkuParamsBase = Depends(),
-                                db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_business_product_skus(db, business_id, params)
 
 
 @router_businesses.get("/business/orders")
