@@ -25,14 +25,14 @@ def get_orders(params: Params = Depends(), db: Session = Depends(get_db), user=D
 @router_after_care.get("/{item_id}")
 @web_try()
 @sxtimeit
-def get_except_order_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+def get_after_care_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_after_care_once_dict(db=db, item_id=item_id)
 
 
 @router_after_care.put("/{item_id}")
 @web_try()
 @sxtimeit
-def update_except_order(item_id: int, update_item: schemas.AfterCareUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+def update_after_care(item_id: int, update_item: schemas.AfterCareUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.update_after_care(db=db,item_id=item_id,update_item=update_item)
 
 

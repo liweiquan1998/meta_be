@@ -22,7 +22,7 @@ supervisorctl tail -f be
 | customer_id       | INTEGER      | 买家ID      |
 | deliver_address   | VARCHAR(150) | 发货地址      |
 | deliver_time      | INTEGER      | 发货时间      |
-| except_id         | INTEGER      | 退货id      |
+| after_care_id     | INTEGER      | 退货id      |
 | id                | INTEGER      | id        |
 | logistic_id       | INTEGER      | 物流商id     |
 | logistic_name     | VARCHAR(15)  | 物流商名称     |
@@ -33,10 +33,10 @@ supervisorctl tail -f be
 | receiver_phone    | VARCHAR(12)  | 收货电话      |
 | recv_time         | INTEGER      | 收货时间      |
 | status            | INTEGER      | 订单状态      |
-|order_number       |VARCHAR(30)    |订单号        |
-|sku_snapshot       |VARCHAR(1000)    |商品名称       |
-|sku_id             |INTEGER        |库存ID       |
-|num                |INTEGER        |购买数量|
+| order_number      |VARCHAR(30)    |订单号        |
+| sku_snapshot      |VARCHAR(1000)    |商品名称       |
+| sku_id            |INTEGER        |库存ID       |
+| num               |INTEGER        |购买数量|
 
 ### product
 | 名称          | 类型           | 备注   |
