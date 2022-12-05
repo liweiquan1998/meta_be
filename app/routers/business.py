@@ -17,7 +17,7 @@ router_businesses = APIRouter(
 def get_businesses_product_skus(params: schemas.ProductSkuParams = Depends(),
                                 db: Session = Depends(get_db), user=Depends(check_user)):
     business_id = user.id
-    return paginate(crud.get_business_product_skus(db,business_id, params), params)
+    return paginate(crud.get_business_product_skus(db, business_id, params), params)
 
 
 @router_businesses.get("/business/orders")

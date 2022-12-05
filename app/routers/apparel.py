@@ -14,11 +14,10 @@ router_apparel = APIRouter(
 )
 
 
-
 @router_apparel.get("")
 @web_try()
 @sxtimeit
-def get_apparel(params: Params = schemas.ApparelParams, db: Session = Depends(get_db), user=Depends(check_user)):
+def get_apparel(params: schemas.ApparelParams = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_apparels(db,params), params)
 
 
