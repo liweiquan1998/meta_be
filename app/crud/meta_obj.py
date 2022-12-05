@@ -17,7 +17,10 @@ def meta_obj_add_username(mo, db: Session, ):
     if type(mo) == list:
         res = [r.to_dict() for r in mo]
         for m in res:
-            m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
+            try:
+                m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
+            except Exception as e:
+                raise Exception(f"meta_obj {m['id']} 的创建者不存在")
     else:
         res = mo.to_dict()
         res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name

@@ -16,11 +16,11 @@ router_user = APIRouter(
 )
 
 
-# @router_user.post("/create", summary="创建商户")
-# @web_try()
-# @sxtimeit
-# def add_user(item: schemas.UserCreate, db: Session = Depends(get_db)):
-#     return crud.create_user(db=db, item=item)
+@router_user.post("/create", summary="创建商户")
+@web_try()
+@sxtimeit
+def add_user(item: schemas.UserCreate, db: Session = Depends(get_db)):
+    return crud.create_user(db=db, item=item)
 
 
 @router_user.post("/login", summary="商户登录")

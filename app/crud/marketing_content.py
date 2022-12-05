@@ -15,7 +15,10 @@ def mc_add_username(mc, db: Session):
     if type(mc) == list:
         res = [r.to_dict() for r in mc]
         for m in res:
-            m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
+            try:
+                m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
+            except Exception as e:
+                raise Exception(f"营销内容id {m['id']} 的创建者id {m['creator_id']} 不存在")
     else:
         res = mc.to_dict()
         res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name
@@ -62,7 +65,7 @@ def update_marketing_content_by_workspace(db: Session, workspace: str, update_it
 
 def get_marketing_content_once(db: Session, item_id: int):
     if item := db.query(models.MarketingContent).filter(models.MarketingContent.id == item_id).first():
-        return mc_add_username(item)
+        return mc_add_username(item, db)
     else:
         raise Exception(f"营销内容id {item_id} 不存在")
 
