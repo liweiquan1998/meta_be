@@ -20,6 +20,14 @@ def get_businesses_product_skus(params: schemas.ProductSkuParams = Depends(),
     return paginate(crud.get_business_product_skus(db, business_id, params), params)
 
 
+@router_businesses.get("/{business_id}/product_skus", summary="一个商家下的所有商品类型")
+@web_try()
+@sxtimeit
+def get_businesses_product_skus(business_id, params: schemas.ProductSkuParams = Depends(),
+                                db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_business_product_skus(db, business_id, params), params)
+
+
 @router_businesses.get("/business/orders")
 @web_try()
 @sxtimeit
