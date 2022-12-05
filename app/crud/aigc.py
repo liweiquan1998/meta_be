@@ -14,7 +14,7 @@ threeD_url = config.get("AIGC", "threeD_url")
 video_sound_url = config.get("AIGC", "video_sound_url")
 
 
-def send_tty_request(content, vh_id, work_space, db: Session):
+def send_tts_request(content, vh_id, work_space, db: Session):
     vh = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == vh_id).first()
     sound_type = "female" if vh.sex == 1 else "male"
     data = {

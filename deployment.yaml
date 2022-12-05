@@ -1,0 +1,198 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: meta-be
+  namespace: pixel
+  labels:
+    k8s-app: meta-be
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+                  f:volumeMounts:
+                    .: {}
+                    k:{"mountPath":"/mnt/nfs"}:
+                      .: {}
+                      f:mountPath: {}
+                      f:name: {}
+                    k:{"mountPath":"/workspace"}:
+                      .: {}
+                      f:mountPath: {}
+                      f:name: {}
+              f:dnsPolicy: {}
+              f:imagePullSecrets:
+                .: {}
+                k:{"name":"git-gogs"}:
+                  .: {}
+                  f:name: {}
+              f:initContainers:
+                .: {}
+                k:{"name":"git-clone-metabe"}:
+                  .: {}
+                  f:command: {}
+                  f:image: {}
+                  f:imagePullPolicy: {}
+                  f:name: {}
+                  f:resources: {}
+                  f:terminationMessagePath: {}
+                  f:terminationMessagePolicy: {}
+                  f:volumeMounts:
+                    .: {}
+                    k:{"mountPath":"/app"}:
+                      .: {}
+                      f:mountPath: {}
+                      f:name: {}
+              f:restartPolicy: {}
+              f:schedulerName: {}
+              f:securityContext: {}
+              f:terminationGracePeriodSeconds: {}
+              f:volumes:
+                .: {}
+                k:{"name":"git-metabe"}:
+                  .: {}
+                  f:emptyDir: {}
+                  f:name: {}
+                k:{"name":"metaverse"}:
+                  .: {}
+                  f:name: {}
+                  f:persistentVolumeClaim:
+                    .: {}
+                    f:claimName: {}
+    - manager: kube-controller-manager
+      operation: Update
+      apiVersion: apps/v1
+      time: '2022-12-05T03:31:27Z'
+      fieldsType: FieldsV1
+      fieldsV1:
+        f:metadata:
+          f:annotations:
+            .: {}
+            f:deployment.kubernetes.io/revision: {}
+        f:status:
+          f:availableReplicas: {}
+          f:conditions:
+            .: {}
+            k:{"type":"Available"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+            k:{"type":"Progressing"}:
+              .: {}
+              f:lastTransitionTime: {}
+              f:lastUpdateTime: {}
+              f:message: {}
+              f:reason: {}
+              f:status: {}
+              f:type: {}
+          f:observedGeneration: {}
+          f:readyReplicas: {}
+          f:replicas: {}
+          f:updatedReplicas: {}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: meta-be
+  template:
+    metadata:
+      name: meta-be
+      creationTimestamp: null
+      labels:
+        k8s-app: meta-be
+      annotations:
+        kubectl.kubernetes.io/restartedAt: '2022-12-05T03:30:18Z'
+    spec:
+      volumes:
+        - name: metaverse
+          persistentVolumeClaim:
+            claimName: metaverse-pvc
+        - name: git-metabe
+          emptyDir: {}
+      initContainers:
+        - name: git-clone-metabe
+          image: docker.io/bitnami/git:2.37.3-debian-11-r0
+          command:
+            - /bin/bash
+            - '-ec'
+            - >
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source
+              "/opt/bitnami/scripts/git/entrypoint.sh"
+
+              git clone http://gogs.soaringnova.com/sxwl_DL/meta_be.git --branch
+              main /app
+          resources: {}
+          volumeMounts:
+            - name: git-metabe
+              mountPath: /app
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+      containers:
+        - name: git-repo-syncer
+          image: docker.io/bitnami/git:2.37.3-debian-11-r0
+          command:
+            - /bin/bash
+            - '-ec'
+            - >
+              [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source
+              "/opt/bitnami/scripts/git/entrypoint.sh"
+
+              while true; do
+                  cd /app && git pull origin main
+                  sleep 60
+              done
+          resources: {}
+          volumeMounts:
+            - name: git-metabe
+              mountPath: /app
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: IfNotPresent
+        - name: meta-be
+          image: SXKJ:32775/meta_be
+          resources: {}
+          volumeMounts:
+            - name: metaverse
+              mountPath: /mnt/nfs
+            - name: git-metabe
+              mountPath: /workspace
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+          securityContext:
+            privileged: false
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      imagePullSecrets:
+        - name: git-gogs
+      schedulerName: default-scheduler
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+status:
+  observedGeneration: 22
+  replicas: 1
+  updatedReplicas: 1
+  readyReplicas: 1
+  availableReplicas: 1
+  conditions:
+    - type: Progressing
+      status: 'True'
+      lastUpdateTime: '2022-12-05T03:30:44Z'
+      lastTransitionTime: '2022-12-05T03:01:35Z'
+      reason: NewReplicaSetAvailable
+      message: ReplicaSet "meta-be-855585c8fc" has successfully progressed.
+    - type: Available
+      status: 'True'
+      lastUpdateTime: '2022-12-05T03:31:27Z'
+      lastTransitionTime: '2022-12-05T03:31:27Z'
+      reason: MinimumReplicasAvailable
+      message: Deployment has minimum availability.
