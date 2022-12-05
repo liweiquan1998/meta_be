@@ -13,7 +13,7 @@ class LiveAccountCreate(BaseModel):
     platform: str
     key: str
     token: str
-    creator_id: int
+    creator_id: Union[int] = None
 
     class Config:
         schema_extra = {

@@ -20,6 +20,8 @@ router_live_account = APIRouter(
 @web_try()
 @sxtimeit
 def add_live_account(item: schemas.LiveAccountCreate, db: Session = Depends(get_db), user=Depends(check_user)):
+    if not item.creator_id:
+        item.creator_id = user.id
     return crud.create_live_account(db=db, item=item)
 
 
