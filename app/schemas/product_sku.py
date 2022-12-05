@@ -24,7 +24,8 @@ class ProductSkuUpdate(ProductSkuBase):
     business_id: Optional[int] = None
     meta_obj_id: Optional[int] = None
     remarks: Optional[str] = None
-    status:  Optional[int] = None
+    status: Optional[int] = None
+
 
 class ProductSkuParams(Params):
     name: Optional[str] = None
@@ -43,12 +44,12 @@ class ProductSkuCreate(ProductSkuBase):
         schema_extra = {
             "example": {
                 "sku_name": faker.pystr(),
-                "price": faker.pyint(5,2000),
-                "stock": faker.pyint(1,100),
+                "price": faker.pyint(5, 2000),
+                "stock": faker.pyint(1, 100),
                 "unit": "件",
                 "remarks": faker.pystr(),
-                "business_id": faker.pyint(1,100),
-                "meta_obj_id": faker.pyint(1,100)
+                "business_id": faker.pyint(1, 100),
+                "meta_obj_id": faker.pyint(1, 100)
             }}
 
 
@@ -58,5 +59,3 @@ class Sku(ProductSkuBase):
 
     class Config:
         orm_mode = True
-
-
