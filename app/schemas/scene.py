@@ -21,8 +21,8 @@ class SceneCreate(BaseModel):
                 "name": f"{faker.company_prefix()}的场景",
                 "tag": random.choice([1, 2]),  # 1:直播 2:商铺
                 "base_id": random.choice([1, 2, 3]),  # 基础场景id
-                "thumbnail": 'metaverse_assets/SceneAssets/202211',
-                "config": 'metaverse_assets/SceneAssets/202211',
+                "thumbnail": 'SceneAssets/202211',
+                "config": 'SceneAssets/202211',
                 "creator_id": faker.pyint(5, 10)}
         }
 
