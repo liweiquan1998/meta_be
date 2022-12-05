@@ -17,4 +17,6 @@ from app.schemas.marketing_content import *
 from app.schemas.live_account import *
 from app.schemas.live_streaming import *
 from app.schemas.background import *
+from app.schemas.apparel import *
+
 

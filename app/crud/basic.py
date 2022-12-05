@@ -15,6 +15,8 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
     if len(extra) > 1:
         update_dict[extra[0]] = extra[1]
     for k, v in update_dict.items():
+        if v is None :
+            continue
         if k == 'password':
             k = 'password_hash'
             v = get_password_hash(v)
