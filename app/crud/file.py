@@ -36,6 +36,8 @@ def upload_minio_file(file):
     return {'uri': FMH.put_file(real_path, file_byte)}
 
 def get_nfs_file(path: str):
+    # 兼容老地址
+    path = path.split("metaverse_assets/")[-1]
     file_path = Path('/mnt/nfs') / Path(path)
     with file_path.open('rb') as f:
         file_byte = f.read()
