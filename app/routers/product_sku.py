@@ -48,5 +48,6 @@ def delete_product_sku(item_id: int, db: Session = Depends(get_db), user=Depends
 @web_try()
 @sxtimeit
 def add_sku(item: schemas.ProductSkuCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_product_sku(db=db, item=item)
+    business_id = user.id
+    return crud.create_product_sku(db=db, item=item,business_id)
 

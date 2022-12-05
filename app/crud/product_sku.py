@@ -21,10 +21,11 @@ def split_params(item: schemas.ProductSkuBase):
     return product, sku
 
 
-def create_product_sku(db: Session, item: schemas.ProductSkuCreate):
+def create_product_sku(db: Session, item: schemas.ProductSkuCreate,business_id:int):
     product_param, sku_param = split_params(item)
     db_product_item = models.Product(**product_param)
     db_product_item.create_time = time.time()
+    db_product_item.business_id = business_id
     db.add(db_product_item)
     db.commit()
     db.refresh(db_product_item)
