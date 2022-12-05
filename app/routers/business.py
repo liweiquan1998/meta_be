@@ -11,21 +11,23 @@ router_businesses = APIRouter(
 )
 
 
-@router_businesses.get("/{business_id}/product_skus",summary="一个商家下的所有商品类型")
+@router_businesses.get("/{business_id}/product_skus", summary="一个商家下的所有商品类型")
 @web_try()
 @sxtimeit
-def get_businesses_product_skus(business_id:str,name:str=None,status:int=None,create_time:int=None,
+def get_businesses_product_skus(business_id: str, name: str = None, status: int = None, create_time: int = None,
                                 params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_business_product_skus(db,int(business_id),name,status,create_time), params)
+    return paginate(crud.get_business_product_skus(db, int(business_id), name, status, create_time), params)
 
 
-@router_businesses.get("/{business_id}/orders")
+@router_businesses.get("/business/orders")
 @web_try()
 @sxtimeit
-def get_business_orders(business_id: int, params:  schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db),
+def get_business_orders(params:  schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db),
                         user=Depends(check_user)):
+    business_id = user.id
     return paginate(crud.get_business_orders(db, business_id,
                                              schemas.BusinessPageParams(business_id=int(business_id))), params)
+
 
 @router_businesses.get("/{business_id}/after_care")
 @web_try()

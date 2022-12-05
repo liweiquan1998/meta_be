@@ -11,8 +11,7 @@ from app.routers.sku import router_sku
 from app.routers.scene import router_scene
 from app.routers.scene_base import router_scene_base
 from app.routers.order import router_order
-# from app.routers.logistics import router_logistics
-# from app.routers.except_order import router_except_order
+from app.routers.after_care import router_after_care
 from app.routers.meta_obj import router_meta_obj
 from app.routers.meta_obj_tag import router_meta_obj_tag
 from app.routers.shelves import router_shelves
@@ -47,8 +46,7 @@ app.include_router(router_sku)
 app.include_router(router_scene)
 app.include_router(router_scene_base)
 app.include_router(router_order)
-# app.include_router(router_logistics)
-# app.include_router(router_except_order)
+app.include_router(router_after_care)
 app.include_router(router_meta_obj)
 app.include_router(router_meta_obj_tag)
 app.include_router(router_shelves)
