@@ -15,7 +15,7 @@ FMH = FileHandler("metaverse")
 def upload_nfs_file(file):
     file_byte = file.file.read()
     file_name = f'{int(time.time())}{Path(file.filename).suffix}'
-    result = Path(f'metaverse_assets/SceneAssets/{time.strftime("%Y%m", time.localtime())}')
+    result = Path(f'SceneAssets/{time.strftime("%Y%m", time.localtime())}')
     sys_path = '/mnt/nfs/' / result
     sys_path.mkdir(parents=True, exist_ok=True)
     real_path = sys_path / file_name
@@ -36,6 +36,8 @@ def upload_minio_file(file):
     return {'uri': FMH.put_file(real_path, file_byte)}
 
 def get_nfs_file(path: str):
+    # 兼容老地址
+    path = path.split("metaverse_assets/")[-1]
     file_path = Path('/mnt/nfs') / Path(path)
     with file_path.open('rb') as f:
         file_byte = f.read()
