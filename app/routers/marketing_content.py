@@ -15,7 +15,7 @@ router_marketing_content = APIRouter(
 )
 
 
-@router_marketing_content.post("/", summary="创建营销内容", )
+@router_marketing_content.post("", summary="创建营销内容", )
 @web_try()
 @sxtimeit
 def add_marketing_content(item: schemas.MarketingContentCreate, db: Session = Depends(get_db), user=Depends(check_user)):
