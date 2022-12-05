@@ -5,91 +5,6 @@ metadata:
   namespace: pixel
   labels:
     k8s-app: meta-be
-                  f:terminationMessagePath: {}
-                  f:terminationMessagePolicy: {}
-                  f:volumeMounts:
-                    .: {}
-                    k:{"mountPath":"/mnt/nfs"}:
-                      .: {}
-                      f:mountPath: {}
-                      f:name: {}
-                    k:{"mountPath":"/workspace"}:
-                      .: {}
-                      f:mountPath: {}
-                      f:name: {}
-              f:dnsPolicy: {}
-              f:imagePullSecrets:
-                .: {}
-                k:{"name":"git-gogs"}:
-                  .: {}
-                  f:name: {}
-              f:initContainers:
-                .: {}
-                k:{"name":"git-clone-metabe"}:
-                  .: {}
-                  f:command: {}
-                  f:image: {}
-                  f:imagePullPolicy: {}
-                  f:name: {}
-                  f:resources: {}
-                  f:terminationMessagePath: {}
-                  f:terminationMessagePolicy: {}
-                  f:volumeMounts:
-                    .: {}
-                    k:{"mountPath":"/app"}:
-                      .: {}
-                      f:mountPath: {}
-                      f:name: {}
-              f:restartPolicy: {}
-              f:schedulerName: {}
-              f:securityContext: {}
-              f:terminationGracePeriodSeconds: {}
-              f:volumes:
-                .: {}
-                k:{"name":"git-metabe"}:
-                  .: {}
-                  f:emptyDir: {}
-                  f:name: {}
-                k:{"name":"metaverse"}:
-                  .: {}
-                  f:name: {}
-                  f:persistentVolumeClaim:
-                    .: {}
-                    f:claimName: {}
-    - manager: kube-controller-manager
-      operation: Update
-      apiVersion: apps/v1
-      time: '2022-12-05T03:31:27Z'
-      fieldsType: FieldsV1
-      fieldsV1:
-        f:metadata:
-          f:annotations:
-            .: {}
-            f:deployment.kubernetes.io/revision: {}
-        f:status:
-          f:availableReplicas: {}
-          f:conditions:
-            .: {}
-            k:{"type":"Available"}:
-              .: {}
-              f:lastTransitionTime: {}
-              f:lastUpdateTime: {}
-              f:message: {}
-              f:reason: {}
-              f:status: {}
-              f:type: {}
-            k:{"type":"Progressing"}:
-              .: {}
-              f:lastTransitionTime: {}
-              f:lastUpdateTime: {}
-              f:message: {}
-              f:reason: {}
-              f:status: {}
-              f:type: {}
-          f:observedGeneration: {}
-          f:readyReplicas: {}
-          f:replicas: {}
-          f:updatedReplicas: {}
 spec:
   replicas: 1
   selector:
@@ -101,8 +16,6 @@ spec:
       creationTimestamp: null
       labels:
         k8s-app: meta-be
-      annotations:
-        kubectl.kubernetes.io/restartedAt: '2022-12-05T03:30:18Z'
     spec:
       volumes:
         - name: metaverse
@@ -169,30 +82,3 @@ spec:
       securityContext: {}
       imagePullSecrets:
         - name: git-gogs
-      schedulerName: default-scheduler
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxUnavailable: 25%
-      maxSurge: 25%
-  revisionHistoryLimit: 10
-  progressDeadlineSeconds: 600
-status:
-  observedGeneration: 22
-  replicas: 1
-  updatedReplicas: 1
-  readyReplicas: 1
-  availableReplicas: 1
-  conditions:
-    - type: Progressing
-      status: 'True'
-      lastUpdateTime: '2022-12-05T03:30:44Z'
-      lastTransitionTime: '2022-12-05T03:01:35Z'
-      reason: NewReplicaSetAvailable
-      message: ReplicaSet "meta-be-855585c8fc" has successfully progressed.
-    - type: Available
-      status: 'True'
-      lastUpdateTime: '2022-12-05T03:31:27Z'
-      lastTransitionTime: '2022-12-05T03:31:27Z'
-      reason: MinimumReplicasAvailable
-      message: Deployment has minimum availability.
