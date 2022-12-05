@@ -16,7 +16,7 @@ router_live_account = APIRouter(
 )
 
 
-@router_live_account.post("/", summary="创建直播账号")
+@router_live_account.post("", summary="创建直播账号")
 @web_try()
 @sxtimeit
 def add_live_account(item: schemas.LiveAccountCreate, db: Session = Depends(get_db), user=Depends(check_user)):
@@ -37,7 +37,7 @@ def get_live_account_once(creator_id: int, db: Session = Depends(get_db), user=D
     return crud.get_live_account_once_by_creator_id(db=db, creator_id=creator_id)
 
 
-@router_live_account.get("/", summary="获取直播账号列表")
+@router_live_account.get("", summary="获取直播账号列表")
 @web_try()
 @sxtimeit
 def get_live_account(get_item: schemas.LiveAccountGet = Depends(), params: Params = Depends(),

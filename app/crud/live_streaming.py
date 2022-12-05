@@ -9,6 +9,18 @@ from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
 
+def live_streaming_add_username(ls, db: Session):
+    if type(ls) == list:
+        res = [r.to_dict() for r in ls]
+        for m in res:
+            try:
+                m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
+            except Exception as e:
+                raise Exception(f"直播流id {m['id']} 的创建者id {m['creator_id']} 不存在")
+    else:
+        res = ls.to_dict()
+        res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name
+    return res
 
 def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate):
     # sourcery skip: use-named-expression
@@ -27,7 +39,7 @@ def update_live_streaming(db: Session, item_id: int, update_item: schemas.LiveSt
 
 def get_live_streaming_once(db: Session, item_id: int):
     if item := db.query(models.LiveStreaming).filter(models.LiveStreaming.id == item_id).first():
-        return item
+        return live_streaming_add_username(item, db)
     else:
         raise Exception(f"直播流id {item_id} 不存在")
 
@@ -39,7 +51,8 @@ def get_live_streamings(db: Session, item: schemas.LiveStreamingGet):
     if item.create_time is not None and item.create_time != 0:
         db_query = db_query.filter(models.LiveStreaming.create_time <= item.create_time + 86400)
         db_query = db_query.filter(models.LiveStreaming.create_time >= item.create_time)
-    return db_query.order_by(models.LiveStreaming.id).all()
+    res = db_query.order_by(models.LiveStreaming.id).all()
+    return live_streaming_add_username(res, db)
 
 
 def delete_live_streaming(db: Session, item_id: int):
