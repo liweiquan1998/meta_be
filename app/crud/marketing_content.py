@@ -18,27 +18,34 @@ def mc_add_username(mc, db: Session):
             try:
                 m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
             except Exception as e:
-                raise Exception(f"营销内容id {m['id']} 的创建者id {m['creator_id']} 不存在")
+                raise Exception(f"营销内容id {m['id']} 的创建者id {m['creator_id']} 不存在") from e
     else:
         res = mc.to_dict()
         res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name
     return res
-def create_marketing_content(db: Session, item: schemas.MarketingContentCreate):
+
+
+def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, creator_id: int):
     # sourcery skip: use-named-expression
     # meta_obj 存在检查
     if db.query(models.MetaObj).filter(models.MetaObj.id == item.metaobj_id).first() is None:
         raise Exception(f"meta_obj {item.metaobj_id} 不存在")
     # 创建者 存在检查
-    if db.query(models.User).filter(models.User.id == item.creator_id).first() is None:
-        raise Exception(f"创建者 {item.creator_id} 不存在")
-    # 向tts发送请求
-    threading.Thread(target=send_tts_request, args=(item.content, item.virtual_human_id, item.work_space, db)).start()
-    # 创建
+    if db.query(models.User).filter(models.User.id == creator_id).first() is None:
+        raise Exception(f"创建者 {creator_id} 不存在")
+    # 删除virtual_human_sex
+    vh_sex = item.virtual_human_sex
+    del item.virtual_human_sex
+    # 创建 添加create_id
     db_item = models.MarketingContent(**item.dict(), **{'create_time': int(time.time()),
+                                                        'creator_id': creator_id,
                                                         'status': 0})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
+    # 向tts发送请求
+    # send_tts_request(item.content, vh_sex, db_item.id,db)
+    threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
     return db_item
 
 

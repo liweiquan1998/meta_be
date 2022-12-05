@@ -10,19 +10,18 @@ class MarketingContentCreate(BaseModel):
     name: str
     content: str
     metaobj_id: int
-    creator_id: int
-    virtual_human_id: int
-    work_space: str
+    virtual_human_sex: int
+    # creator_id: int
+    # virtual_human_id: int
+    # work_space: str
 
     class Config:
         schema_extra = {
             "example": {
-                "name": faker.name(),
+                "name": "内容营销测试",
                 "content": faker.text(),
-                "metaobj_id": faker.pyint(5, 10),
-                "creator_id": faker.pyint(5, 10),
-                "virtual_human_id": faker.pyint(5, 10),
-                "work_space": faker.address()}}
+                "metaobj_id": 1,
+                "virtual_human_sex": faker.pyint(1, 2)}}
 
 
 class ComposeVideo(BaseModel):

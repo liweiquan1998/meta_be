@@ -13,6 +13,6 @@ services:
       - ./:/workspace
       - ./be.conf:/etc/supervisor/conf.d/be.conf
     ports:
-      - '20080:8080'
-      - '22110:22'
+      - '50003:8080'
+      - '22003:22'
 

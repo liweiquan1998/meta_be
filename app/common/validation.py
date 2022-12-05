@@ -83,13 +83,13 @@ def check_user_id(token: str, db: Session = Depends(get_db)):
 # 验证
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
     if token in {"sxkjue", 'sxkjALG'}:
-        return True
+        return {id: 1}
     userid, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在
     user = db.query(models.User).filter(models.User.id == userid).first()
     if user is None:
         raise HTTPException(status_code=401, detail="商户不存在")
-    return user
+    return user.to_dict()
 
 
 async def check_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
