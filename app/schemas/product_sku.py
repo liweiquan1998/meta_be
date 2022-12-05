@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from faker import Faker
 from typing import Optional
+from fastapi_pagination import Params
 
 faker = Faker(locale='zh_CN')
 
@@ -24,6 +25,12 @@ class ProductSkuUpdate(ProductSkuBase):
     meta_obj_id: Optional[int] = None
     remarks: Optional[str] = None
     status:  Optional[int] = None
+
+class ProductSkuParams(Params):
+    business_id: str
+    name: Optional[str] = None
+    status: Optional[int] = None
+    create_time: Optional[int] = None
 
 
 class ProductSkuCreate(ProductSkuBase):

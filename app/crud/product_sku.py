@@ -86,7 +86,7 @@ def get_product_skus(db: Session):
     return res
 
 
-def get_business_product_skus(db: Session, business_id,name,status,create_time):
+def get_business_product_skus(db: Session,business_id, params: schemas.ProductSkuParams):
     sql = '''SELECT a.create_time,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id,
 			b.*,c.thumbnail
             FROM product a LEFT JOIN sku b 
@@ -98,12 +98,12 @@ def get_business_product_skus(db: Session, business_id,name,status,create_time):
     status_filter_sql = 'AND b.status = {}'
     time_filter_sql = "AND a.create_time>={} AND a.create_time<{}"
     sql = sql.format(business_id)
-    if name is not None:
-        sql += name_filter_sql.format(name)
-    if status is not None:
-        sql += status_filter_sql.format(status)
-    if create_time is not None:
-        sql += time_filter_sql.format(create_time,create_time+24*3600)
+    if params.name is not None:
+        sql += name_filter_sql.format(params.name)
+    if params.status is not None:
+        sql += status_filter_sql.format(params.status)
+    if params.create_time is not None:
+        sql += time_filter_sql.format(params.create_time,params.create_time+24*3600)
     rows = db.execute(sql).fetchall()
     res = []
     for row in rows:  # 处理时间戳

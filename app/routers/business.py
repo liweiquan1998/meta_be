@@ -11,12 +11,13 @@ router_businesses = APIRouter(
 )
 
 
-@router_businesses.get("/{business_id}/product_skus", summary="一个商家下的所有商品类型")
+@router_businesses.get("/business/product_skus", summary="一个商家下的所有商品类型")
 @web_try()
 @sxtimeit
-def get_businesses_product_skus(business_id: str, name: str = None, status: int = None, create_time: int = None,
-                                params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_business_product_skus(db, int(business_id), name, status, create_time), params)
+def get_businesses_product_skus(params: schemas.ProductSkuParams = Depends(),
+                                db: Session = Depends(get_db), user=Depends(check_user)):
+    business_id = user.id
+    return paginate(crud.get_business_product_skus(db,business_id, params), params)
 
 
 @router_businesses.get("/business/orders")
@@ -28,8 +29,9 @@ def get_business_orders(params:  schemas.BusinessPageParams = Depends(), db: Ses
     return paginate(crud.get_business_orders(db, business_id, params), params)
 
 
-@router_businesses.get("/{business_id}/after_care")
+@router_businesses.get("/business/after_care")
 @web_try()
 @sxtimeit
-def get_business_except_orders(business_id: str, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_business_after_cares(db, int(business_id)), params)
+def get_business_except_orders(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    business_id = user.id
+    return paginate(crud.get_business_after_cares(db, business_id), params)
