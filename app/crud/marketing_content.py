@@ -32,7 +32,7 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate):
     if db.query(models.User).filter(models.User.id == item.creator_id).first() is None:
         raise Exception(f"创建者 {item.creator_id} 不存在")
     # 向tts发送请求
-    threading.Thread(target=send_tty_request, args=(item.content, item.virtual_human_id, item.work_space, db)).start()
+    threading.Thread(target=send_tts_request, args=(item.content, item.virtual_human_id, item.work_space, db)).start()
     # 创建
     db_item = models.MarketingContent(**item.dict(), **{'create_time': int(time.time()),
                                                         'status': 0})
