@@ -5,14 +5,14 @@ from faker import Faker
 faker = Faker(locale='zh_CN')
 
 
-class ExceptOrderBase(BaseModel):
+class AfterCareBase(BaseModel):
     except_type: str
     order_id: int
     business_id: int
     back_reason: str
 
 
-class ExceptOrderCreate(ExceptOrderBase):
+class AfterCareCreate(AfterCareBase):
     class Config:
         schema_extra = {
             "example": {
@@ -23,7 +23,7 @@ class ExceptOrderCreate(ExceptOrderBase):
             }}
 
 
-class ExceptOrderUpdate(ExceptOrderBase):
+class AfterCareUpdate(AfterCareBase):
     remark: str
     status: int
     create_time: int
@@ -31,11 +31,11 @@ class ExceptOrderUpdate(ExceptOrderBase):
     recv_time: int
     close_time: int
 
-class BusinessExceptOrderUpdate(BaseModel):
+class BusinessAfterCareUpdate(BaseModel):
     remark: str
     status: int
 
-class ExceptOrder(ExceptOrderBase):
+class AfterCare(AfterCareBase):
     back_reason: str
     remark: str
     status: int

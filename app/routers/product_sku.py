@@ -14,8 +14,7 @@ router_product_sku = APIRouter(
 )
 
 
-
-@router_product_sku.get("/",summary="分页获取pro_sku或者全量获取")
+@router_product_sku.get("", summary="分页获取pro_sku或者全量获取")
 @web_try()
 @sxtimeit
 def get_product_skus(total: int = 0, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):

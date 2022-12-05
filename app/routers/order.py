@@ -5,7 +5,6 @@ from app.crud import product
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
 import time
-from app.handler import order
 from app.common.validation import *
 
 router_order = APIRouter(
@@ -15,17 +14,11 @@ router_order = APIRouter(
 
 
 
-@router_order.get("/")
+@router_order.get("")
 @web_try()
 @sxtimeit
 def get_orders(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_orders(db), params)
-
-@router_order.get("/businesses")
-@web_try()
-@sxtimeit
-def get_business_orders(params: schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_business_orders(db,params), params)
 
 
 @router_order.get("/{item_id}")
@@ -39,7 +32,8 @@ def get_order_once(item_id: int, db: Session = Depends(get_db), user=Depends(che
 @web_try()
 @sxtimeit
 def update_order(item_id: int, update_item: schemas.OrderUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_order(db=db,item_id=item_id,update_item=update_item)
+    return crud.update_order(db=db, item_id=item_id, update_item=update_item)
+
 
 @router_order.delete("/{item_id}")
 @web_try()
@@ -47,21 +41,6 @@ def update_order(item_id: int, update_item: schemas.OrderUpdate, db: Session = D
 def delete_order(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_order(db=db,item_id=item_id)
 
-@router_order.post("/")
-@web_try()
-@sxtimeit
-def add_order(item: schemas.OrderCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_order(db=db, item=item)
 
 
-@router_order.put("/{item_id}/deliver_status")  # todo: 发货不需要了，直接该状态就ok
-@web_try()
-@sxtimeit
-def deliver_order(item_id: int,item: schemas.OrderDeliver,db: Session = Depends(get_db), user=Depends(check_user)):
-    return order.deliver_order(db,item_id,item)
 
-@router_order.put("/{item_id}/except_status")  # todo: 确认退货，先不管SKU了也用Order
-@web_try()
-@sxtimeit
-def except_order(item_id: int,item: schemas.OrderExcept,db: Session = Depends(get_db), user=Depends(check_user)): #after care
-    return order.except_order(db,item_id,item)

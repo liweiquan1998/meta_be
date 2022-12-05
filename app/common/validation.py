@@ -82,7 +82,7 @@ def check_user_id(token: str, db: Session = Depends(get_db)):
 
 # 验证
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    if token == 'sxkjue':
+    if token in {"sxkjue", 'sxkjALG'}:
         return True
     userid, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在

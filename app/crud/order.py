@@ -4,7 +4,8 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.crud.product_sku import *
-from utils import t2date,trans_t2date
+from utils import t2date, trans_t2date
+
 
 def create_order(db: Session, item: schemas.OrderCreate):
     db_item = models.Order(**item.dict())
@@ -17,13 +18,26 @@ def create_order(db: Session, item: schemas.OrderCreate):
 
 
 def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
-    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Order)
+    order_db_item: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
+    original_status = order_db_item.status
+    order_db_item.set_field(update_item.dict())
+    if original_status == -1 and order_db_item.status == 3:  # 商家确认退款
+        after_care_db_item: models.AfterCare = db.query(models.AfterCare).\
+                            filter(models.AfterCare.id == order_db_item.except_id).first()
+        after_care_db_item.set_field(update_item.dict())
+        after_care_db_item.status = 1
+        order_db_item.close_time = time.time()
+    db.commit()
+    db.refresh(order_db_item)
+    return order_db_item
+
 
 def get_order_once(db: Session, item_id: int):
     res: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
     return res
 
-def get_order_once_dict(db:Session, item_id:int):
+
+def get_order_once_dict(db: Session, item_id: int):
     res: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
     if res.create_time:
         res.create_time = t2date(res.create_time)
@@ -34,7 +48,7 @@ def get_order_once_dict(db:Session, item_id:int):
     res_dict['deliver_name'] = business_info.name if business_info else '商家姓名丢失'
     res_dict['deliver_phone'] = business_info.tel_phone if business_info else '商家电话信息丢失'
     res_dict['sku_snapshot'] = json.loads(res_dict.get('sku_snapshot', '{}'))
-    res_dict['except_order'] = db.query(models.ExceptOrder).filter(models.ExceptOrder.id == res.except_id).first()
+    res_dict['except_order'] = db.query(models.AfterCare).filter(models.AfterCare.id == res.except_id).first()
     return res_dict
 
 
@@ -43,8 +57,8 @@ def get_orders(db: Session):
     return res
 
 
-def get_business_orders(db: Session, params: schemas.BusinessPageParams):
-    query = db.query(models.Order).filter(models.Order.business_id == params.business_id)
+def get_business_orders(db: Session, business_id: int, params: schemas.BusinessPageParams):
+    query = db.query(models.Order).filter(models.Order.business_id == business_id)
     if params.status is not None:
         query = query.filter(models.Order.status == params.status)
     if params.order_num:
@@ -63,7 +77,7 @@ def get_business_orders(db: Session, params: schemas.BusinessPageParams):
     return res
 
 
-def get_customer_orders(db: Session, customer_id:int):
+def get_customer_orders(db: Session, customer_id: int):
     res: List[models.Order] = db.query(models.Order).filter(models.Order.customer_id == customer_id).all()
     return res
 

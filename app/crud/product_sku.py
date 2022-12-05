@@ -80,7 +80,8 @@ def get_product_sku_once_withmeta(db: Session, item_id: int):
 
 def get_product_skus(db: Session):
     sql = '''SELECT  b.*,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id
-            FROM product a LEFT JOIN sku b ON a.id=b.product_id'''
+            FROM product a LEFT JOIN sku b ON a.id=b.product_id 
+            WHERE b.product_id>0'''
     res: List[models.BaseModel] = db.execute(sql).fetchall()
     return res
 

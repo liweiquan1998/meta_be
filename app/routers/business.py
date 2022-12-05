@@ -22,11 +22,13 @@ def get_businesses_product_skus(business_id:str,name:str=None,status:int=None,cr
 @router_businesses.get("/{business_id}/orders")
 @web_try()
 @sxtimeit
-def get_business_orders(business_id:str,params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_business_orders(db,schemas.BusinessPageParams(business_id=int(business_id))), params)
+def get_business_orders(business_id: int, params:  schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db),
+                        user=Depends(check_user)):
+    return paginate(crud.get_business_orders(db, business_id,
+                                             schemas.BusinessPageParams(business_id=int(business_id))), params)
 
-@router_businesses.get("/{business_id}/except_orders")
+@router_businesses.get("/{business_id}/after_care")
 @web_try()
 @sxtimeit
-def get_business_except_orders(business_id:str,params:Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_business_except_orders(db,int(business_id)), params)
+def get_business_except_orders(business_id: str, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_business_after_cares(db, int(business_id)), params)
