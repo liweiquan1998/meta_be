@@ -17,6 +17,7 @@ def upload_nfs_file(file):
     file_name = f'{int(time.time())}{Path(file.filename).suffix}'
     # result = Path(f'SceneAssets/{time.strftime("%Y%m", time.localtime())}')
     result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+    print(result)
     sys_path = '/mnt/nfs/' / result
     sys_path.mkdir(parents=True, exist_ok=True)
     real_path = sys_path / file_name
