@@ -27,7 +27,6 @@ class ProductSkuUpdate(ProductSkuBase):
     status:  Optional[int] = None
 
 class ProductSkuParams(Params):
-    business_id: str
     name: Optional[str] = None
     status: Optional[int] = None
     create_time: Optional[int] = None
