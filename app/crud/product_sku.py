@@ -1,7 +1,7 @@
 # @author: wanjinhong
 # @remarks: sku模块数据库设计为product+sku,目前逻辑为product和sku,所以先临时针对当前业务设计接口
 import time
-from typing import List
+from typing import List,Union
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
@@ -86,7 +86,7 @@ def get_product_skus(db: Session):
     return res
 
 
-def get_business_product_skus(db: Session,business_id, params: schemas.ProductSkuParams):
+def get_business_product_skus(db: Session,business_id, params: Union[schemas.ProductSkuParams,schemas.ProductSkuParamsBase]):
     sql = '''SELECT a.create_time,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id,
 			b.*,c.thumbnail
             FROM product a LEFT JOIN sku b 

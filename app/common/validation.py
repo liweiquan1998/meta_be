@@ -13,6 +13,8 @@ from pydantic import BaseModel
 from app import get_db, models
 from configs.settings import config
 
+sx_servers = {"sxkjue", 'sxkjALG'}
+
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/swagger/login")
@@ -82,8 +84,9 @@ def check_user_id(token: str, db: Session = Depends(get_db)):
 
 # 验证
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    if token in {"sxkjue", 'sxkjALG'}:
-        return db.query(models.User).filter(models.User.id == 1).first()
+    global sx_servers
+    if token in sx_servers:
+        return token
     userid, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在
     user = db.query(models.User).filter(models.User.id == userid).first()

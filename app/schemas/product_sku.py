@@ -32,6 +32,12 @@ class ProductSkuParams(Params):
     create_time: Optional[int] = None
 
 
+class ProductSkuParamsBase(BaseModel):
+    name: Optional[str] = None
+    status: Optional[int] = None
+    create_time: Optional[int] = None
+
+
 class ProductSkuCreate(ProductSkuBase):
     class Config:
         schema_extra = {
