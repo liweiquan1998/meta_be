@@ -11,7 +11,7 @@ router_businesses = APIRouter(
 )
 
 
-@router_businesses.get("/business_id/product_skus", summary="一个商家下的所有商品类型")  # 正式上线前要记得检验token是否是内部服务
+@router_businesses.get("/{business_id}/product_skus", summary="一个商家下的所有商品类型")  # 正式上线前要记得检验token是否是内部服务
 @web_try()
 @sxtimeit
 def get_businesses_product_skus(business_id:int, params: schemas.ProductSkuParamsBase = Depends(),
