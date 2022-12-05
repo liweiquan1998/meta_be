@@ -25,8 +25,7 @@ def get_businesses_product_skus(business_id: str, name: str = None, status: int 
 def get_business_orders(params:  schemas.BusinessPageParams = Depends(), db: Session = Depends(get_db),
                         user=Depends(check_user)):
     business_id = user.id
-    return paginate(crud.get_business_orders(db, business_id,
-                                             schemas.BusinessPageParams(business_id=int(business_id))), params)
+    return paginate(crud.get_business_orders(db, business_id, params), params)
 
 
 @router_businesses.get("/{business_id}/after_care")
