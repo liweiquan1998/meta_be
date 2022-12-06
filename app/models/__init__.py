@@ -17,4 +17,5 @@ from app.models.live_account import *
 from app.models.live_streaming import *
 from app.models.background import *
 from app.models.apparel import *
+from app.models.blueprint import *
 

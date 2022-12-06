@@ -45,3 +45,10 @@ def get_business_orders(params:  schemas.BusinessPageParams = Depends(), db: Ses
 def get_business_except_orders(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     business_id = user.id
     return paginate(crud.get_business_after_cares(db, business_id), params)
+
+
+@router_businesses.get("/{business}/blueprints")
+@web_try()
+@sxtimeit
+def get_business_blueprints(business: int, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_blueprints_by_creatorid(db, business), params)

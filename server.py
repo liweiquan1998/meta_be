@@ -23,6 +23,7 @@ from app.routers.live_account import router_live_account
 from app.routers.live_streaming import router_live_streaming
 from app.routers.background import router_backgrounds
 from app.routers.apparel import router_apparel
+from app.routers.blueprint import router_blueprint
 from utils.sx_log import format_print
 
 format_print()
@@ -61,6 +62,7 @@ app.include_router(router_live_account)
 app.include_router(router_live_streaming)
 app.include_router(router_backgrounds)
 app.include_router(router_apparel)
+app.include_router(router_blueprint)
 
 # Get 健康检查
 @app.get("/ping", description="健康检查")
