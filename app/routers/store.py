@@ -49,3 +49,10 @@ def get_store_once(item_id: int, db: Session = Depends(get_db), user=Depends(che
 @sxtimeit
 def get_stores(get_item: schemas.StoreGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user) ):
     return paginate(crud.get_stores(db, get_item), params)
+
+
+@router_store.get("/{store_id}/blueprint", summary="获取蓝图列表")
+@web_try()
+@sxtimeit
+def get_store_blueprint(store_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_blueprint_once_by_store_id(db, store_id)

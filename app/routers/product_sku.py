@@ -34,7 +34,8 @@ def get_product_sku_once(item_id: int, db: Session = Depends(get_db), user=Depen
 @web_try()
 @sxtimeit
 def update_product_sku(item_id: int, update_item: schemas.ProductSkuUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_product_sku(db=db,item_id=item_id,update_item=update_item)
+    update_item.business_id = user.id
+    return crud.update_product_sku(db=db, item_id=item_id, update_item=update_item)
 
 
 @router_product_sku.delete("/{item_id}")
@@ -48,5 +49,6 @@ def delete_product_sku(item_id: int, db: Session = Depends(get_db), user=Depends
 @web_try()
 @sxtimeit
 def add_sku(item: schemas.ProductSkuCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_product_sku(db=db, item=item)
+    business_id = user.id
+    return crud.create_product_sku(db=db, item=item,business_id=business_id)
 
