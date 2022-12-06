@@ -51,5 +51,5 @@ def get_minio_file(uri):
 @router_file.post("/MinioFiles", summary="minio上传多个文件")
 async def create_files(files: List[UploadFile] = File()):
                        # , user=Depends(check_user)):
-    uris = [crud.upload_minio_file(file) for file in files]
+    uris = [crud.upload_minio_file(file)['uri'] for file in files]
     return {'uris': uris}

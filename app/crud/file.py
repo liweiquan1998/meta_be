@@ -2,6 +2,7 @@ import io
 import time
 from pathlib import Path
 from typing import List
+import uuid
 import magic
 from fastapi.responses import StreamingResponse
 from app.db.minio import FileHandler
@@ -14,7 +15,7 @@ FMH = FileHandler("metaverse")
 
 def upload_nfs_file(file):
     file_byte = file.file.read()
-    file_name = f'{int(time.time())}{Path(file.filename).suffix}'
+    file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
     # result = Path(f'SceneAssets/{time.strftime("%Y%m", time.localtime())}')
     result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
     sys_path = '/mnt/nfs/' / result
@@ -30,7 +31,7 @@ def upload_nfs_file(file):
 
 def upload_minio_file(file):
     file_byte = file.file.read()
-    file_name = f'{int(time.time())}{Path(file.filename).suffix}'
+    file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
     FMH.put_file(real_path, file_byte)
