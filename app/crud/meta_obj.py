@@ -47,7 +47,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
 
     if upload_type == 'image':
         minio_path = item.aigc[0]
-        file_byte = get_minio_file(minio_path).body_iterator.ag_code
+        file_byte = get_minio_file(minio_path).body_iterator.ag_code.co_code
         nfs_path = f"/mnt/nfs/SceneAssets/{minio_path}"
         with open(nfs_path, "wb") as f:
             f.write(file_byte)
