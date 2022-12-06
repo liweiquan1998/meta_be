@@ -43,6 +43,9 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
                                                'creator_id': creator_id,
                                                'kind': 0 if upload_type is None else 1,
                                                'status': 0 if item.type == 0 else None})
+
+    if upload_type == 'image':
+        db_item.thumbnail = item.aigc[0]
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
