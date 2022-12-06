@@ -26,7 +26,6 @@ class MarketingContentCreate(BaseModel):
 
 class ComposeVideo(BaseModel):
     marketing_content_id: int
-    audio_uri: str
     video_uri: str
 
 
