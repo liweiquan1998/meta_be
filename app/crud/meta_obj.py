@@ -27,25 +27,37 @@ def meta_obj_add_username(mo, db: Session, ):
     return res
 
 
-def create_meta_obj(db: Session, item):
+def create_meta_obj(db: Session, item, creator_id):
     # sourcery skip: use-named-expression
     # 重复名称检查
     item.name = is_valid_name(item.name, 10)
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.name == item.name).first()
     if res:
         raise Exception(f"物品 {item.name} 已存在")
-    if item.type == 0:
+    # 场景素材
+    if item.type == 1:
         create_meta_obj_tag(db, item.tag)
-    # 由图片流创建模型
+    # 商铺 upload_type 暂存
     if item.type == 0:
-        item.status = 0
-        threading.Thread(target=send_nerf_request, args=(item.aigc, item.id, 'image' if item.status == 1 else 'video')).start()
+        upload_type = item.upload_type
+        del item.upload_type
 
     # 创建
-    db_item = models.MetaObj(**item.dict(), **{'create_time': int(time.time())})
+    db_item = models.MetaObj(**item.dict(), **{'create_time': int(time.time()),
+                                               'creator_id': creator_id,
+                                               'status': 0 if item.type == 0 else None})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
+
+    # 由图片流创建模型
+    if item.type == 0:
+        threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
+
+        # if upload_type == 'image':
+        #     threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
+        # if upload_type == 'video':
+        #     threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
     return db_item
 
 

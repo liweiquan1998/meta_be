@@ -29,7 +29,7 @@ def send_nerf_request(file_list, mo_id, file_type):
     data = {
         "file_list": file_list,
         "file_type": file_type,
-        "mo_id": mo_id
+        "id": mo_id
     }
     requests.post(threeD_url, json=data)
 

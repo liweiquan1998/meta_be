@@ -8,7 +8,7 @@ class VirtualHuman(BaseModel):
 
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(20), comment='姓名')
-    sex = Column(Integer, comment='性别 0:未知 1:男 2:女')
+    sex = Column(Integer, comment='性别 1:男 2:女')
     status = Column(Integer, comment='状态 0:禁用 1:启用')
     creator_id = Column(Integer, comment='创建者id')
     create_time = Column(Integer, comment='创建时间')
