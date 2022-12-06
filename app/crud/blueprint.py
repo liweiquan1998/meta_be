@@ -8,8 +8,6 @@ from app.common.validation import *
 
 
 def create_blueprint(db: Session, item: schemas.BlueprintCreate):
-    # sourcery skip: use-named-expression
-    # 重复店铺名检查
     if db.query(models.BluePrint).filter(models.BluePrint.store_id == item.store_id).first():
         raise Exception(f"店铺id {item.store_id} 已有保存的蓝图")
     if db.query(models.User).filter(models.User.id == item.creator_id).first() is None:
