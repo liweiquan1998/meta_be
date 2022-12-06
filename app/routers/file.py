@@ -1,3 +1,5 @@
+from concurrent.futures import ThreadPoolExecutor
+
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
 
@@ -51,5 +53,8 @@ def get_minio_file(uri):
 @router_file.post("/MinioFiles", summary="minio上传多个文件")
 async def create_files(files: List[UploadFile] = File()):
                        # , user=Depends(check_user)):
-    uris = [crud.upload_minio_file(file)['uri'] for file in files]
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        results = executor.map(crud.upload_minio_file, files)
+    uris = [result['uri'] for result in results]
+    # uris = [crud.upload_minio_file(file)['uri'] for file in files]
     return {'uris': uris}
