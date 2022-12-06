@@ -38,7 +38,7 @@ def get_blueprint_once_by_store_id(db: Session, item_id: int):
     return res
 
 
-def get_blueprints_by_creatorid(db: Session, user_id):
+def get_blueprints_by_creator_id(db: Session, user_id):
     blueprints: List[models.BluePrint] = db.query(models.BluePrint).filter(models.BluePrint.creator_id == user_id).all()
     return blueprints
 
