@@ -41,6 +41,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # 创建
     db_item = models.MetaObj(**item.dict(), **{'create_time': int(time.time()),
                                                'creator_id': creator_id,
+                                               'kind': 0 if upload_type is None else 1,
                                                'status': 0 if item.type == 0 else None})
     db.add(db_item)
     db.commit()
