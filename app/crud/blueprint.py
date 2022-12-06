@@ -23,8 +23,6 @@ def create_blueprint(db: Session, item: schemas.BlueprintCreate):
 
 
 def update_blueprint(db: Session, item_id: int, update_item: schemas.BlueprintUpdate):
-    if update_item.config:
-        update_item.config = json.loads(update_item.config)
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.BluePrint)
 
 
