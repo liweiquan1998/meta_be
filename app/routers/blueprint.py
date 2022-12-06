@@ -15,8 +15,12 @@ router_blueprint = APIRouter(
 @web_try()
 @sxtimeit
 def add_blueprint(item: schemas.BlueprintCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    item.creator_id = user.id
-    return crud.create_blueprint(db=db, item=item)
+    blueprint = crud.get_blueprint_once_by_store_id(db,item.store_id)
+    if not blueprint:
+        item.creator_id = user.id
+        return crud.create_blueprint(db=db, item=item)
+    else:
+        return crud.update_blueprint(db,blueprint.id,schemas.BlueprintUpdate(config_uri=item.config_uri))
 
 
 @router_blueprint.delete("/{item_id}", summary="删除蓝图")
