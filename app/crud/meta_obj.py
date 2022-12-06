@@ -9,6 +9,7 @@ from app.crud.meta_obj_tag import create_meta_obj_tag
 from utils.valid_name import is_valid_name
 from app.crud.aigc import *
 from app.crud.user import *
+from app.crud.file import *
 
 
 
@@ -45,7 +46,12 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
                                                'status': 0 if item.type == 0 else None})
 
     if upload_type == 'image':
-        db_item.thumbnail = item.aigc[0]
+        minio_path = item.aigc[0]
+        file_byte = get_minio_file(minio_path).body_iterator.ag_code
+        nfs_path = f"/mnt/nfs/SceneAssets/{minio_path}"
+        with open(nfs_path, "wb") as f:
+            f.write(file_byte)
+        db_item.thumbnail = nfs_path
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
