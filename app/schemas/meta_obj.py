@@ -18,7 +18,6 @@ class MetaObjByImageCreate(BaseModel):
     name: str
     type: int
     aigc: list
-    upload_type: str
     height: Optional[int] = None
 
     class Config:
@@ -128,7 +127,6 @@ class MetaObjByImageCreate(BaseModel):
                     "202212/64f38abc-7515-11ed-8267-0242ac1a0002.png",
                     "202212/6516504c-7515-11ed-8267-0242ac1a0002.png"
                 ],
-                "upload_type": "image",
             }}
 
 
@@ -136,7 +134,6 @@ class MetaObjByVideoCreate(BaseModel):
     name: str
     type: int
     aigc: list
-    upload_type: str
     height: Optional[int] = None
 
     class Config:
@@ -145,7 +142,6 @@ class MetaObjByVideoCreate(BaseModel):
                 "name": f"{faker.company_prefix()}的商品",
                 "type": 0,
                 "aigc": ["202212/1670312821.mp4"],
-                "upload_type": "video",
             }}
 
 

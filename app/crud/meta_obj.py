@@ -9,6 +9,7 @@ from app.crud.meta_obj_tag import create_meta_obj_tag
 from utils.valid_name import is_valid_name
 from app.crud.aigc import *
 from app.crud.user import *
+from app.crud.file import *
 
 
 
@@ -27,7 +28,7 @@ def meta_obj_add_username(mo, db: Session, ):
     return res
 
 
-def create_meta_obj(db: Session, item, creator_id):
+def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
     # 重复名称检查
     item.name = is_valid_name(item.name, 10)
@@ -37,15 +38,20 @@ def create_meta_obj(db: Session, item, creator_id):
     # 场景素材
     if item.type == 1:
         create_meta_obj_tag(db, item.tag)
-    # 商铺 upload_type 暂存
-    if item.type == 0:
-        upload_type = item.upload_type
-        del item.upload_type
 
     # 创建
     db_item = models.MetaObj(**item.dict(), **{'create_time': int(time.time()),
                                                'creator_id': creator_id,
+                                               'kind': 0 if upload_type is None else 1,
                                                'status': 0 if item.type == 0 else None})
+
+    if upload_type == 'image':
+        minio_path = item.aigc[0]
+        file_byte = get_minio_file(minio_path).body_iterator.ag_code.co_code
+        nfs_path = f"/mnt/nfs/SceneAssets/{minio_path}"
+        with open(nfs_path, "wb") as f:
+            f.write(file_byte)
+        db_item.thumbnail = nfs_path
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -53,11 +59,6 @@ def create_meta_obj(db: Session, item, creator_id):
     # 由图片流创建模型
     if item.type == 0:
         threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
-
-        # if upload_type == 'image':
-        #     threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
-        # if upload_type == 'video':
-        #     threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
     return db_item
 
 

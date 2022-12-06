@@ -60,3 +60,4 @@ def get_minio_file(path: str):
         return StreamingResponse(io.BytesIO(file_byte), media_type=content_type)
     else:
         raise Exception(404, f"文件 {path} 不存在")
+
