@@ -27,7 +27,7 @@ def meta_obj_add_username(mo, db: Session, ):
     return res
 
 
-def create_meta_obj(db: Session, item, creator_id):
+def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
     # 重复名称检查
     item.name = is_valid_name(item.name, 10)
@@ -37,10 +37,6 @@ def create_meta_obj(db: Session, item, creator_id):
     # 场景素材
     if item.type == 1:
         create_meta_obj_tag(db, item.tag)
-    # 商铺 upload_type 暂存
-    if item.type == 0:
-        upload_type = item.upload_type
-        del item.upload_type
 
     # 创建
     db_item = models.MetaObj(**item.dict(), **{'create_time': int(time.time()),
@@ -53,11 +49,6 @@ def create_meta_obj(db: Session, item, creator_id):
     # 由图片流创建模型
     if item.type == 0:
         threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
-
-        # if upload_type == 'image':
-        #     threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
-        # if upload_type == 'video':
-        #     threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
     return db_item
 
 

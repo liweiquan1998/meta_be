@@ -20,14 +20,14 @@ router_meta_obj = APIRouter(
 @web_try()
 @sxtimeit
 def add_meta_obj_by_images(item: schemas.MetaObjByImageCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_meta_obj(db=db, item=item, creator_id=user.id)
+    return crud.create_meta_obj(db=db, item=item, creator_id=user.id, upload_type='image')
 
 
 @router_meta_obj.post("/create_by_video", summary="由视频创建元对象")
 @web_try()
 @sxtimeit
 def add_meta_obj_by_video(item: schemas.MetaObjByVideoCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_meta_obj(db=db, item=item, creator_id=user.id)
+    return crud.create_meta_obj(db=db, item=item, creator_id=user.id, upload_type='video')
 
 
 @router_meta_obj.post("/create_by_model", summary="由模型创建元对象")
