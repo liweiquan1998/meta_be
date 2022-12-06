@@ -21,7 +21,9 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
     order_db_item: models.Order = db.query(models.Order).filter(models.Order.id == item_id).first()
     original_status = order_db_item.status
     order_db_item.set_field(update_item.dict())
+    after_care = after_care_db_item = False
     if original_status == -1 and order_db_item.status == 3:  # 商家确认退款
+        after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare).\
                             filter(models.AfterCare.id == order_db_item.except_id).first()
         after_care_db_item.set_field(update_item.dict())
@@ -29,6 +31,8 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
         order_db_item.close_time = time.time()
     db.commit()
     db.refresh(order_db_item)
+    if after_care:
+        db.refresh(after_care_db_item)
     return order_db_item
 
 

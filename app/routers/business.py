@@ -28,8 +28,6 @@ def get_businesses_product_skus(params: schemas.ProductSkuParams = Depends(),
     return paginate(crud.get_business_product_skus(db, business_id, params), params)
 
 
-
-
 @router_businesses.get("/business/orders")
 @web_try()
 @sxtimeit
