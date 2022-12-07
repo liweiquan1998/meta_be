@@ -46,13 +46,13 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
                                                'status': 0 if item.type == 0 else None})
 
     if upload_type == 'image':
-        db_item.thumbnail = item.aigc[0]
-        # minio_path = item.aigc[0]
-        # file_byte = get_minio_file(minio_path).body_iterator.ag_code.co_code
-        # nfs_path = f"SceneAssets/{minio_path}"
-        # with open(f"/mnt/nfs/{nfs_path}", "wb") as f:
-        #     f.write(file_byte)
-        # db_item.thumbnail = nfs_path
+        # db_item.thumbnail = item.aigc[0]
+        minio_path = item.aigc[0]
+        file_byte = get_minio_file_byte(minio_path)
+        nfs_path = f"SceneAssets/{minio_path}"
+        with open(f"/mnt/nfs/{nfs_path}", "wb") as f:
+            f.write(file_byte)
+        db_item.thumbnail = nfs_path
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
