@@ -61,3 +61,10 @@ def get_minio_file(path: str):
     else:
         raise Exception(404, f"文件 {path} 不存在")
 
+
+def get_minio_file_byte(path: str):
+    if file_byte := FMH.get_file(path):
+        return file_byte
+    else:
+        raise Exception(404, f"文件 {path} 不存在")
+
