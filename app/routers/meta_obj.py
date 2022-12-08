@@ -56,7 +56,7 @@ def get_meta_obj_by_creator_id(creator_id: int, db: Session = Depends(get_db), u
     return crud.get_meta_obj_by_creator_id(db=db, creator_id=creator_id)
 
 
-@router_meta_obj.get("/", summary="获取元对象列表")
+@router_meta_obj.get("", summary="获取元对象列表")
 @web_try()
 @sxtimeit
 def get_meta_objs(get_item: schemas.MetaObjGet = Depends(), params: Params = Depends(),
