@@ -39,6 +39,7 @@ class StoreUpdate(BaseModel):
                 "name": f"{faker.company_prefix()}的商铺",
                 "thumbnail": "xxxx",
                 "config": "xxxx",
+                "sku_ids": str([faker.pyint(1, 20) for i in range(5)])
             }}
 
 
