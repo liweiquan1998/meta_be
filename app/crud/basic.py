@@ -16,11 +16,11 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
     if len(extra) > 1:
         update_dict[extra[0]] = extra[1]
     for k, v in update_dict.items():
-        if not force:  # 只有特意加force，才不进行【可选update】
+        if not force:  # 更新时想保留原值，值为空即可
             if v is None:
                 continue
         else:
-            if k not in force_fields and v is None:
+            if k not in force_fields and v is None:  # 更新时想要保留原值，1。值为空，2。字段没被指定强改
                 continue
         if k == 'password':
             k = 'password_hash'
