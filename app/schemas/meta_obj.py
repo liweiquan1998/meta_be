@@ -53,6 +53,7 @@ class MetaObjByImageCreate(BaseModel):
     type: int
     aigc: list
     height: Optional[int] = None
+    kind: Optional[int] = 1
 
     class Config:
         schema_extra = {
@@ -169,6 +170,7 @@ class MetaObjByVideoCreate(BaseModel):
     type: int
     aigc: list
     height: Optional[int] = None
+    kind: Optional[int] = 1
 
     class Config:
         schema_extra = {
