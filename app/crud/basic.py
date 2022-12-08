@@ -17,7 +17,10 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
         update_dict[extra[0]] = extra[1]
     for k, v in update_dict.items():
         if not force:  # 只有特意加force，才不进行【可选update】
-            if v is None and k not in force_fields:
+            if v is None:
+                continue
+        else:
+            if k not in force_fields:
                 continue
         if k == 'password':
             k = 'password_hash'
