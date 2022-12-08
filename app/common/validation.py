@@ -66,6 +66,7 @@ def check_access_token(token: str, user_type: str):
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="token 过期")
     except jwt.JWTError:
+        print(f"token 错误,token:{token}")
         raise HTTPException(status_code=401, detail=f"token 错误,token:{token}")
 
 
