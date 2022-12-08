@@ -43,7 +43,18 @@ def create_product_sku(db: Session, item: schemas.ProductSkuCreate,business_id:i
 def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSkuUpdate):
     product_param, sku_param = split_params(update_item)
     db_sku_item: models.Sku = db.query(models.Sku).filter(models.Sku.id == item_id).first()
+    sku_item_original_status = db_sku_item.status
     db_sku_item.set_field(sku_param)
+    if sku_item_original_status == 1 and db_sku_item.status == 0:  # 下架某个商品
+        select_sku_ids_sql = '''SELECT json_array_elements(sku_ids) as sku_id,creator_id
+                             from store
+                             where creator_id='{}'
+                             '''.format(update_item.business_id)
+        sku_ids_rows = db.execute(select_sku_ids_sql).fetchall()
+        if sku_ids_rows:
+            sku_ids = [row[0] for row in sku_ids_rows]
+            if item_id in sku_ids:
+                raise Exception(400, '该商品已经被上货架，不可以在本页面下架')
     db_product_item: models.Product = db.query(models.Product).filter(
         models.Product.id == db_sku_item.product_id).first()
     db_product_item.set_field(product_param)

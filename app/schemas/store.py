@@ -13,6 +13,7 @@ class StoreCreate(BaseModel):
     thumbnail: str
     config: str
     creator_id: int
+    sku_ids: Union[str] = None
 
     class Config:
         schema_extra = {
@@ -22,13 +23,15 @@ class StoreCreate(BaseModel):
                 "thumbnail": "xxxx",
                 "config": "xxxx",
                 "creator_id": faker.pyint(1, 10),
+                "sku_ids": str([faker.pyint(1, 20) for i in range(5)])
             }}
 
 
 class StoreUpdate(BaseModel):
-    name: Union[str] = None
-    thumbnail: Union[str] = None
-    config: Union[str] = None
+    name: str
+    thumbnail: str
+    config: str
+    sku_ids: str
 
     class Config:
         schema_extra = {
@@ -36,6 +39,7 @@ class StoreUpdate(BaseModel):
                 "name": f"{faker.company_prefix()}的商铺",
                 "thumbnail": "xxxx",
                 "config": "xxxx",
+                "sku_ids": str([faker.pyint(1, 20) for i in range(5)])
             }}
 
 
