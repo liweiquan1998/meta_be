@@ -25,7 +25,8 @@ def create_store(db: Session, item: schemas.StoreCreate):
 
 
 def update_store(db: Session, item_id: int, update_item: schemas.StoreUpdate):
-    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Store, force=1)
+    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Store, force=1,
+                        force_fields=('sku_ids',))
 
 
 def get_store_once(db: Session, item_id: int):

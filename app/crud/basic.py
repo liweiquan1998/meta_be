@@ -8,7 +8,7 @@ from app.models import BaseModel
 
 
 def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseModel],
-                 extra: tuple = (), force: int = 0):
+                 extra: tuple = (), force: int = 0, force_fields: tuple = tuple()):
     db_item = db.query(model_cls).filter(model_cls.id == item_id).first()
     if not db_item:
         raise Exception('未找到该任务')
@@ -17,7 +17,7 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
         update_dict[extra[0]] = extra[1]
     for k, v in update_dict.items():
         if not force:  # 只有特意加force，才不进行【可选update】
-            if v is None:
+            if v is None and k not in force_fields:
                 continue
         if k == 'password':
             k = 'password_hash'

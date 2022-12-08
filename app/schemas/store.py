@@ -28,9 +28,9 @@ class StoreCreate(BaseModel):
 
 
 class StoreUpdate(BaseModel):
-    name: str
-    thumbnail: str
-    config: str
+    name: Union[str] = None
+    thumbnail: Union[str] = None
+    config: Union[str] = None
     sku_ids: str
 
     class Config:
