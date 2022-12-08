@@ -22,7 +22,7 @@ class MetaObjCreate(BaseModel):
         schema_extra = {
             "example": {
                 "name": f"{faker.company_prefix()}的商品【必填 str】",
-                "type": "0: upload 1: image 2: video【必填 int！】 ",
+                "type": "0: upload model 1: image 2: video【必填 int！】 ",
                 "kind": "0:场景素材 1:商品【必填 int！】",
                 "aigc": [
                     "202212/64d0c86a-7515-11ed-8267-0242ac1a0002.png",
@@ -34,7 +34,11 @@ class MetaObjCreate(BaseModel):
                 'thumbnail': '上传模型时【选填 str】',
                 'tag': '上模型时【选填 str】',
                 'height': '【选填 float】',
-            }}
+            },
+            "example2": {
+                "name": f"{faker.company_prefix()}的商品【必填 str】"
+            }
+        }
 
 
 class MetaObjCreateBase(BaseModel):
