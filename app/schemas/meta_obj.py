@@ -185,6 +185,7 @@ class MetaObjByModelCreate(MetaObjCreateBase):
     model: str
     thumbnail: str
     tag: str
+    kind: Optional[int] = 1
 
     class Config:
         schema_extra = {
