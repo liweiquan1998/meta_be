@@ -66,7 +66,7 @@ def check_access_token(token: str, user_type: str):
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="token 过期")
     except jwt.JWTError:
-        raise HTTPException(status_code=401, detail="token 错误")
+        raise HTTPException(status_code=401, detail=f"token 错误,token:{token}")
 
 
 def check_user_id(token: str, db: Session = Depends(get_db)):
