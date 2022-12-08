@@ -63,6 +63,7 @@ def get_meta_objs(get_item: schemas.MetaObjGet = Depends(), params: Params = Dep
                   db: Session = Depends(get_db), total: int = 0, user=Depends(check_user)):
     if total:
         return crud.get_meta_objs(db, get_item)
+    get_item.creator_id = user.id
     return paginate(crud.get_meta_objs(db, get_item), params)
 
 
