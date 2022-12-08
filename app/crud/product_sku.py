@@ -50,7 +50,7 @@ def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSk
                              from store
                              where creator_id='{}'
                              '''.format(update_item.business_id)
-        sku_ids_rows = db.execute(select_sku_ids_sql).fetch_all()
+        sku_ids_rows = db.execute(select_sku_ids_sql).fetchall()
         if sku_ids_rows:
             sku_ids = [row[0] for row in sku_ids_rows]
             if item_id in sku_ids:
