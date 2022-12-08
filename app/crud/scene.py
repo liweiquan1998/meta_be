@@ -34,7 +34,7 @@ def get_scenes(db: Session, item: schemas.SceneGet):
     db_query = db.query(models.Scene)
     if item.name is not None and item.name != "":
         db_query = db_query.filter(models.Scene.name.like(f"%{item.name}%"))
-    if item.tag:
+    if item.tag is not None:
         db_query = db_query.filter(models.Scene.tag == item.tag)
     if item.base_id:
         db_query = db_query.filter(models.Scene.base_id == item.base_id)
