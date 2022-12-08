@@ -40,7 +40,7 @@ def login_user_swagger(db: Session, item: schemas.UserLogin):
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
     # 更新登录时间
-    res.auth_token = create_access_token(res.id, 'user')
+    # res.auth_token = create_access_token(res.id, 'user')
     res.last_login = int(time.time())
     db.commit()
     db.flush()
