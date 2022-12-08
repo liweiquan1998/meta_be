@@ -60,7 +60,7 @@ def login_user(db: Session, item: schemas.UserLogin):
     res.last_login = int(time.time())
     db.commit()
     db.flush()
-    return {"access_token": res.auth_token, "token_type": "bearer","user_id":res.id}
+    return {"access_token": res.auth_token, "token_type": "bearer","user_id":res.id,"user_name":res.name}
 
 
 def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):
