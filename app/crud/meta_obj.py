@@ -33,6 +33,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
     def db_save(_item, more_dict):
         _db_item = models.MetaObj(**item.dict(), **more_dict)
+        _db_item.status = 1
         db.add(_db_item)
         db.commit()
         db.refresh(_db_item)
