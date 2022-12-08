@@ -6,6 +6,36 @@ from faker import Faker
 
 faker = Faker(locale='zh_CN')
 
+class MetaObjCreate(BaseModel):
+    name: str
+    type: int
+    kind: int
+    aigc: Optional[list] = None
+
+    model: Optional[str] = None
+    thumbnail: Optional[str] = None
+    tag: Optional[str] = None
+
+    height: Optional[float] = None
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": f"{faker.company_prefix()}的商品【必填 str】",
+                "type": "0: upload 1: image 2: video【必填 int！】 ",
+                "kind": "0:场景素材 1:商品【必填 int！】",
+                "aigc": [
+                    "202212/64d0c86a-7515-11ed-8267-0242ac1a0002.png",
+                    "202212/64f38abc-7515-11ed-8267-0242ac1a0002.png",
+                    "202212/6516504c-7515-11ed-8267-0242ac1a0002.png",
+                    '渲染模型时【选填】'
+                ],
+                'model': '上传模型时【选填 str】',
+                'thumbnail': '上传模型时【选填 str】',
+                'tag': '上模型时【选填 str】',
+                'height': '【选填 float】',
+            }}
+
 
 class MetaObjCreateBase(BaseModel):
     name: str
@@ -24,7 +54,7 @@ class MetaObjByImageCreate(BaseModel):
         schema_extra = {
             "example": {
                 "name": f"{faker.company_prefix()}的商品",
-                "type": 0,
+                "type": 1,
                 "aigc": [
                     "202212/50fa1a9e-7515-11ed-8267-0242ac1a0002.png",
                     "202212/51388c84-7515-11ed-8267-0242ac1a0002.png",
@@ -140,7 +170,7 @@ class MetaObjByVideoCreate(BaseModel):
         schema_extra = {
             "example": {
                 "name": f"{faker.company_prefix()}的商品",
-                "type": 0,
+                "type": 1,
                 "aigc": ["202212/1670312821.mp4"],
             }}
 
@@ -192,7 +222,7 @@ class MetaObj(BaseModel):
     status: int
     tag: str
     creator_id: int
-    height: int
+    height: float
 
     class Config:
         orm_mode = True

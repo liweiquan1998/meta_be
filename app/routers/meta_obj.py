@@ -15,6 +15,11 @@ router_meta_obj = APIRouter(
     tags=["meta_obj-元对象管理"],
 )
 
+@router_meta_obj.post("", summary="创建元对象")
+@web_try()
+@sxtimeit
+def add_meta_obj_create(item: schemas.MetaObjCreate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.create_meta_obj(db=db, item=item, creator_id=user.id)
 
 @router_meta_obj.post("/create_by_images", summary="由图片创建元对象")
 @web_try()

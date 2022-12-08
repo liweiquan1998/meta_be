@@ -1,5 +1,6 @@
 import threading
 import time
+import cv2
 from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
@@ -30,36 +31,99 @@ def meta_obj_add_username(mo, db: Session, ):
 
 def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
+    def db_save(_item, more_dict):
+        _db_item = models.MetaObj(**item.dict(), **more_dict)
+        db.add(_db_item)
+        db.commit()
+        db.refresh(_db_item)
+        return _db_item
+
+    def minio2nfs(minio_p):
+        file_byte = get_minio_file_byte(minio_p)
+        nfs_p = f"SceneAssets/{minio_p}"
+        with open(f"/mnt/nfs/{nfs_p}", "wb") as f:
+            f.write(file_byte)
+        return nfs_p
+
+    def video_fist_frame(video_p):
+        root_p = Path(f"/mnt/nfs/{minio2nfs(video_p)}")
+        vidcap = cv2.VideoCapture(str(root_p))
+        success, image = vidcap.read()
+        n = 1
+        while n < 30:
+            success, image = vidcap.read()
+            n += 1
+        thumbnail_path = str(root_p.parent / f"{uuid.uuid1()}.png")
+        imag = cv2.imwrite(thumbnail_path, image)
+        if imag:
+            return thumbnail_path
+        else:
+            raise Exception('视频转换缩略图失败')
+
+    def model_save(_item):
+        # 补充字段
+        _model_dict = {
+            'create_time': int(time.time()),
+            'creator_id': creator_id,
+        }
+        # 存入数据库
+        _db_item = db_save(_item, _model_dict)
+        return _db_item
+
+
     # 重复名称检查
     item.name = is_valid_name(item.name, 10)
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.name == item.name).first()
     if res:
         raise Exception(f"物品 {item.name} 已存在")
+
+    # 商品
+    if item.kind == 1:
+        # 模型上传
+        if item.type == 0:
+            db_item = model_save(item)
+        # 图片生成
+        elif item.type == 1:
+            # 取出缩略图
+            nfs_path = minio2nfs(item.aigc[0])
+            item.thumbnail = nfs_path
+            # 补充字段
+            image_dict = {
+                'create_time': int(time.time()),
+                'creator_id': creator_id,
+                'status': 0,
+            }
+            # 存入数据库
+            db_item = db_save(item, image_dict)
+            # 向算法端发送请求
+            threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, 'image')).start()
+        # 视频生成
+        elif item.type == 2:
+            # 取出缩略图
+            nfs_path = video_fist_frame(item.aigc[0])
+            item.thumbnail = nfs_path
+            # 补充字段
+            video_dict = {
+                'create_time': int(time.time()),
+                'creator_id': creator_id,
+                'status': 0,
+                'thumbnail': nfs_path
+            }
+            # 存入数据库
+            db_item = db_save(item, video_dict)
+            # 向算法端发送请求
+            threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, 'video')).start()
+        else:
+            raise Exception('type参数错误 应为0: 上传模型 ,1: 图片生成,2: 视频生成')
     # 场景素材
-    if item.type == 1:
+    elif item.kind == 0:
+        # tag处理
         create_meta_obj_tag(db, item.tag)
+        # 保存模型
+        db_item = model_save(item)
+    else:
+        raise Exception("meta_obj 种类(kind)不合法 应为 0: 场景素材 1: 商品 ")
 
-    # 创建
-    db_item = models.MetaObj(**item.dict(), **{'create_time': int(time.time()),
-                                               'creator_id': creator_id,
-                                               'kind': 0 if upload_type is None else 1,
-                                               'status': 0 if item.type == 0 else None})
-
-    if upload_type == 'image':
-        # db_item.thumbnail = item.aigc[0]
-        minio_path = item.aigc[0]
-        file_byte = get_minio_file_byte(minio_path)
-        nfs_path = f"SceneAssets/{minio_path}"
-        with open(f"/mnt/nfs/{nfs_path}", "wb") as f:
-            f.write(file_byte)
-        db_item.thumbnail = nfs_path
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-
-    # 由图片流创建模型
-    if item.type == 0:
-        threading.Thread(target=send_nerf_request, args=(item.aigc, db_item.id, upload_type)).start()
     return db_item
 
 
