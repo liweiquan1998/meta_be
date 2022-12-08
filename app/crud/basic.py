@@ -20,7 +20,7 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
             if v is None:
                 continue
         else:
-            if k not in force_fields:
+            if k not in force_fields and v is None:
                 continue
         if k == 'password':
             k = 'password_hash'
