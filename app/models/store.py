@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, JSON
 from app.models.database import BaseModel
 
 
@@ -12,3 +12,4 @@ class Store(BaseModel):
     creator_id = Column(String(255), comment='创建者id')
     create_time = Column(Integer, comment='创建时间')
     creator_name = Column(String(255), comment='创建者名称')
+    sku_ids = Column(JSON(255), comment='货架上的skuid列表')

@@ -7,7 +7,8 @@ from app.common.validation import *
 from app.models import BaseModel
 
 
-def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseModel],extra: tuple = ()):
+def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseModel],
+                 extra: tuple = (), force: int = 0):
     db_item = db.query(model_cls).filter(model_cls.id == item_id).first()
     if not db_item:
         raise Exception('未找到该任务')
@@ -15,8 +16,9 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
     if len(extra) > 1:
         update_dict[extra[0]] = extra[1]
     for k, v in update_dict.items():
-        if v is None :
-            continue
+        if not force:  # 只有特意加force，才不进行【可选update】
+            if v is None:
+                continue
         if k == 'password':
             k = 'password_hash'
             v = get_password_hash(v)
