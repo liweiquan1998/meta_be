@@ -28,10 +28,10 @@ class StoreCreate(BaseModel):
 
 
 class StoreUpdate(BaseModel):
-    name: Union[str] = None
-    thumbnail: Union[str] = None
-    config: Union[str] = None
-    sku_ids: Union[str] = None
+    name: str
+    thumbnail: str
+    config: str
+    sku_ids: str
 
     class Config:
         schema_extra = {
