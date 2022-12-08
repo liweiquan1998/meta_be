@@ -50,7 +50,7 @@ class MetaObjCreateBase(BaseModel):
 
 class MetaObjByImageCreate(BaseModel):
     name: str
-    type: int
+    type: int = 1
     aigc: list
     height: Optional[int] = None
     kind: Optional[int] = 1
@@ -167,7 +167,7 @@ class MetaObjByImageCreate(BaseModel):
 
 class MetaObjByVideoCreate(BaseModel):
     name: str
-    type: int
+    type: int = 1
     aigc: list
     height: Optional[int] = None
     kind: Optional[int] = 1
@@ -186,6 +186,7 @@ class MetaObjByModelCreate(MetaObjCreateBase):
     thumbnail: str
     tag: str
     kind: Optional[int] = 1
+    type: int = 0
 
     class Config:
         schema_extra = {
