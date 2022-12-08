@@ -57,7 +57,7 @@ def get_order_once_dict(db: Session, item_id: int):
 
 
 def get_orders(db: Session):
-    res: List[models.Order] = db.query(models.Order).order_by(models.Order.id).all()
+    res: List[models.Order] = db.query(models.Order).order_by(models.Order.create_time.desc()).all()
     return res
 
 
@@ -70,8 +70,8 @@ def get_business_orders(db: Session, business_id: int, params: schemas.BusinessP
     if params.create_time:
         day_begin = int(params.create_time)
         day_end = day_begin + 3600 * 24
-        query = query.filter(models.Order.create_time.between(day_begin,day_end))
-    res: List[models.Order] = query.order_by(models.Order.id).all()
+        query = query.filter(models.Order.create_time.between(day_begin, day_end))
+    res: List[models.Order] = query.order_by(models.Order.create_time.desc()).all()
     for item in res:
         if item.sku_snapshot:  # sku快照的反序列化和时间戳转字符串
             item.sku_snapshot = json.loads(item.sku_snapshot)
