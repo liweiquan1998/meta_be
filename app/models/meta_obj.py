@@ -19,4 +19,4 @@ class MetaObj(BaseModel):
 
     create_time = Column(Integer, comment='创建时间')
     creator_id = Column(Integer, comment='创建者id')
-    height = Column(Float, comment='物品高度')  # todo 类型改为float
+    height = Column(Float, comment='物品高度')
