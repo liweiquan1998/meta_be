@@ -45,7 +45,7 @@ class MetaObjCreateBase(BaseModel):
     name: str
     type: int
     kind: int
-    height: int
+    height: Optional[int] = None
 
 
 class MetaObjByImageCreate(BaseModel):
