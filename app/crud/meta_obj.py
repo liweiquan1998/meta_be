@@ -34,11 +34,15 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     def db_save(_item, more_dict):
         _db_item = models.MetaObj(**item.dict(), **more_dict)
         _db_item.status = 0  # wjh add reason:必须有个初始状态，后面可以按分类改
+        max_id_row = db.execute('select max(id) from public.meta_obj').fetchone()
+        if max_id_row:
+            max_id = max_id_row[0]
+            db_item.id = max_id
         db.add(_db_item)
         try:
             db.commit()
         except Exception as e:
-            print('#####################',e)
+            print('#####################', e)
             raise e
         db.refresh(_db_item)
         return _db_item
