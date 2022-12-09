@@ -35,7 +35,11 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         _db_item = models.MetaObj(**item.dict(), **more_dict)
         _db_item.status = 0  # wjh add reason:必须有个初始状态，后面可以按分类改
         db.add(_db_item)
-        db.commit()
+        try:
+            db.commit()
+        except Exception as e:
+            print('#####################',e)
+            raise e
         db.refresh(_db_item)
         return _db_item
 
