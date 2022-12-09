@@ -172,6 +172,7 @@ class MetaObjByVideoCreate(BaseModel):
     aigc: list
     height: Optional[int] = None
     kind: Optional[int] = 1
+    thumbnail: Optional[str] = None
 
     class Config:
         schema_extra = {
