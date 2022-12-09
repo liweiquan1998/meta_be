@@ -12,7 +12,7 @@ class StoreCreate(BaseModel):
     scene_id: int
     thumbnail: str
     config: str
-    creator_id: int
+    creator_id: Union[int] = None
     sku_ids: Union[str] = None
 
     class Config:

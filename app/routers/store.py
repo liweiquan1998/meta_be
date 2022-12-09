@@ -18,6 +18,7 @@ router_store = APIRouter(
 @web_try()
 @sxtimeit
 def add_store(item: schemas.StoreCreate, db: Session = Depends(get_db), user=Depends(check_user)):
+    item.creator_id = user.id
     return crud.create_store(db=db, item=item)
 
 
