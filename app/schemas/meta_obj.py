@@ -186,7 +186,6 @@ class MetaObjByVideoCreate(BaseModel):
 class MetaObjByModelCreate(MetaObjCreateBase):
     model: str
     thumbnail: str
-    tag: str
     kind: Optional[int] = 1
     type: int = 0
 
