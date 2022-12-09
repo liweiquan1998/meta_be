@@ -37,7 +37,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         max_id_row = db.execute('select max(id) from public.meta_obj').fetchone()
         if max_id_row:
             max_id = max_id_row[0]
-            db_item.id = max_id
+            _db_item.id = max_id
         db.add(_db_item)
         try:
             db.commit()
