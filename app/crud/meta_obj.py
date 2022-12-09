@@ -135,6 +135,8 @@ def update_meta_obj(db: Session, item_id: int, update_item: schemas.MetaObjUpdat
 
 def get_meta_obj_once(db: Session, item_id: int):
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
+    if res.aigc:
+        res.aigc = res.aigc.replace('{', '').replace('}', '').split(',')
     return meta_obj_add_username(res, db)
 
 
@@ -163,6 +165,9 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
         db_query = db_query.filter(models.MetaObj.creator_id == item.creator_id)
 
     meta_objs = db_query.all()
+    for mo in meta_objs:
+        if mo.aigc:
+            mo.aigc = mo.aigc.replace('{', '').replace('}','').split(',')
     return meta_obj_add_username(meta_objs, db)
 
 
