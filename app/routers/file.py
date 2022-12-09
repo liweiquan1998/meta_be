@@ -25,7 +25,7 @@ router_file = APIRouter(
 @web_try()
 @sxtimeit
 def upload_file(file: UploadFile = File(...)):
-                # , user=Depends(check_user)):
+    # , user=Depends(check_user)):
     return crud.upload_nfs_file(file)
 
 
@@ -33,7 +33,7 @@ def upload_file(file: UploadFile = File(...)):
 @web_try()
 @sxtimeit
 def upload_minio_file(file: UploadFile = File(...)):
-                      # , user=Depends(check_user)):
+    # , user=Depends(check_user)):
     return crud.upload_minio_file(file)
 
 
@@ -52,9 +52,19 @@ def get_minio_file(uri):
 # 多个文件
 @router_file.post("/MinioFiles", summary="minio上传多个文件")
 async def create_files(files: List[UploadFile] = File()):
-                       # , user=Depends(check_user)):
+    # , user=Depends(check_user)):
     with ThreadPoolExecutor(max_workers=8) as executor:
         results = executor.map(crud.upload_minio_file, files)
+    uris = [result['uri'] for result in results]
+    # uris = [crud.upload_minio_file(file)['uri'] for file in files]
+    return {'uris': uris}
+
+
+@router_file.post("/NfsFiles", summary="nfs上传多个文件")
+async def create_files(files: List[UploadFile] = File()):
+    # , user=Depends(check_user)):
+    with ThreadPoolExecutor(max_workers=8) as executor:
+        results = executor.map(crud.upload_nfs_file, files)
     uris = [result['uri'] for result in results]
     # uris = [crud.upload_minio_file(file)['uri'] for file in files]
     return {'uris': uris}
