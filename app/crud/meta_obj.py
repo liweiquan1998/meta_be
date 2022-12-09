@@ -88,7 +88,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         elif item.type == 0:  # todo 要改
             # 取出缩略图
             nfs_path = minio2nfs(item.aigc[0])
-            item.thumbnail = nfs_path
+            item.thumbnail = nfs_path  # todo
             # 补充字段
             image_dict = {
                 'create_time': int(time.time()),
