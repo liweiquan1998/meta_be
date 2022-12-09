@@ -82,10 +82,10 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # 商品
     if item.kind == 1:
         # 模型上传
-        if item.type == 0:
+        if item.type == 1:
             db_item = model_save(item)
         # 图片生成
-        elif item.type == 1:
+        elif item.type == 0:  # todo 要改
             # 取出缩略图
             nfs_path = minio2nfs(item.aigc[0])
             item.thumbnail = nfs_path
