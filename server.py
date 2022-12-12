@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.models.database import Base, engine
-from app.routers.customer import router_customer
 from app.routers.file import router_file
 from app.routers.store import router_store
 from app.routers.user import router_user
@@ -40,7 +39,6 @@ app.add_middleware(
 )
 
 print('server init finish:)!!!')
-# app.include_router(router_customer)
 app.include_router(router_user)
 # app.include_router(router_admin)
 app.include_router(router_product)
