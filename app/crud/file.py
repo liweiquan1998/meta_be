@@ -26,7 +26,7 @@ def upload_nfs_file(file):
         with real_path.open('wb') as f:
             f.write(file_byte)
         real_path.chmod(0o777)
-        return {'uri': str(result / file_name)}
+        return {'uri': f'/file/nfs/{str(result / file_name)}'}
     except Exception as e:
         raise Exception(400, f"上传失败{e}")
 
@@ -36,9 +36,16 @@ def upload_minio_file(file):
     file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
-    FMH.put_file(real_path, file_byte)
-    return {'uri': FMH.put_file(real_path, file_byte)}
+    path = FMH.put_file(real_path, file_byte)
+    return {'uri': f'/file/minio/{path}'}
 
+def get_file(path: str):
+    if 'minio' in path:
+        return get_minio_file(path.split('minio/')[-1])
+    elif 'nfs' in path:
+        return get_nfs_file(path.split('nfs/')[-1])
+    else:
+        raise Exception(404, f'path:{path},文件路径不合法，应包含"minio"或"nfs"')
 
 def get_nfs_file(path: str):
     # 兼容老地址

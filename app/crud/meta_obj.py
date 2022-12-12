@@ -47,14 +47,15 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         return _db_item
 
     def minio2nfs(minio_p):
-        file_byte = get_minio_file_byte(minio_p)
-        nfs_p = f"SceneAssets/{minio_p}"
-        with open(f"/mnt/nfs/{nfs_p}", "wb") as f:
+        file_byte = get_minio_file_byte(minio_p.split('minio/')[-1])
+        yearmonth = time.strftime("%Y%m", time.localtime())
+        nfs_p = f"/mnt/nfs/SceneAssets/{yearmonth}/{minio_p.split('/')[-1]}"
+        with open(nfs_p, "wb") as f:
             f.write(file_byte)
         return nfs_p
 
     def video_fist_frame(video_p):
-        root_p = Path(f"/mnt/nfs/{minio2nfs(video_p)}")
+        root_p = Path(f"{minio2nfs(video_p)}")
         vidcap = cv2.VideoCapture(str(root_p))
         success, image = vidcap.read()
         n = 1
