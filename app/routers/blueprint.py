@@ -6,8 +6,8 @@ from fastapi import APIRouter
 from app.common.validation import *
 
 router_blueprint = APIRouter(
-    prefix="/blueprint",
-    tags=["blueprint-蓝图管理"],
+    prefix="/blueprints",
+    tags=["blueprints-蓝图管理"],
 )
 
 
