@@ -13,9 +13,9 @@ def create_after_care(db: Session,order_id:int, item: schemas.AfterCareCreate):
     db_item.status = 0
     order_item = order.get_order_once(db,order_id)
     if not order_item:
-        raise Exception(407,'创建服务失败，找不到原订单')
+        raise Exception(407, '创建服务失败，找不到原订单')
     if order_item.after_care_id:
-        raise Exception(405,'已经创建过异常服务，不可重复')
+        raise Exception(405, '已经创建过异常服务，不可重复')
     db_item.order_id = order_item.id
     db.add(db_item)
     db.commit()
@@ -29,9 +29,11 @@ def create_after_care(db: Session,order_id:int, item: schemas.AfterCareCreate):
 def update_after_care(db: Session, item_id: int, update_item: schemas.AfterCareUpdate):
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.AfterCare)
 
+
 def get_after_care_once(db: Session, item_id: int):
     res: models.AfterCare = db.query(models.AfterCare).filter(models.AfterCare.id == item_id).first()
     return res
+
 
 def get_after_care_once_dict(db: Session, item_id: int) -> dict:
     res: models.AfterCare = db.query(models.AfterCare).filter(models.AfterCare.id == item_id).first()
@@ -62,7 +64,3 @@ def delete_after_care(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     db.flush()
-
-
-
-
