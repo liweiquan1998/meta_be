@@ -8,10 +8,9 @@ import time
 from app.common.validation import *
 
 router_order = APIRouter(
-    prefix="/order",
-    tags=["order-订单管理"],
+    prefix="/orders",
+    tags=["orders-订单管理"],
 )
-
 
 
 @router_order.get("")
@@ -21,26 +20,23 @@ def get_orders(params: Params = Depends(), db: Session = Depends(get_db), user=D
     return paginate(crud.get_orders(db), params)
 
 
-@router_order.get("/{item_id}")
+@router_order.get("/{order_id}")
 @web_try()
 @sxtimeit
-def get_order_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_order_once_dict(db=db, item_id=item_id)
+def get_order_once(order_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_order_once_dict(db=db, item_id=order_id)
 
 
-@router_order.put("/{item_id}")
+@router_order.put("/{order_id}")
 @web_try()
 @sxtimeit
-def update_order(item_id: int, update_item: schemas.OrderUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_order(db=db, item_id=item_id, update_item=update_item)
+def update_order(order_id: int, update_item: schemas.OrderUpdate, db: Session = Depends(get_db),
+                 user=Depends(check_user)):
+    return crud.update_order(db=db, item_id=order_id, update_item=update_item)
 
 
-@router_order.delete("/{item_id}")
+@router_order.delete("/{order_id}")
 @web_try()
 @sxtimeit
-def delete_order(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.delete_order(db=db,item_id=item_id)
-
-
-
-
+def delete_order(order_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.delete_order(db=db, item_id=order_id)

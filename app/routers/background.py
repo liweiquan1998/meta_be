@@ -11,7 +11,7 @@ router_backgrounds = APIRouter(
 )
 
 
-@router_backgrounds.post("/", summary="创建背景")
+@router_backgrounds.post("/background", summary="创建背景")
 @web_try()
 @sxtimeit
 def create_background(item: schemas.BackgroundCreate, db: Session = Depends(get_db), user=Depends(check_user)):
@@ -25,7 +25,7 @@ def get_background(background_id: int, db: Session = Depends(get_db), user=Depen
     return crud.get_background_once(db, background_id)
 
 
-@router_backgrounds.get("/", summary="获取背景列表")
+@router_backgrounds.get("", summary="获取背景列表")
 @web_try()
 @sxtimeit
 def get_backgrounds(get_item: schemas.BackgroundGet = Depends(), params: Params = Depends(),

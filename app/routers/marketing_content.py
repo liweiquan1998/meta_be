@@ -10,12 +10,12 @@ from fastapi import APIRouter
 from app.common.validation import *
 
 router_marketing_content = APIRouter(
-    prefix="/marketing_content",
-    tags=["marketing_content-营销内容管理"],
+    prefix="/marketing_contents",
+    tags=["marketing_contents-营销内容管理"],
 )
 
 
-@router_marketing_content.post("", summary="创建营销内容", )
+@router_marketing_content.post("/marketing_content", summary="创建营销内容", )
 @web_try()
 @sxtimeit
 def add_marketing_content(item: schemas.MarketingContentCreate, db: Session = Depends(get_db), user=Depends(check_user)):
@@ -29,18 +29,18 @@ def compose_video(item: schemas.ComposeVideo, db: Session = Depends(get_db), use
     return crud.compose_video(db=db, item=item)
 
 
-@router_marketing_content.delete("/{item_id}", summary="删除营销内容")
+@router_marketing_content.delete("/{content_id}", summary="删除营销内容")
 @web_try()
 @sxtimeit
-def delete_marketing_content(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.delete_marketing_content(item_id=item_id, db=db)
+def delete_marketing_content(content_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.delete_marketing_content(item_id=content_id, db=db)
 
 
-@router_marketing_content.put("/{item_id}", summary="更新营销内容信息")
+@router_marketing_content.put("/{content_id}", summary="更新营销内容信息")
 @web_try()
 @sxtimeit
-def update_marketing_content(item_id: int, update_item: schemas.MarketingContentUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_marketing_content(db=db, item_id=item_id, update_item=update_item)
+def update_marketing_content(content_id: int, update_item: schemas.MarketingContentUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.update_marketing_content(db=db, item_id=content_id, update_item=update_item)
 
 
 @router_marketing_content.put("/{workspace}/workspace", summary="更新营销内容信息 by workspace")
@@ -51,7 +51,7 @@ def update_marketing_content_by_workspace(workspace: str, update_item: schemas.M
     return crud.update_marketing_content_by_workspace(db=db, workspace=workspace, update_item=update_item)
 
 
-@router_marketing_content.get("/", summary="获取营销内容列表")
+@router_marketing_content.get("", summary="获取营销内容列表")
 @web_try()
 @sxtimeit
 def get_marketing_contents(get_item: schemas.MarketingContentGet = Depends(), params: Params = Depends(),
@@ -59,8 +59,8 @@ def get_marketing_contents(get_item: schemas.MarketingContentGet = Depends(), pa
     return paginate(crud.get_marketing_contents(db, get_item), params)
 
 
-@router_marketing_content.get("/{item_id}", summary="获取营销内容信息")
+@router_marketing_content.get("/{content_id}", summary="获取营销内容信息")
 @web_try()
 @sxtimeit
-def get_marketing_content_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_marketing_content_once(db=db, item_id=item_id)
+def get_marketing_content_once(content_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_marketing_content_once(db=db, item_id=content_id)

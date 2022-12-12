@@ -16,7 +16,7 @@ router_virtual_humans = APIRouter(
 )
 
 
-@router_virtual_humans.post("/", summary="创建虚拟人")
+@router_virtual_humans.post("/virtual_human", summary="创建虚拟人")
 @web_try()
 @sxtimeit
 def add_virtual_human(item: schemas.VirtualHumanCreate, db: Session = Depends(get_db), user=Depends(check_user)):
@@ -37,7 +37,7 @@ def update_virtual_human(item_id: int, update_item: schemas.VirtualHumanUpdate, 
     return crud.update_virtual_human(db=db, item_id=item_id, update_item=update_item)
 
 
-@router_virtual_humans.get("/", summary="获取虚拟人列表")
+@router_virtual_humans.get("", summary="获取虚拟人列表")
 @web_try()
 @sxtimeit
 def get_virtual_humans(get_item: schemas.VirtualHumanGet = Depends(), params: Params = Depends(),

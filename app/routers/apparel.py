@@ -9,8 +9,8 @@ import time
 
 
 router_apparel = APIRouter(
-    prefix="/apparel",
-    tags=["apparel-虚拟人服饰管理"],
+    prefix="/apparels",
+    tags=["apparels-虚拟人服饰管理"],
 )
 
 
@@ -41,12 +41,4 @@ def update_apparel(item_id: int, update_item: schemas.ApparelUpdate, db: Session
 @sxtimeit
 def delete_apparel(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_apparel(db=db, item_id=item_id)
-
-
-@router_apparel.post("/orders/{order_id}")
-@web_try()
-@sxtimeit
-def add_order(item: schemas.ApparelCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_apparel(db=db, item=item)
-
 

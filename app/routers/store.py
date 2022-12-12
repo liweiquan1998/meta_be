@@ -14,7 +14,7 @@ router_store = APIRouter(
 )
 
 
-@router_store.post("/", summary="创建商铺")
+@router_store.post("/store", summary="创建商铺")
 @web_try()
 @sxtimeit
 def add_store(item: schemas.StoreCreate, db: Session = Depends(get_db), user=Depends(check_user)):
@@ -22,28 +22,28 @@ def add_store(item: schemas.StoreCreate, db: Session = Depends(get_db), user=Dep
     return crud.create_store(db=db, item=item)
 
 
-@router_store.delete("/{item_id}", summary="删除商铺")
+@router_store.delete("/{store_id}", summary="删除商铺")
 @web_try()
 @sxtimeit
-def delete_store(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.delete_store(item_id=item_id, db=db)
+def delete_store(store_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.delete_store(item_id=store_id, db=db)
 
 
-@router_store.put("/{item_id}", summary="更新商铺信息")
+@router_store.put("/{store_id}", summary="更新商铺信息")
 @web_try()
 @sxtimeit
-def update_store(item_id: int, update_item: schemas.StoreUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_store(db=db, item_id=item_id, update_item=update_item)
+def update_store(store_id: int, update_item: schemas.StoreUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.update_store(db=db, item_id=store_id, update_item=update_item)
 
 
-@router_store.get("/{item_id}", summary="获取商铺信息")
+@router_store.get("/{store_id}", summary="获取商铺信息")
 @web_try()
 @sxtimeit
-def get_store_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user) ):
-    return crud.get_store_once(db=db, item_id=item_id)
+def get_store_once(store_id: int, db: Session = Depends(get_db), user=Depends(check_user) ):
+    return crud.get_store_once(db=db, item_id=store_id)
 
 
-@router_store.get("/", summary="获取商铺列表")
+@router_store.get("", summary="获取商铺列表")
 @web_try()
 @sxtimeit
 def get_stores(get_item: schemas.StoreGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user) ):

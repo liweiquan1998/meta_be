@@ -11,12 +11,12 @@ router_businesses = APIRouter(
 )
 
 
-@router_businesses.get("/{business_id}/product_skus/", summary="一个商家下的所有商品类型")  # 正式上线前要记得检验token是否是内部服务
+@router_businesses.get("/{business}/product_skus/", summary="一个商家下的所有商品类型")  # 正式上线前要记得检验token是否是内部服务
 @web_try()
 @sxtimeit
-def get_businesses_product_skus(business_id:int, params: schemas.ProductSkuParamsBase = Depends(),
+def get_businesses_product_skus(business:int, params: schemas.ProductSkuParamsBase = Depends(),
                                 db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_business_product_skus(db, business_id, params)
+    return crud.get_business_product_skus(db, business, params)
 
 
 @router_businesses.get("/business/product_skus", summary="一个商家下的所有商品类型")
@@ -43,6 +43,13 @@ def get_business_orders(params:  schemas.BusinessPageParams = Depends(), db: Ses
 def get_business_except_orders(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     business_id = user.id
     return paginate(crud.get_business_after_cares(db, business_id), params)
+
+
+@router_businesses.get("/business/shelves")
+@web_try()
+@sxtimeit
+def get_shelves_once(db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_shelves_once_by_creator_id(db=db, creator_id=user.id)
 
 
 @router_businesses.get("/{business}/blueprints")

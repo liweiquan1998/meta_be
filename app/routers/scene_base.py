@@ -11,12 +11,12 @@ from app.common.validation import *
 from app.common.validation import *
 
 router_scene_base = APIRouter(
-    prefix="/scene_base",
-    tags=["scene_base-基础场景"],
+    prefix="/scene_bases",
+    tags=["scene_bases-基础场景"],
 )
 
 
-@router_scene_base.get("/", summary="获取模版场景列表")
+@router_scene_base.get("", summary="获取模版场景列表")
 @web_try()
 @sxtimeit
 def get_scene_bases(get_item: schemas.SceneBaseGet = Depends(), params: Params = Depends(),
@@ -24,8 +24,8 @@ def get_scene_bases(get_item: schemas.SceneBaseGet = Depends(), params: Params =
     return crud.get_scene_base(db, get_item)
 
 
-@router_scene_base.get("/getOnce/{item_id}", summary="获取模版场景信息")
+@router_scene_base.get("/{scene_id}", summary="获取模版场景信息")
 @web_try()
 @sxtimeit
-def get_scene_base_once(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_scene_base_once(db=db, item_id=item_id)
+def get_scene_base_once(scene_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_scene_base_once(db=db, item_id=scene_id)
