@@ -33,7 +33,6 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
     def db_save(_item, more_dict):
         _db_item = models.MetaObj(**item.dict(), **more_dict)
-        _db_item.status = 0  # wjh add reason:必须有个初始状态，后面可以按分类改
         max_id_row = db.execute('select max(id) from public.meta_obj').fetchone()
         if max_id_row:
             max_id = max_id_row[0]
@@ -74,6 +73,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         _model_dict = {
             'create_time': int(time.time()),
             'creator_id': creator_id,
+            'status': 1,
         }
         # 存入数据库
         _db_item = db_save(_item, _model_dict)
