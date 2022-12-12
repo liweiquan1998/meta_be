@@ -2,6 +2,9 @@ import traceback
 import numpy as np
 from decorator import decorator
 from fastapi.responses import JSONResponse
+from fastapi import Depends
+from app import get_db
+from app.models.database import Session
 
 
 def json_compatible(data):
@@ -20,9 +23,18 @@ def web_try(exception_ret=None):
         ret = None
         msg = ''
         try:
+            session = None
+            for arg in args:
+                if isinstance(arg, Session):
+                    session = arg
             ret = func(*args, **kwargs)
         except Exception as e:
             msg = traceback.format_exc()
+            if 'sqlalchemy' in str(msg).lower():
+                if session:
+                    session.rollback()
+                    session.close()
+                    msg = 'database-error \n.'
             if len(e.args) > 0 and isinstance(e.args[0], int):
                 error_code = e.args[0]
             else:
