@@ -25,7 +25,7 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
     if original_status == -1 and order_db_item.status == 3:  # 商家确认退款
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare).\
-                            filter(models.AfterCare.id == order_db_item.except_id).first()
+                            filter(models.AfterCare.id == order_db_item.after_care_id).first()
         after_care_db_item.set_field(update_item.dict())
         after_care_db_item.status = 1
         order_db_item.close_time = time.time()
@@ -52,7 +52,7 @@ def get_order_once_dict(db: Session, item_id: int):
     res_dict['deliver_name'] = business_info.name if business_info else '商家姓名丢失'
     res_dict['deliver_phone'] = business_info.tel_phone if business_info else '商家电话信息丢失'
     res_dict['sku_snapshot'] = json.loads(res_dict.get('sku_snapshot', '{}'))
-    res_dict['except_order'] = db.query(models.AfterCare).filter(models.AfterCare.id == res.except_id).first()
+    res_dict['except_order'] = db.query(models.AfterCare).filter(models.AfterCare.id == res.after_care_id).first()
     return res_dict
 
 

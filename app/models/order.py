@@ -14,7 +14,7 @@ class Order(BaseModel):
     recv_time = Column(Integer, comment='收货时间')
     close_time = Column(Integer, comment='结束时间')
     pay_count = Column(Float, comment='支付金额')
-    except_id = Column(Integer, comment='退货id')
+    after_care_id = Column(Integer, comment='退货id')
     business_id = Column(Integer, comment='商家ID',index=True)
     customer_id = Column(Integer, comment='买家ID')
     receiver_phone = Column(String(12), comment='收货电话')

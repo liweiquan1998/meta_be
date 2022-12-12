@@ -6,7 +6,7 @@ from sqlalchemy import Column, Integer, String,VARCHAR,Float,JSON
 from app.models.database import BaseModel,Base
 
 class AfterCare(BaseModel):
-    __tablename__ = "except_order"
+    __tablename__ = "after_care"
     id = Column(Integer, primary_key=True, comment='id',autoincrement=True)
     except_type = Column(VARCHAR(30),comment='异常类型',default='退货退款')
     status = Column(Integer,comment='服务状态',default=0)
