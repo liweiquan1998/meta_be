@@ -1,3 +1,4 @@
+import json
 import time
 from typing import List
 from app import models, schemas
@@ -25,6 +26,8 @@ def create_store(db: Session, item: schemas.StoreCreate):
 
 
 def update_store(db: Session, item_id: int, update_item: schemas.StoreUpdate):
+    if update_item.sku_ids:
+        update_item.sku_ids = json.loads(update_item.sku_ids)
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Store, force=1,
                         force_fields=('sku_ids',))
 
