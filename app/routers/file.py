@@ -37,21 +37,26 @@ def upload_minio_file(file: UploadFile = File(...)):
     return crud.upload_minio_file(file)
 
 
-@router_file.get("/NfsFile/{uri:path}", summary="nfs获取文件")
+@router_file.get("/{uri:path}", summary="获取文件")
 @sxtimeit
 def get_nfs_file(uri):
-    return crud.get_nfs_file(uri)
+    return crud.get_file(uri)
 
-
-@router_file.get("/MinioFile/{uri:path}", summary="minio获取文件")
-@sxtimeit
-def get_minio_file(uri):
-    return crud.get_minio_file(uri)
+# @router_file.get("/NfsFile/{uri:path}", summary="nfs获取文件")
+# @sxtimeit
+# def get_nfs_file(uri):
+#     return crud.get_nfs_file(uri)
+#
+#
+# @router_file.get("/MinioFile/{uri:path}", summary="minio获取文件")
+# @sxtimeit
+# def get_minio_file(uri):
+#     return crud.get_minio_file(uri)
 
 
 # 多个文件
 @router_file.post("/MinioFiles", summary="minio上传多个文件")
-async def create_files(files: List[UploadFile] = File()):
+async def create_files(files: List[UploadFile] = File(...)):
     # , user=Depends(check_user)):
     with ThreadPoolExecutor(max_workers=8) as executor:
         results = executor.map(crud.upload_minio_file, files)
@@ -61,7 +66,7 @@ async def create_files(files: List[UploadFile] = File()):
 
 
 @router_file.post("/NfsFiles", summary="nfs上传多个文件")
-async def create_files(files: List[UploadFile] = File()):
+async def create_files(files: List[UploadFile] = File(...)):
     # , user=Depends(check_user)):
     with ThreadPoolExecutor(max_workers=8) as executor:
         results = executor.map(crud.upload_nfs_file, files)
