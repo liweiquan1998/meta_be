@@ -28,6 +28,7 @@ class SceneCreate(BaseModel):
 
 
 class SceneGet(BaseModel):
+    creator_id: Union[int, None] = None
     name: Union[str, None] = None
     tag: Union[int, None] = None
     base_id: Union[int, None] = None
