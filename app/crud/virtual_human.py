@@ -47,6 +47,8 @@ def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet, user: models.
     db_query = db.query(models.VirtualHuman)
     if not item.creator_id:
         item.creator_id = user.id
+    if item.creator_id:
+        db_query = db_query.filter(models.VirtualHuman.creator_id == item.creator_id)
     if item.name:
         db_query = db_query.filter(models.VirtualHuman.name.like(f"%{item.name}%"))
     if item.sex is not None:
