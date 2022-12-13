@@ -71,3 +71,10 @@ async def websocket_endpoint(websocket: WebSocket):
         except :
             print('连接断开')
             break
+
+@router_user.get('/test_module')
+def test_module(module:str):
+    import importlib
+    s = importlib.import_module(module)
+    return str(s)+'_ok'
+
