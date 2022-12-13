@@ -33,6 +33,7 @@ class VirtualHumanUpdate(BaseModel):
 
 
 class VirtualHumanGet(BaseModel):
+    creator_id: Optional[int] = None
     name: Union[str, None] = None
     sex: Union[int, None] = None
 

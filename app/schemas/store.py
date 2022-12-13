@@ -44,8 +44,8 @@ class StoreUpdate(BaseModel):
 
 
 class StoreGet(BaseModel):
-    creator_id: Union[int] = None
-    name: Union[str] = None
+    creator_id: Union[int, None] = None
+    name: Union[str, None] = None
 
 
 class Store(BaseModel):

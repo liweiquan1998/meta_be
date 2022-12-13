@@ -42,7 +42,7 @@ def update_virtual_human(item_id: int, update_item: schemas.VirtualHumanUpdate, 
 @sxtimeit
 def get_virtual_humans(get_item: schemas.VirtualHumanGet = Depends(), params: Params = Depends(),
                        db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_virtual_humans(db, get_item), params)
+    return paginate(crud.get_virtual_humans(db, get_item, user), params)
 
 
 @router_virtual_humans.get("/{item_id}", summary="获取虚拟人信息")
