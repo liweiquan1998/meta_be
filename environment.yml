@@ -40,7 +40,5 @@ dependencies:
       - faker
       - python-magic
       - websockets
-      - flask
-      - turtle
       - -i https://mirror.baidu.com/pypi/simple
 prefix: /opt/conda/envs/py38
