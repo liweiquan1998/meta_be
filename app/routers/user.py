@@ -32,11 +32,12 @@ def login_user(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = D
     return crud.login_user_swagger(db=db, item=item)
 
 
-@router_user.put("/{item_id}", summary="更新商户信息")
+@router_user.put("/user", summary="更新商户信息")
 @web_try()
 @sxtimeit
-def update_user(item_id: int, update_item: schemas.UserUpdate, db: Session = Depends(get_db)):
-    return crud.update_user(db=db, item_id=item_id, update_item=update_item)
+def update_user(item_id: int, update_item: schemas.UserUpdate, db: Session = Depends(get_db),
+                user: models.User = Depends(check_user)):
+    return crud.update_user(db=db, item_id=user.id, update_item=update_item)
 
 
 @router_user.get("", summary="获取商户列表")
