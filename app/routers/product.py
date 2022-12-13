@@ -12,7 +12,7 @@ router_product = APIRouter(
 )
 
 
-@router_product.get("/")
+@router_product.get("")
 @web_try()
 @sxtimeit
 def get_product(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
