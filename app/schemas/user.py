@@ -22,7 +22,8 @@ class UserCreate(UserBase):
                 "password": faker.password()}}
 
 
-class UserUpdate(UserBase):
+class UserUpdate(BaseModel):
+    storename: Optional[str] = None
     name: Optional[str] = None
     password: Optional[str] = None
     status: Optional[int] = None
