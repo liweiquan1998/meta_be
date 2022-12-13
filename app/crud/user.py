@@ -60,6 +60,7 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 更新登录时间
     res.auth_token = create_access_token(res.id, 'user')
     res.last_login = int(time.time())
+    res.occupied = 1
     db.commit()
     db.flush()
     return {"access_token": res.auth_token, "token_type": "bearer","user_id":res.id,"user_name":res.name}
