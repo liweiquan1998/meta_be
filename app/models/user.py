@@ -16,6 +16,7 @@ class User(BaseModel):
     last_login = Column(Integer, comment='最近时间')
     status = Column(Integer, comment='状态 0:正常 1:禁用')
     tel_phone = Column(String(255), comment='电话')
+    occupied = Column(Integer, comment='0:可登陆，2:不可登陆(被其他浏览器占用)，None:可登陆')
 
 
 

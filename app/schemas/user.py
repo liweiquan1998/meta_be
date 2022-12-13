@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union,Optional
 
 from pydantic import BaseModel
 from faker import Faker
@@ -23,9 +23,10 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(UserBase):
-    name: str
-    password: str
-    status: int
+    name: Optional[str] = None
+    password: Optional[str] = None
+    status: Optional[int] = None
+    occupied: Optional[int] = None
 
 
 class UserGet(UserBase):

@@ -1,13 +1,11 @@
+import time
+
+import websockets.exceptions
 from fastapi_pagination import paginate, Params
-from sqlalchemy.orm import Session
-
+from fastapi import FastAPI, WebSocket
 from app import schemas, get_db, crud
-from app.common.validation import check_user
 from utils import web_try, sxtimeit
-
-from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
 from app.common.validation import *
 
 router_user = APIRouter(
@@ -65,3 +63,16 @@ def get_user_id(token: str, db: Session = Depends(get_db)):
     return check_user_id(token, db)
 
 
+@router_user.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    while True:
+        try:
+            await websocket.send_bytes(bytes(1))
+            time.sleep(1)
+        except websockets.exceptions.ConnectionClosed:
+            print('连接断开')
+            break
+        except Exception as e:
+            print(f'websocket心跳异常，exception:{e}')
+            break
