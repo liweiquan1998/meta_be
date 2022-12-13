@@ -39,5 +39,6 @@ dependencies:
       - python-multipart
       - faker
       - python-magic
+      - websockets
       - -i https://mirror.baidu.com/pypi/simple
 prefix: /opt/conda/envs/py38
