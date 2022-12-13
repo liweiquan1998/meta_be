@@ -58,7 +58,7 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
-    if time.time() - res.last_login > ACCESS_TOKEN_EXPIRE_MINUTES * 60:  # token过期后，去掉占用状态，让用户可以登陆
+    if (time.time() - res.last_login) > ACCESS_TOKEN_EXPIRE_MINUTES * 60:  # token过期后，去掉占用状态，让用户可以登陆
         res.occupied = 0
     if res.occupied == 1:
         raise Exception(401, "该用户已经被其他客户端登陆，请在用户退出后登陆")
