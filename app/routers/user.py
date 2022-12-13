@@ -1,6 +1,4 @@
 import time
-
-import websockets.exceptions
 from fastapi_pagination import paginate, Params
 from fastapi import FastAPI, WebSocket
 from app import schemas, get_db, crud
@@ -70,9 +68,6 @@ async def websocket_endpoint(websocket: WebSocket):
         try:
             await websocket.send_bytes(bytes(1))
             time.sleep(1)
-        except websockets.exceptions.ConnectionClosed:
+        except :
             print('连接断开')
-            break
-        except Exception as e:
-            print(f'websocket心跳异常，exception:{e}')
             break
