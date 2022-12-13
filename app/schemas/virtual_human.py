@@ -45,7 +45,7 @@ class VirtualHuman(BaseModel):
     status: int
     creator_id: int
     create_time: int
-    headimg_uri: str
+    heading_uri: str
     work_space: str
 
     class Config:
