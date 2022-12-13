@@ -4,6 +4,9 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
+from configs.settings import config
+
+ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
 
 
 def create_user(db: Session, item: schemas.UserCreate):
@@ -55,6 +58,8 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
+    if time.time() - res.last_login > ACCESS_TOKEN_EXPIRE_MINUTES:  # token过期后，去掉占用状态，让用户可以登陆
+        res.occupied = 0
     if res.occupied == 1:
         raise Exception(401, "该用户已经被其他客户端登陆，请在用户退出后登陆")
     # 更新登录时间
@@ -63,7 +68,7 @@ def login_user(db: Session, item: schemas.UserLogin):
     res.occupied = 1
     db.commit()
     db.flush()
-    return {"access_token": res.auth_token, "token_type": "bearer","user_id":res.id,"user_name":res.name}
+    return {"access_token": res.auth_token, "token_type": "bearer", "user_id": res.id, "user_name": res.name}
 
 
 def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):
@@ -73,6 +78,7 @@ def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):
 def get_user_once(db: Session, item_id: int):
     res: models.User = db.query(models.User).filter(models.User.id == item_id).first()
     return res
+
 
 def get_user_once_by_name(db: Session, name: str):
     res: models.User = db.query(models.User).filter(models.User.name == name).first()
