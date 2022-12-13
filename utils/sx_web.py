@@ -34,7 +34,7 @@ def web_try(exception_ret=None):
                 if session:
                     session.rollback()
                     session.close()
-                    msg = 'database-error \n.'
+                    msg = f'database-error \n{msg}'
             if len(e.args) > 0 and isinstance(e.args[0], int):
                 error_code = e.args[0]
             else:
