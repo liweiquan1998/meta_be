@@ -3,7 +3,7 @@ from app.models.database import BaseModel
 
 
 class LiveAccount(BaseModel):
-    __tablename__ = "live_account_"
+    __tablename__ = "live_account"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(255), comment='直播账号名称')
     address = Column(String(255), comment='直播推流地址')

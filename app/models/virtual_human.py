@@ -4,7 +4,7 @@ from app.models.database import BaseModel
 
 
 class VirtualHuman(BaseModel):
-    __tablename__ = 'virtual_human_'
+    __tablename__ = 'virtual_human'
 
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(20), comment='姓名')

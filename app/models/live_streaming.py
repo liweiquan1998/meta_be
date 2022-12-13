@@ -3,7 +3,7 @@ from app.models.database import BaseModel
 
 
 class LiveStreaming(BaseModel):
-    __tablename__ = "live_streaming_"
+    __tablename__ = "live_streaming"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(255), comment='直播间名称')
     address = Column(String(255), comment='直播间地址')

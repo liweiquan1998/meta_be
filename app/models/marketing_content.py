@@ -4,7 +4,7 @@ from app.models.database import BaseModel
 
 
 class MarketingContent(BaseModel):
-    __tablename__ = 'marketing_content_'
+    __tablename__ = 'marketing_content'
 
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(20), comment='名称')

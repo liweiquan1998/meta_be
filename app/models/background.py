@@ -4,7 +4,7 @@ from app.models.database import BaseModel
 
 
 class Background(BaseModel):
-    __tablename__ = "background_"
+    __tablename__ = "background"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(255), comment='背景名称')
     type = Column(Integer, comment='背景类型 0:image 1:video')
