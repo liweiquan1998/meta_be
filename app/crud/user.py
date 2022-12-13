@@ -103,6 +103,7 @@ def delete_user(db: Session, item_id: int):
     db.flush()
     return True
 
+
 def userid2name(user_id: int, db: Session):
     if user := db.query(models.User).filter(models.User.id == user_id).first():
         return user.name

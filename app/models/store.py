@@ -9,7 +9,7 @@ class Store(BaseModel):
     scene_id = Column(Integer, comment='场景id')
     thumbnail = Column(String(255), comment='缩略图')
     config = Column(String(255), comment='配置文件')
-    creator_id = Column(String(255), comment='创建者id')
+    creator_id = Column(Integer, comment='创建者id')
     create_time = Column(Integer, comment='创建时间')
     creator_name = Column(String(255), comment='创建者名称')
     sku_ids = Column(JSON(255), comment='货架上的skuid列表')

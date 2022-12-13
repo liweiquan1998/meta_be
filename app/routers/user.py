@@ -62,20 +62,4 @@ def get_user_id(token: str, db: Session = Depends(get_db)):
     return check_user_id(token, db)
 
 
-@router_user.websocket("/ws")
-async def websocket_endpoint(websocket: WebSocket):
-    await websocket.accept()
-    while True:
-        try:
-            await websocket.send_bytes(bytes(1))
-            time.sleep(1)
-        except :
-            print('连接断开')
-            break
-
-@router_user.get('/test_module')
-def test_module(module:str):
-    import importlib
-    s = importlib.import_module(module)
-    return str(s)+'_ok'
 
