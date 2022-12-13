@@ -56,6 +56,8 @@ def update_marketing_content_by_workspace(workspace: str, update_item: schemas.M
 @sxtimeit
 def get_marketing_contents(get_item: schemas.MarketingContentGet = Depends(), params: Params = Depends(),
                            db: Session = Depends(get_db), user=Depends(check_user)):
+    if not get_item.creator_id:
+        get_item.creator_id = user.id
     return paginate(crud.get_marketing_contents(db, get_item), params)
 
 

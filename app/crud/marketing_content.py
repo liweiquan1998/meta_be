@@ -79,6 +79,8 @@ def get_marketing_content_once(db: Session, item_id: int):
 
 def get_marketing_contents(db: Session, item: schemas.MarketingContentGet):
     db_query = db.query(models.MarketingContent)
+    if item.creator_id:
+        db_query = db_query.filter(models.MarketingContent.creator_id == item.creator_id)
     if item.name:
         db_query = db_query.filter(models.MarketingContent.name.like(f"%{item.name}%"))
     if item.status is not None:

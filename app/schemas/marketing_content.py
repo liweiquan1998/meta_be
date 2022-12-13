@@ -40,6 +40,7 @@ class MarketingContentUpdate(BaseModel):
 
 
 class MarketingContentGet(BaseModel):
+    creator_id: Optional[int] = None
     name: Optional[str] = None
     status:  Optional[int] = None
     create_time:  Optional[int] = None
