@@ -41,9 +41,7 @@ def update_scene(scene_id: int, update_item: schemas.SceneUpdate, db: Session = 
 @web_try()
 @sxtimeit
 def get_scenes(get_item: schemas.SceneGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    if not get_item.creator_id:
-        get_item.creator_id = user.id
-    return paginate(crud.get_scenes(db, get_item), params)
+    return paginate(crud.get_scenes(db, get_item, user), params)
 
 
 @router_scene.get("/{scene_id}", summary="获取场景信息")

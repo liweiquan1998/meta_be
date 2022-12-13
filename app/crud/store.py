@@ -37,8 +37,12 @@ def get_store_once(db: Session, item_id: int):
     return res
 
 
-def get_stores(db: Session, item: schemas.StoreGet):
+def get_stores(db: Session, item: schemas.StoreGet,user: models.User):
+    if not item.creator_id:
+        item.creator_id = user.id
     db_query = db.query(models.Store)
+    if item.creator_id:
+        db_query = db_query.filter(models.Store.creator_id == item.creator_id)
     if item.name:
         db_query = db_query.filter(models.Store.name.like(f"%{item.name}%"))
     return db_query.all()

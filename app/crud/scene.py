@@ -30,7 +30,9 @@ def get_scene_once_by_creator_id(db: Session, creator_id: int):
     return res
 
 
-def get_scenes(db: Session, item: schemas.SceneGet):
+def get_scenes(db: Session, item: schemas.SceneGet, user: models.User):
+    if not item.creator_id:
+        item.creator_id = user.id
     db_query = db.query(models.Scene)
     if item.creator_id is not None:
         db_query = db_query.filter(models.Scene.creator_id == item.creator_id)
