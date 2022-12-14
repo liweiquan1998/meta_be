@@ -9,8 +9,8 @@ faker = Faker(locale='zh_CN')
 class VirtualHumanCreate(BaseModel):
     name: str
     sex: int
-    status: int
-    creator_id: int
+    status: int = 1
+    creator_id: Optional[int] = None
     headimg_uri: str
     work_space: str
 
