@@ -22,8 +22,8 @@ def web_try(exception_ret=None):
         error_code = 200
         ret = None
         msg = ''
+        session = None
         try:
-            session = None
             for arg in args:
                 if isinstance(arg, Session):
                     session = arg
@@ -49,6 +49,8 @@ def web_try(exception_ret=None):
         finally:
             if ret is not None and isinstance(ret, JSONResponse):
                 return ret
+            if session:
+                session.close()
             return json_compatible({"code": error_code,
                                     "data": ret,
                                     "msg": msg.split('\n')[-2] if msg is not '' else msg})
