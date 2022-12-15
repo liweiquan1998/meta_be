@@ -95,19 +95,3 @@ async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 
-async def check_admin(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    userid, expire_time = check_access_token(token, 'admin')
-    # 验证用户是否存在
-    user = db.query(models.Admin).filter(models.Admin.id == userid).first()
-    if user is None:
-        raise HTTPException(status_code=401, detail="超管不存在")
-    return user
-
-
-async def check_customer(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
-    userid, expire_time = check_access_token(token, 'customer')
-    # 验证用户是否存在
-    user = db.query(models.Customer).filter(models.Customer.id == userid).first()
-    if user is None:
-        raise HTTPException(status_code=401, detail="用户不存在")
-    return user
