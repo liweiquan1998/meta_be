@@ -2,7 +2,6 @@ import time  # database.py
 from typing import Optional
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine
-from sqlalchemy.pool import NullPool
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.attributes import flag_modified
@@ -14,8 +13,9 @@ DB_NAME = config.get('DATABASE', 'DB_NAME')
 HOST = config.get('DATABASE', 'HOST')
 PORT = config.get('DATABASE', 'PORT')
 
+
 SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}"
-engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True, poolclass=NullPool)
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True, pool_pre_ping=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
