@@ -80,7 +80,7 @@ async def websocket_endpoint(
         try:
             time.sleep(int(PING_INTERVAL))
             await websocket.send_text('1')
-            data = asyncio.wait_for(await websocket.receive_text(), 0.1)
+            data = await asyncio.wait_for(websocket.receive_text(), 0.1)
             if data == '0':
                 print(f'客户端正常退出,user={user.name}')
                 if user.last_ping:
@@ -94,8 +94,8 @@ async def websocket_endpoint(
             db.flush()
             retry = 0
         except Exception as e:
-            print(f'websocket connect break: retry={retry}, user={user.name}')
             retry += 1
+            print(f'websocket connect warning: retry={retry}, user={user.name},e:{e}')
             if retry >= int(LOGIN_EXPIRED)//int(PING_INTERVAL):
                 print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{e}')
                 if user.last_ping:
