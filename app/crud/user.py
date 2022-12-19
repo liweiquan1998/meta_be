@@ -60,7 +60,7 @@ def login_user(db: Session, item: schemas.UserLogin):
         raise Exception(401, "用户密码错误")
     # 已被占用
     if res.last_ping:
-        if time.time() - res.last_ping < LOGIN_EXPIRED:
+        if time.time() - res.last_ping < int(LOGIN_EXPIRED):
             raise Exception(401, '该账户已经被其他客户端占用')
             # allow_ue = 0
     # 更新登录时间
