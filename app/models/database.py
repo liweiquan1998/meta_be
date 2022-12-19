@@ -15,13 +15,11 @@ PORT = config.get('DATABASE', 'PORT')
 
 
 SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}"
-engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True, pool_pre_ping=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True, pool_recycle=3600)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base(bind=engine)
-
-
 
 
 class BaseModel(Base):
