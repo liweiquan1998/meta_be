@@ -7,6 +7,7 @@ def get_db():
     finally:
         db.close()
 
+
 async def get_page(
     page: int = 1, size: int = 10
 ):
