@@ -130,3 +130,11 @@ def day_begin(t):
 def hour_begin(t):
     hsecs = 3600
     return (int(t) + 8 * 3600) // hsecs * hsecs - 8 * 3600
+
+
+def get_utc_now():
+    from datetime import timezone
+    import datetime
+    dt = datetime.datetime.now(timezone.utc)
+    utc_timestamp = dt.timestamp()
+    return utc_timestamp

@@ -1,15 +1,18 @@
 import time
 from fastapi_pagination import paginate, Params
-from fastapi import FastAPI, WebSocket
-from app import schemas, get_db, crud
-from utils import web_try, sxtimeit
-from fastapi import APIRouter
+from app import schemas, crud
+from utils import web_try, sxtimeit, get_utc_now
+from fastapi import APIRouter, WebSocket
 from app.common.validation import *
+from configs.settings import config
+
 
 router_user = APIRouter(
     prefix="/user",
     tags=["user-商户管理"],
 )
+PING_INTERVAL = config.get('USER','ping_interval')
+LOGIN_EXPIRED = config.get('USER', 'login_expired')
 
 
 @router_user.post("/create", summary="创建商户")
@@ -62,90 +65,31 @@ def get_user_id(token: str, db: Session = Depends(get_db)):
     return check_user_id(token, db)
 
 
-# ----
-from typing import Union
-
-from fastapi import (
-    Cookie,
-    Depends,
-    FastAPI,
-    Query,
-    WebSocket,
-    status,
-)
-from fastapi.responses import HTMLResponse
-
-app = FastAPI()
-
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <label>Item ID: <input type="text" id="itemId" autocomplete="off" value="foo"/></label>
-            <label>Token: <input type="text" id="token" autocomplete="off" value="some-key-token"/></label>
-            <button onclick="connect(event)">Connect</button>
-            <hr>
-            <label>Message: <input type="text" id="messageText" autocomplete="off"/></label>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-        var ws = null;
-            function connect(event) {
-                var itemId = document.getElementById("itemId")
-                var token = document.getElementById("token")
-                ws = new WebSocket("ws://frps.retailwell.com:20065/user/ws" + "?token=" + token.value);
-                ws.onmessage = function(event) {
-                    var messages = document.getElementById('messages')
-                    var message = document.createElement('li')
-                    var content = document.createTextNode(event.data)
-                    message.appendChild(content)
-                    messages.appendChild(message)
-                };
-                event.preventDefault()
-            }
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
-
-
-@router_user.get("/ws_test")
-async def get():
-    return HTMLResponse(html)
-
-
-async def get_token(
-    websocket: WebSocket,
-    token: Union[str, None] = Query(default=None),
-):
-    if token is None:
-        raise Exception(422,'token not found')
-    return token
-
-
 @router_user.websocket("/ws")
 async def websocket_endpoint(
     websocket: WebSocket,
-    token: str = Depends(get_token),
+    db=Depends(get_db),
+    user: models.User = Depends(check_user_ws),
 ):
     await websocket.accept()
+    print(f'客户端连接：user={user.name}')
+    await websocket.send_text('1')
+    retry = 0
     while True:
-        data = await websocket.receive_text()
-        await websocket.send_text(
-            f"Session cookie or query token value is: {token}"
-        )
-
-#
+        try:
+            time.sleep(int(PING_INTERVAL))
+            await websocket.send_text('1')
+            data = await websocket.receive_text()
+            if data == '0':
+                print(f'客户端正常退出,user={user.name}')
+                return
+            user.last_ping = time.time()
+            db.commit()
+            db.flush()
+            retry = 0
+        except Exception as e:
+            print(f'websocket connect break: retry={retry}, user={user.name}')
+            retry += 1
+            if retry >= int(LOGIN_EXPIRED)//int(PING_INTERVAL):
+                print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{e}')
+                return

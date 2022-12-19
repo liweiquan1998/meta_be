@@ -7,6 +7,7 @@ from app.common.validation import *
 from configs.settings import config
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
+LOGIN_EXPIRED = config.get('USER', 'login_expired')
 
 
 def create_user(db: Session, item: schemas.UserCreate):
@@ -42,9 +43,7 @@ def login_user_swagger(db: Session, item: schemas.UserLogin):
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
-    # 更新登录时间
     res.auth_token = create_access_token(res.id, 'user')
-    res.last_login = int(time.time())
     db.commit()
     db.flush()
     return TokenSchemas(**{"access_token": res.auth_token, "token_type": "bearer"})
@@ -52,23 +51,25 @@ def login_user_swagger(db: Session, item: schemas.UserLogin):
 
 def login_user(db: Session, item: schemas.UserLogin):
     res: models.User = db.query(models.User).filter(models.User.name == item.name).first()
+    allow_ue = 1  # 允许该token连接ue的ws
     # 用户不存在
     if not res:
         raise Exception(404, f"用户 {item.name} 不存在")
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
-    if (time.time() - res.last_login) > int(ACCESS_TOKEN_EXPIRE_MINUTES) * 60:  # token过期后，去掉占用状态，让用户可以登陆
-        res.occupied = 0
-    if res.occupied == 1:
-        raise Exception(401, "该用户已经被其他客户端登陆，请在用户退出后登陆")
+    # 已被占用
+    if res.last_ping:
+        if time.time() - res.last_ping < LOGIN_EXPIRED:
+            raise Exception(401, '该账户已经被其他客户端占用')
+            # allow_ue = 0
     # 更新登录时间
     res.auth_token = create_access_token(res.id, 'user')
     res.last_login = int(time.time())
-    res.occupied = 1
     db.commit()
     db.flush()
-    return {"access_token": res.auth_token, "token_type": "bearer", "user_id": res.id, "user_name": res.name}
+    return {"access_token": res.auth_token, "token_type": "bearer", "user_id": res.id,
+            "user_name": res.name, "allow_ue": allow_ue}
 
 
 def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):

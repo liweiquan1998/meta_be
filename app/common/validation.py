@@ -95,3 +95,12 @@ async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
     return user
 
 
+async def check_user_ws(token: str, db: Session = Depends(get_db)):
+    if token in sx_servers:
+        return True
+    userid, expire_time = check_access_token(token, 'user')
+    # 验证用户是否存在
+    user = db.query(models.User).filter(models.User.id == userid).first()
+    if user is None:
+        raise HTTPException(status_code=401, detail="商户不存在")
+    return user
