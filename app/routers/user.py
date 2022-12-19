@@ -5,6 +5,7 @@ from utils import web_try, sxtimeit, get_utc_now
 from fastapi import APIRouter, WebSocket
 from app.common.validation import *
 from configs.settings import config
+import asyncio
 
 
 router_user = APIRouter(
@@ -79,11 +80,10 @@ async def websocket_endpoint(
         try:
             time.sleep(int(PING_INTERVAL))
             await websocket.send_text('1')
-            data = await websocket.receive_text()
+            data = asyncio.wait_for(await websocket.receive_text(), 0.1)
             if data == '0':
                 print(f'客户端正常退出,user={user.name}')
                 if user.last_ping:
-                    user.last_ping = time.time() - int(LOGIN_EXPIRED)
                     user.occupied = 0
                     db.commit()
                     db.flush()
@@ -99,7 +99,6 @@ async def websocket_endpoint(
             if retry >= int(LOGIN_EXPIRED)//int(PING_INTERVAL):
                 print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{e}')
                 if user.last_ping:
-                    user.last_ping = time.time() - int(LOGIN_EXPIRED)
                     user.occupied = 0
                     db.commit()
                     db.flush()
