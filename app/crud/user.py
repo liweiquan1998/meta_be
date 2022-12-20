@@ -140,10 +140,9 @@ async def check_alive(websocket, db, user):
             print(f'websocket connect warning: retry={retry}, user={user.name},e:{str(e)}')
             if retry >= LOGIN_EXPIRED//PING_INTERVAL:
                 print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{str(e)}')
-                if user.last_ping:
-                    user.occupied = 0
-                    db.commit()
-                    db.flush()
+                user.occupied = 0
+                db.commit()
+                db.flush()
                 raise e
             await asyncio.sleep(PING_INTERVAL)
 
