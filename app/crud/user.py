@@ -124,10 +124,9 @@ async def check_alive(websocket, db, user):
             data = await asyncio.wait_for(websocket.receive_text(), 0.1)
             if data == '0':
                 print(f'客户端正常退出,user={user.name}')
-                if user.last_ping:
-                    user.occupied = 0
-                    db.commit()
-                    db.flush()
+                user.occupied = 0
+                db.commit()
+                db.flush()
                 return
             user.last_ping = int(time.time())
             user.occupied = 1
