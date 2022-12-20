@@ -93,11 +93,12 @@ async def websocket_endpoint(
             db.commit()
             db.flush()
             retry = 0
+            print(f'ping_user={user.name}:ok')
         except Exception as e:
             retry += 1
-            print(f'websocket connect warning: retry={retry}, user={user.name},e:{e}')
+            print(f'websocket connect warning: retry={retry}, user={user.name},e:{str(e)}')
             if retry >= int(LOGIN_EXPIRED)//int(PING_INTERVAL):
-                print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{e}')
+                print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{str(e)}')
                 if user.last_ping:
                     user.occupied = 0
                     db.commit()
