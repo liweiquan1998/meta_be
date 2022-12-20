@@ -1,6 +1,9 @@
 import time
 import asyncio
 from typing import List
+
+import websockets.exceptions
+
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
@@ -10,6 +13,7 @@ from configs.settings import config
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
 LOGIN_EXPIRED = int(config.get('USER', 'login_expired'))
 PING_INTERVAL = int(config.get('USER', 'ping_interval'))
+ping_uid_list = list()
 
 
 def create_user(db: Session, item: schemas.UserCreate):
@@ -115,34 +119,45 @@ def delete_user(db: Session, item_id: int):
 
 
 async def check_alive(websocket, db, user):
-    await websocket.accept()
+    # 保证ws连接---user_id 的一对一关系 (否则可能出现a客户端断网，b登录，a刷新后共2个客户端共用1个账户的问题)
+    if user.id not in ping_uid_list:
+        ping_uid_list.append(user.id)
+    else:
+        raise websockets.exceptions.SecurityError
     print(f'客户端连接：user={user.name}')
+    # ws连接的心跳检测以及对user表的更新
+    await websocket.accept()
     retry = 0
-    while True:
-        try:
-            await websocket.send_text('1')
-            data = await asyncio.wait_for(websocket.receive_text(), 0.1)
-            if data == '0':
-                print(f'客户端正常退出,user={user.name}')
-                user.occupied = 0
+    try:
+        while True:
+            try:
+                await websocket.send_text('1')
+                data = await asyncio.wait_for(websocket.receive_text(), 0.1)
+                if data == '0':
+                    print(f'客户端正常退出,user={user.name}')
+                    user.occupied = 0
+                    db.commit()
+                    db.flush()
+                    break
+                user.last_ping = int(time.time())
+                user.occupied = 1
                 db.commit()
                 db.flush()
-                return
-            user.last_ping = int(time.time())
-            user.occupied = 1
-            db.commit()
-            db.flush()
-            retry = 0
-            print(f'ping_user={user.name}:ok')
-            await asyncio.sleep(PING_INTERVAL)
-        except Exception as e:
-            retry += 1
-            print(f'websocket connect warning: retry={retry}, user={user.name},e:{str(e)}')
-            if retry >= LOGIN_EXPIRED//PING_INTERVAL:
-                print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{str(e)}')
-                user.occupied = 0
-                db.commit()
-                db.flush()
-                raise e
-            await asyncio.sleep(PING_INTERVAL)
-
+                retry = 0
+                print(f'ping_user={user.name}:ok')
+                await asyncio.sleep(PING_INTERVAL)
+            except Exception as e:
+                retry += 1
+                print(f'websocket 心跳异常: retry={retry}, user={user.name},e:{str(e)}')
+                if retry >= LOGIN_EXPIRED//PING_INTERVAL:
+                    print(f'{retry}次心跳失败,websocket关闭,user={user.name},exception:{str(e)}')
+                    user.occupied = 0
+                    db.commit()
+                    db.flush()
+                    await websocket.close()
+                    break
+                await asyncio.sleep(PING_INTERVAL)
+    finally:
+        # 保证连接断开后一定清除掉user_id，否则一直占用会导致客户端无法建立ws(但是可以登录)
+        while user.id in ping_uid_list:
+            ping_uid_list.remove(user.id)
