@@ -1,4 +1,5 @@
 import time
+import asyncio
 from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
@@ -7,7 +8,8 @@ from app.common.validation import *
 from configs.settings import config
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
-LOGIN_EXPIRED = config.get('USER', 'login_expired')
+LOGIN_EXPIRED = int(config.get('USER', 'login_expired'))
+PING_INTERVAL = int(config.get('USER', 'ping_interval'))
 
 
 def create_user(db: Session, item: schemas.UserCreate):
@@ -58,7 +60,7 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
-    if time.time() - res.last_ping > int(LOGIN_EXPIRED):
+    if time.time() - res.last_ping > LOGIN_EXPIRED:
         res.occupied = 0
     # 已被占用
     if res.occupied == 1:
@@ -110,4 +112,39 @@ def delete_user(db: Session, item_id: int):
     db.commit()
     db.flush()
     return True
+
+
+async def check_alive(websocket, db, user):
+    await websocket.accept()
+    print(f'客户端连接：user={user.name}')
+    retry = 0
+    while True:
+        try:
+            await websocket.send_text('1')
+            data = await asyncio.wait_for(websocket.receive_text(), 0.1)
+            if data == '0':
+                print(f'客户端正常退出,user={user.name}')
+                if user.last_ping:
+                    user.occupied = 0
+                    db.commit()
+                    db.flush()
+                return
+            user.last_ping = int(time.time())
+            user.occupied = 1
+            db.commit()
+            db.flush()
+            retry = 0
+            print(f'ping_user={user.name}:ok')
+            await asyncio.sleep(PING_INTERVAL)
+        except Exception as e:
+            retry += 1
+            print(f'websocket connect warning: retry={retry}, user={user.name},e:{str(e)}')
+            if retry >= LOGIN_EXPIRED//PING_INTERVAL:
+                print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{str(e)}')
+                if user.last_ping:
+                    user.occupied = 0
+                    db.commit()
+                    db.flush()
+                raise e
+            await asyncio.sleep(PING_INTERVAL)
 

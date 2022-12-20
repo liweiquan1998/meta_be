@@ -67,44 +67,9 @@ def get_user_id(token: str, db: Session = Depends(get_db)):
 
 
 @router_user.websocket("/ws")
-async def websocket_endpoint(
+async def check_alive(
     websocket: WebSocket,
     db=Depends(get_db),
     user: models.User = Depends(check_user_ws),
 ):
-    await func(websocket,db,user)
-
-
-async def func(websocket,db,user):
-    await websocket.accept()
-    print(f'客户端连接：user={user.name}')
-    retry = 0
-    while True:
-        try:
-            await websocket.send_text('1')
-            data = await asyncio.wait_for(websocket.receive_text(), 0.1)
-            if data == '0':
-                print(f'客户端正常退出,user={user.name}')
-                if user.last_ping:
-                    user.occupied = 0
-                    db.commit()
-                    db.flush()
-                return
-            user.last_ping = time.time()
-            user.occupied = 1
-            db.commit()
-            db.flush()
-            retry = 0
-            print(f'ping_user={user.name}:ok')
-            await asyncio.sleep(int(PING_INTERVAL))
-        except Exception as e:
-            retry += 1
-            print(f'websocket connect warning: retry={retry}, user={user.name},e:{str(e)}')
-            if retry >= int(LOGIN_EXPIRED)//int(PING_INTERVAL):
-                print(f'{retry}次连接失败,客户端关闭,user={user.name},exception:{str(e)}')
-                if user.last_ping:
-                    user.occupied = 0
-                    db.commit()
-                    db.flush()
-                raise e
-            await asyncio.sleep(int(PING_INTERVAL))
+    await crud.check_alive(websocket, db, user)
