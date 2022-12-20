@@ -72,13 +72,15 @@ async def websocket_endpoint(
     db=Depends(get_db),
     user: models.User = Depends(check_user_ws),
 ):
+    await func(websocket,db,user)
+
+
+async def func(websocket,db,user):
     await websocket.accept()
     print(f'客户端连接：user={user.name}')
-    await websocket.send_text('1')
     retry = 0
     while True:
         try:
-            await asyncio.sleep(int(PING_INTERVAL))
             await websocket.send_text('1')
             data = await asyncio.wait_for(websocket.receive_text(), 0.1)
             if data == '0':
@@ -94,6 +96,7 @@ async def websocket_endpoint(
             db.flush()
             retry = 0
             print(f'ping_user={user.name}:ok')
+            await asyncio.sleep(int(PING_INTERVAL))
         except Exception as e:
             retry += 1
             print(f'websocket connect warning: retry={retry}, user={user.name},e:{str(e)}')
@@ -104,76 +107,4 @@ async def websocket_endpoint(
                     db.commit()
                     db.flush()
                 raise e
-
-
-
-
-
-
-
-
-
-from typing import Union
-
-from fastapi import (
-    Cookie,
-    Depends,
-    FastAPI,
-    Query,
-    WebSocket,
-    status,
-)
-from fastapi.responses import HTMLResponse
-
-app = FastAPI()
-
-html = """
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Chat</title>
-    </head>
-    <body>
-        <h1>WebSocket Chat</h1>
-        <form action="" onsubmit="sendMessage(event)">
-            <label>Item ID: <input type="text" id="itemId" autocomplete="off" value="foo"/></label>
-            <label>Token: <input type="text" id="token" autocomplete="off" value="some-key-token"/></label>
-            <button onclick="connect(event)">Connect</button>
-            <hr>
-            <label>Message: <input type="text" id="messageText" autocomplete="off"/></label>
-            <button>Send</button>
-        </form>
-        <ul id='messages'>
-        </ul>
-        <script>
-        var ws = null;
-            function connect(event) {
-                var itemId = document.getElementById("itemId")
-                var token = document.getElementById("token")
-                ws = new WebSocket("ws://127.0.0.1:8080/user/ws" + "?token=" + token.value);
-                ws.onmessage = function(event) {
-                    var messages = document.getElementById('messages')
-                    var message = document.createElement('li')
-                    var content = document.createTextNode(event.data)
-                    message.appendChild(content)
-                    messages.appendChild(message)
-                };
-                event.preventDefault()
-            }
-            function sendMessage(event) {
-                var input = document.getElementById("messageText")
-                ws.send(input.value)
-                input.value = ''
-                event.preventDefault()
-            }
-        </script>
-    </body>
-</html>
-"""
-
-
-@router_user.get("/ws_test")
-async def get():
-    return HTMLResponse(html)
-
-
+            await asyncio.sleep(int(PING_INTERVAL))
