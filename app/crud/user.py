@@ -58,6 +58,8 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
+    if time.time() - res.last_ping < int(LOGIN_EXPIRED):
+        res.occupied = 0
     # 已被占用
     if res.occupied == 1:
         raise Exception(401, '该账户已经被其他客户端占用')

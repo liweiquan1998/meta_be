@@ -103,7 +103,7 @@ async def websocket_endpoint(
                     user.occupied = 0
                     db.commit()
                     db.flush()
-                return
+                raise e
 
 
 
