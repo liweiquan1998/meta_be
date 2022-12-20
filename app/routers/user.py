@@ -78,7 +78,7 @@ async def websocket_endpoint(
     retry = 0
     while True:
         try:
-            time.sleep(int(PING_INTERVAL))
+            await asyncio.sleep(int(PING_INTERVAL))
             await websocket.send_text('1')
             data = await asyncio.wait_for(websocket.receive_text(), 0.1)
             if data == '0':
