@@ -8,11 +8,11 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
-from configs.settings import config
+import os
 
-ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
-LOGIN_EXPIRED = int(config.get('USER', 'login_expired'))
-PING_INTERVAL = int(config.get('USER', 'ping_interval'))
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv('user_expire_minutes', '4320')
+LOGIN_EXPIRED = int(os.getenv('user_login_expired', '30'))
+PING_INTERVAL = int(os.getenv('user_ping_interval', '10'))
 ping_uid_list = list()
 
 

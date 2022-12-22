@@ -5,13 +5,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.attributes import flag_modified
-from configs.settings import config
+import os
 
-USER = config.get('DATABASE', 'USER')
-PWD = config.get('DATABASE', 'pwd')
-DB_NAME = config.get('DATABASE', 'DB_NAME')
-HOST = config.get('DATABASE', 'HOST')
-PORT = config.get('DATABASE', 'PORT')
+USER = os.getenv('db_user', 'dbatest')
+PWD = os.getenv('db_pwd', 'sxwldba')
+DB_NAME = os.getenv('db_name', 'dbatest')
+HOST = os.getenv('db_host', '47.114.107.70')
+PORT = os.getenv('db_port', '5432')
 
 
 SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}"
@@ -46,5 +46,5 @@ class BaseModel(Base):
             if not key.startswith('_') and key in data:
                 setattr(self, key, data[key])
             if hasattr(self, 'update_time'):
-                setattr(self, 'update_time',time.time())
+                setattr(self, 'update_time', int(time.time()))
 
