@@ -4,7 +4,6 @@ from app import schemas, crud
 from utils import web_try, sxtimeit, get_utc_now
 from fastapi import APIRouter, WebSocket
 from app.common.validation import *
-from configs.settings import config
 import asyncio
 
 
@@ -12,8 +11,8 @@ router_user = APIRouter(
     prefix="/user",
     tags=["user-商户管理"],
 )
-PING_INTERVAL = config.get('USER','ping_interval')
-LOGIN_EXPIRED = config.get('USER', 'login_expired')
+PING_INTERVAL = int(os.getenv('user_ping_interval', 10))
+LOGIN_EXPIRED = int(os.getenv('user_login_expired', 30))
 
 
 @router_user.post("/create", summary="创建商户")

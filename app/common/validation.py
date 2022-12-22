@@ -11,7 +11,7 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from app import get_db, models
-from configs.settings import config
+import os
 
 sx_servers = {"sxkjue", 'sxkjALG'}
 
@@ -19,12 +19,12 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/swagger/login")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = config.get('USER', 'expire_minutes')
-ALGORITHM = config.get('USER', 'ALGORITHM')
+ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv('user_expire_minutes', '4320')
+ALGORITHM = os.getenv('user_algorithm', 'HS256')
 JWT_SECRET_KEY = {
-    'user': config.get('USER', 'secret_keys_user'),
-    'admin': config.get('USER', 'secret_keys_admin'),
-    'customer': config.get('USER', 'secret_keys_customer')
+    'user': os.getenv('user_secret_keys_user', '7491ad7fa77a6a4e5bad2f1d87331ecee129203bfa2f2480bb5c75abb7506e50'),
+    'admin': os.getenv('user_secret_keys_admin', '25313d9bf1b85552a2b8c8de78723b3d9c1bb5739fed8213a3fc0c705e8909e4'),
+    'customer': os.getenv('user_secret_keys_customer', '5d7905fad3ba152347a005334ec3fe3a1946fc5d0415ef47ea88f8357ae0bf76')
 }
 
 
