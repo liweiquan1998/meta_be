@@ -5,7 +5,7 @@
 
 新 http://frps.retailwell.com:20065/
 
-
+生产线 http://frps.retailwell.com:20071/
 ## 查看日志
 supervisorctl tail -f be
 

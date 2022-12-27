@@ -162,6 +162,7 @@ async def check_alive(websocket, db, user):
                     break
                 await asyncio.sleep(PING_INTERVAL)
     finally:
+
         # 保证连接断开后一定清除掉user_id，否则一直占用会导致客户端无法建立ws(但是可以登录)
         # while user.id in ping_uid_list:
         #     ping_uid_list.remove(user.id)
