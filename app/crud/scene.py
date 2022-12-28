@@ -17,7 +17,8 @@ def create_scene(db: Session, item: schemas.SceneCreate):
 
 
 def update_scene(db: Session, update_item: schemas.SceneUpdate, item_id: int):
-    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Scene)
+    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Scene,
+                        force=1, force_fields=('virtual_human_ids',))
 
 
 def get_scene_once(db: Session, item_id: int):
