@@ -2,7 +2,7 @@ import io
 from minio import Minio
 from minio.error import (ResponseError, BucketAlreadyOwnedByYou,
                          BucketAlreadyExists, NoSuchKey)
-import os
+from configs.setting import config
 
 
 class FileHandler(object):
@@ -10,9 +10,9 @@ class FileHandler(object):
     def __init__(self, bucket_name):
         self.bucket_name = bucket_name
 
-        self.minio_client = Minio(os.getenv('minio_url', 'mall-minio.cb41b216715ea452db783d1fdc700e8d0.cn-hangzhou.alicontainer.com'),
-                                  access_key=os.getenv('minio_access_key', 'objdba'),
-                                  secret_key=os.getenv('minio_secret_key', 'sxwlobjdba'),
+        self.minio_client = Minio(config.get('minio_url'),
+                                  access_key=config.get('minio_access_key'),
+                                  secret_key=config.get('minio_secret_key'),
                                   secure=False)
         # 创桶
         try:

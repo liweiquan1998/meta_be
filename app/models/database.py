@@ -5,13 +5,13 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.attributes import flag_modified
-import os
+from configs.setting import config
 
-USER = os.getenv('db_user', 'dbatest')
-PWD = os.getenv('db_pwd', 'sxwldba')
-DB_NAME = os.getenv('db_name', 'dbatest')
-HOST = os.getenv('db_host', '47.114.107.70')
-PORT = os.getenv('db_port', '5432')
+USER = config.get('db_user')
+PWD = config.get('db_pwd')
+DB_NAME = config.get('db_name')
+HOST = config.get('db_host')
+PORT = config.get('db_port')
 
 
 SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}"

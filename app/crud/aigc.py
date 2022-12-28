@@ -1,17 +1,10 @@
-import threading
-import time
-from typing import List
-
 import requests
-
-from app import models, schemas
-from sqlalchemy.orm import Session
-from app.crud.basic import update_to_db
 from app.common.validation import *
+from configs.setting import config
 
-audio_url = os.getenv("aigc_audio_url", 'http://192.168.199.27:7090/aigc/tts')
-threeD_url = os.getenv("aigc_threeD_url", 'http://192.168.199.249:11100/aigc/3d_reconstruction')
-video_sound_url = os.getenv("aigc_video_sound_url", 'http://192.168.199.249:11100/aigc/video_with_sound')
+audio_url = config.get("aigc_audio_url")
+threeD_url = config.get("aigc_threeD_url")
+video_sound_url = config.get("aigc_video_sound_url")
 
 
 def send_tts_request(content, vh_sex,  mc_id, db: Session):
