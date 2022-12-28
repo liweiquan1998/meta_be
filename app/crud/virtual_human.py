@@ -11,8 +11,8 @@ def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: mo
     # 重复虚拟人检查
     item.creator_id = user.id
     res: models.VirtualHuman = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == item.name).first()
-    if res:
-        raise Exception(f"虚拟人 {item.name} 已存在")
+    # if res:
+    #     raise Exception(f"虚拟人 {item.name} 已存在")
     # 性别及状态检查
     if item.sex not in [0, 1, 2]:
         raise Exception(f'虚拟人性别出错 实为{item.sex} 应为 0:未知 1:男 2:女')
