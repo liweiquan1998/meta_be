@@ -123,10 +123,10 @@ def delete_user(db: Session, item_id: int):
 
 async def check_alive(websocket, db, user):
     # 保证ws连接---user_id 的一对一关系 (否则可能出现a客户端断网，b登录，a刷新后共2个客户端共用1个账户的问题)
-    # if user.id not in ping_uid_list:
-    #     ping_uid_list.append(user.id)
-    # else:
-    #     raise websockets.exceptions.SecurityError
+    if user.id not in ping_uid_list:
+        ping_uid_list.append(user.id)
+    else:
+        raise websockets.exceptions.SecurityError
 
     # ws连接的心跳检测以及对user表的更新
     await websocket.accept()
@@ -164,6 +164,6 @@ async def check_alive(websocket, db, user):
     finally:
 
         # 保证连接断开后一定清除掉user_id，否则一直占用会导致客户端无法建立ws(但是可以登录)
-        # while user.id in ping_uid_list:
-        #     ping_uid_list.remove(user.id)
+        while user.id in ping_uid_list:
+            ping_uid_list.remove(user.id)
         return
