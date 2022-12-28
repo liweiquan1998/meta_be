@@ -27,7 +27,7 @@ def add_virtual_human(item: schemas.VirtualHumanCreate, db: Session = Depends(ge
 @web_try()
 @sxtimeit
 def delete_virtual_human(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.delete_virtual_human(item_id=item_id, db=db)
+    return crud.delete_virtual_human(item_id=item_id, db=db, user=user)
 
 
 @router_virtual_humans.put("/{item_id}", summary="更新虚拟人信息")
