@@ -89,9 +89,11 @@ async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(
         return True
     userid, expire_time = check_access_token(token, 'user')
     # 验证用户是否存在
-    user = db.query(models.User).filter(models.User.id == userid).first()
+    user: models.User = db.query(models.User).filter(models.User.id == userid).first()
     if user is None:
         raise HTTPException(status_code=401, detail="商户不存在")
+    if token != user.auth_token:
+        raise HTTPException(status_code=403, detail="您已在其他客户端登录")
     return user
 
 
