@@ -2,12 +2,12 @@ import os
 import configparser
 import copy
 
-environment = 'local'
+environment = 'k8s'
 config_path = '/etc/sx_config'
 try:
     os.listdir(config_path)
 except FileNotFoundError:
-    environment = 'k8s'
+    environment = 'local'
 config = dict()
 print(f'env:{environment}\n{"-"*30}\n')
 
