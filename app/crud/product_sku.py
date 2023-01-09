@@ -127,7 +127,7 @@ def get_business_product_skus(db: Session,business_id, params: Union[schemas.Pro
             row_buffer.update({field:data})
         meta_obj: models.MetaObj = db.query(models.MetaObj)\
             .filter(models.MetaObj.id == row_buffer.get('meta_obj_id')).first()
-        row_buffer['meta_obj'] = meta_obj.to_dict()
+        row_buffer['meta_obj'] = meta_obj.to_dict() if meta_obj else None
         res.append(row_buffer)
     if params.num:
         if len(res) > params.num and params.num > 0:
