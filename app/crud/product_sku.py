@@ -122,11 +122,11 @@ def get_business_product_skus(db: Session,business_id, params: Union[schemas.Pro
         row_buffer = {}
         for field in row.keys():
             data = row[field]
-            if 'time' in str(field) and isinstance(data,int):
+            if 'time' in str(field) and isinstance(data, int):
                 data = t2date(data)
-            row_buffer.update({field:data})
+            row_buffer.update({field: data})
         meta_obj: models.MetaObj = db.query(models.MetaObj)\
-            .filter(models.MetaObj.id == row_buffer.get('meta_obj_id')).first()
+            .filter(models.MetaObj.id == row_buffer.get('meta_obj_id', '-1')).first()
         row_buffer['meta_obj'] = meta_obj.to_dict() if meta_obj else None
         res.append(row_buffer)
     if params.num:
