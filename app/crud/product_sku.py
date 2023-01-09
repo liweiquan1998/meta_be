@@ -100,11 +100,11 @@ def get_product_skus(db: Session):
 
 def get_business_product_skus(db: Session,business_id, params: Union[schemas.ProductSkuParams,schemas.ProductSkuParamsBase]):
     sql = '''SELECT a.create_time,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id,
-			b.*,c.thumbnail
-            FROM product a LEFT JOIN sku b 
-            ON a.id=b.product_id 
-            LEFT JOIN meta_obj c ON a.meta_obj_id=c.id 
-            where business_id={} AND product_id>0 
+			 b.*,c.thumbnail
+             FROM product a LEFT JOIN sku b 
+             ON a.id=b.product_id 
+             LEFT JOIN meta_obj c ON a.meta_obj_id=c.id 
+             where business_id={} AND product_id>0 
             '''
     name_filter_sql = "AND b.sku_name like '%{}%'"
     status_filter_sql = 'AND b.status = {}'
@@ -118,14 +118,20 @@ def get_business_product_skus(db: Session,business_id, params: Union[schemas.Pro
         sql += time_filter_sql.format(params.create_time,params.create_time+24*3600)
     rows = db.execute(sql).fetchall()
     res = []
-    for row in rows:  # 处理时间戳
+    for row in rows:  # 处理时间戳and添加metaobj
         row_buffer = {}
         for field in row.keys():
             data = row[field]
             if 'time' in str(field) and isinstance(data,int):
                 data = t2date(data)
             row_buffer.update({field:data})
+        meta_obj: models.MetaObj = db.query(models.MetaObj)\
+            .filter(models.MetaObj.id == row_buffer.get('meta_obj_id')).first()
+        row_buffer['meta_obj'] = meta_obj.to_dict()
         res.append(row_buffer)
+    if params.num:
+        if len(res) > params.num and params.num > 0:
+            res = res[:params.num]
     return res
 
 

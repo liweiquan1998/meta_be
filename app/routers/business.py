@@ -57,3 +57,4 @@ def get_shelves_once(db: Session = Depends(get_db), user=Depends(check_user)):
 @sxtimeit
 def get_business_blueprints(business: int, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_blueprints_by_creator_id(db, business), params)
+

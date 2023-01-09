@@ -37,6 +37,7 @@ class ProductSkuParamsBase(BaseModel):
     name: Optional[str] = None
     status: Optional[int] = None
     create_time: Optional[int] = None
+    num: Optional[int] = None
 
 
 class ProductSkuCreate(ProductSkuBase):
