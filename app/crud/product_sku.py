@@ -100,7 +100,7 @@ def get_product_skus(db: Session):
 
 def get_business_product_skus(db: Session,business_id, params: Union[schemas.ProductSkuParams,schemas.ProductSkuParamsBase]):
     sql = '''SELECT a.create_time,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id,
-			 b.*,c.thumbnail
+             b.*, c.thumbnail, c.model
              FROM product a LEFT JOIN sku b 
              ON a.id=b.product_id 
              LEFT JOIN meta_obj c ON a.meta_obj_id=c.id 
@@ -125,9 +125,6 @@ def get_business_product_skus(db: Session,business_id, params: Union[schemas.Pro
             if 'time' in str(field) and isinstance(data, int):
                 data = t2date(data)
             row_buffer.update({field: data})
-        meta_obj: models.MetaObj = db.query(models.MetaObj)\
-            .filter(models.MetaObj.id == row_buffer.get('meta_obj_id', '-1')).first()
-        row_buffer['meta_obj'] = meta_obj.to_dict() if meta_obj else None
         res.append(row_buffer)
     if params.num:
         if len(res) > params.num and params.num > 0:
