@@ -126,9 +126,6 @@ def get_business_product_skus(db: Session,business_id, params: Union[schemas.Pro
                 data = t2date(data)
             row_buffer.update({field: data})
         res.append(row_buffer)
-    if params.num:
-        if len(res) > params.num and params.num > 0:
-            res = res[:params.num]
     return res
 
 
