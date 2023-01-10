@@ -17,9 +17,9 @@ class LiveStreamingCreate(BaseModel):
         schema_extra = {
             "example": {
                 "name": faker.name(),
-                "status": 0,
                 "base_scene_id": faker.pyint(5, 10),
-                "live_account_id": faker.pyint(5, 10)}
+                "live_account_id": faker.pyint(5, 10),
+                "virtual_human_id": faker.pyint(1, 5)}
             }
 
 
