@@ -20,7 +20,7 @@ router_live_streaming = APIRouter(
 @web_try()
 @sxtimeit
 def add_live_streaming(item: schemas.LiveStreamingCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_live_streaming(db=db, item=item)
+    return crud.create_live_streaming(db=db, item=item, user=user)
 
 
 @router_live_streaming.get("/{stream_id}", summary="获取直播间信息")

@@ -22,11 +22,16 @@ def live_streaming_add_username(ls, db: Session):
         res['creator_name'] = db.query(models.User).filter(models.User.id == res['creator_id']).first().name
     return res
 
-def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate):
-    # sourcery skip: use-named-expression
-    # todo 判断各参数合法性
+
+def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate, user:models.User):
     # 创建
-    db_item = models.LiveStreaming(**item.dict(), **{'create_time': int(time.time())})
+    account: models.LiveAccount = db.query(models.LiveAccount).\
+        filter(models.LiveAccount.id == item.live_account_id).first()
+    if not account:
+        raise Exception(f'创建的直播关联账号未找到，请求的直播账号id:{item.live_account_id}')
+    db_item = models.LiveStreaming(**item.dict(), **{'create_time': int(time.time()),
+                                                     'creator_id': user.id,
+                                                     'address': account.address})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -34,6 +39,7 @@ def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate):
 
 
 def update_live_streaming(db: Session, item_id: int, update_item: schemas.LiveStreamingUpdate):
+    update_item.last_update = int(time.time()) if update_item.status == 1 else None
     return update_to_db(update_item=update_item, db=db, item_id=item_id, model_cls=models.LiveStreaming)
 
 
