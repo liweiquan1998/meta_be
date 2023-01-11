@@ -3,7 +3,6 @@ from sqlalchemy import Column, Integer, String
 from app.models.database import BaseModel
 
 
-
 class User(BaseModel):
     __tablename__ = "user"
     id = Column(Integer, primary_key=True, index=True, comment='id')
@@ -19,5 +18,5 @@ class User(BaseModel):
     occupied = Column(Integer, comment='0:可登陆，2:不可登陆(被其他浏览器占用)，None:可登陆')
     email_address = Column(String(40), comment='邮箱地址')
     last_ping = Column(Integer, comment='ws上次ping前端的时间')
-
+    group_id = Column(Integer, comment='用户组ID')
 
