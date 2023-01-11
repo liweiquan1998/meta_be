@@ -17,6 +17,7 @@ class User(BaseModel):
     status = Column(Integer, comment='状态 0:正常 1:禁用')
     tel_phone = Column(String(255), comment='电话')
     occupied = Column(Integer, comment='0:可登陆，2:不可登陆(被其他浏览器占用)，None:可登陆')
+    email_address = Column(String(40), comment='邮箱地址')
     last_ping = Column(Integer, comment='ws上次ping前端的时间')
 
 
