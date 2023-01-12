@@ -8,7 +8,7 @@ faker = Faker(locale='zh_CN')
 
 class LiveStreamingCreate(BaseModel):
     name: str
-    status: int = 0
+    status: int = 1
     virtual_human_id: int
     base_scene_id: int
     live_account_id: int
@@ -19,7 +19,8 @@ class LiveStreamingCreate(BaseModel):
                 "name": faker.name(),
                 "base_scene_id": faker.pyint(5, 10),
                 "live_account_id": faker.pyint(5, 10),
-                "virtual_human_id": faker.pyint(1, 5)}
+                "virtual_human_id": faker.pyint(1, 5),
+                "status": 1}
             }
 
 
