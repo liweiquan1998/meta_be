@@ -33,8 +33,6 @@ def delete_store(store_id: int, db: Session = Depends(get_db), user=Depends(chec
 @web_try()
 @sxtimeit
 def update_store(store_id: int, update_item: schemas.StoreUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    if json.loads(update_item.sku_ids):
-        update_item.sku_ids = json.dumps(list(set(json.loads(update_item.sku_ids))))
     return crud.update_store(db=db, item_id=store_id, update_item=update_item)
 
 
