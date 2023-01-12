@@ -58,7 +58,6 @@ def login_user_swagger(db: Session, item: schemas.UserLogin):
 
 def login_user(db: Session, item: schemas.UserLogin):
     res: models.User = db.query(models.User).filter(models.User.name == item.name).first()
-    allow_ue = 1  # 允许该token连接ue的ws
     # 用户不存在
     if not res:
         raise Exception(404, f"用户 {item.name} 不存在")
@@ -73,14 +72,13 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 已被占用
     if res.occupied == 1:
         raise Exception(401, '该账户已经被其他客户端占用')
-        # allow_ue = 0
     # 更新登录时间
     res.auth_token = create_access_token(res.id, 'user')
     res.last_login = int(time.time())
     db.commit()
     db.flush()
     return {"access_token": res.auth_token, "token_type": "bearer", "user_id": res.id,
-            "user_name": res.name, "allow_ue": allow_ue}
+            "user_name": res.name}
 
 
 def update_user(db: Session, item_id: int, update_item: schemas.UserUpdate):
