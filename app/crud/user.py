@@ -50,8 +50,9 @@ def login_user_swagger(db: Session, item: schemas.UserLogin):
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
     res.auth_token = create_access_token(res.id, 'user')
-    db.commit()
-    db.flush()
+    # db.commit()
+    # db.flush()
+    db.close()
     return TokenSchemas(**{"access_token": res.auth_token, "token_type": "bearer"})
 
 
