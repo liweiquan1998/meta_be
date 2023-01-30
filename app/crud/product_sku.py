@@ -54,7 +54,7 @@ def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSk
         if sku_ids_rows:
             sku_ids = [row[0] for row in sku_ids_rows]
             if item_id in sku_ids:
-                raise Exception(400, '该商品已经被上货架，不可以在本页面下架')
+                raise Exception(400, '该商品已经被上货架，不可以直接下架')
     db_product_item: models.Product = db.query(models.Product).filter(
         models.Product.id == db_sku_item.product_id).first()
     db_product_item.set_field(product_param)
@@ -105,26 +105,28 @@ def get_product_skus(db: Session):
     return res
 
 
-def get_business_product_skus(db: Session,business_id, params: Union[schemas.ProductSkuParams,schemas.ProductSkuParamsBase]):
-    sql = '''SELECT a.create_time,a.desc,a.meta_obj_id,a.remarks,a.unit,a.business_id,
-             b.*, c.thumbnail, c.model
-             FROM product a LEFT JOIN sku b 
-             ON a.id=b.product_id 
-             LEFT JOIN meta_obj c ON a.meta_obj_id=c.id 
-             where business_id={} AND product_id>0 
-            '''
-    name_filter_sql = "AND b.sku_name like '%{}%'"
-    status_filter_sql = 'AND b.status = {}'
-    time_filter_sql = "AND a.create_time>={} AND a.create_time<{}"
-    sql = sql.format(business_id)
+def get_business_product_skus(db: Session, business_id, params: Union[schemas.ProductSkuParams,schemas.ProductSkuParamsBase]):
+    query = db.query(models.Sku, models.Product, models.MetaObj). \
+        join(models.MetaObj, models.Product.meta_obj_id == models.MetaObj.id). \
+        join(models.Sku, models.Product.id == models.Sku.product_id, isouter=True). \
+        filter(models.Product.business_id == business_id, models.Sku.product_id > 0)
     if params.name is not None:
-        sql += name_filter_sql.format(params.name)
+        query = query.filter(models.Sku.sku_name.like(f'%{params.name}%'))
     if params.status is not None:
-        sql += status_filter_sql.format(params.status)
+        query = query.filter(models.Sku.status == params.status)
     if params.create_time is not None:
-        sql += time_filter_sql.format(params.create_time,params.create_time+24*3600)
-    rows = db.execute(sql).fetchall()
+        query = query.filter(models.Product.create_time >= params.create_time,
+                             models.Product.create_time < params.create_time + 24 * 3600)
+    rows = query.all()
     res = []
+
+    def combine(item):
+        row: dict = item.MetaObj.to_dict()
+        row.update(item.Product.to_dict())
+        row.update(item.Sku.to_dict())
+        return row
+
+    rows = list(map(combine, rows))
     for row in rows:  # 处理时间戳and添加metaobj
         row_buffer = {}
         for field in row.keys():
@@ -148,10 +150,3 @@ def delete_product_sku(db: Session, item_id: int):
         db.commit()
         db.flush()
         return True
-
-
-
-
-
-
-
