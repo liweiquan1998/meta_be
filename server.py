@@ -68,6 +68,6 @@ def ping():
     return "pong!!!"
 
 # Get 健康检查
-@app.get("/admin/test", description="健康检查")
+@app.get("/meta/test", description="健康检查")
 def ping():
     return "test!"
