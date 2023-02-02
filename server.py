@@ -66,3 +66,8 @@ app.include_router(router_blueprint)
 @app.get("/ping", description="健康检查")
 def ping():
     return "pong!!!"
+
+# Get 健康检查
+@app.get("/admin/test", description="健康检查")
+def ping():
+    return "test!"
