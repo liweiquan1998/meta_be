@@ -55,7 +55,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         nfs_p = f"/mnt/nfs/SceneAssets/{yearmonth}/{minio_p.split('/')[-1]}"
         with open(nfs_p, "wb") as f:
             f.write(file_byte)
-        return nfs_p
+        return '/file/' + nfs_p
 
     def video_fist_frame(video_p):
         root_p = Path(f"{minio2nfs(video_p)}")
