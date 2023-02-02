@@ -1,3 +1,4 @@
+import os.path
 import threading
 import time
 import cv2
@@ -49,6 +50,8 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     def minio2nfs(minio_p):
         file_byte = get_minio_file_byte(minio_p.split('minio/')[-1])
         yearmonth = time.strftime("%Y%m", time.localtime())
+        if not os.path.exists(f"/mnt/nfs/SceneAssets/{yearmonth}"):
+            os.mkdir(f"/mnt/nfs/SceneAssets/{yearmonth}")
         nfs_p = f"/mnt/nfs/SceneAssets/{yearmonth}/{minio_p.split('/')[-1]}"
         with open(nfs_p, "wb") as f:
             f.write(file_byte)
