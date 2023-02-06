@@ -1,13 +1,44 @@
-# 元宇宙 DEMO
- 
+# 元宇宙商户端文档 
+
+### 服务简介
+本服务是元宇宙电商平台商家端web后端服务，采用的python web框架:fastapi,
+MVC架构，数据库模型用sqlalchemy1.4.9建立。
+
+关于fastapi: https://fastapi.tiangolo.com/
+
 ## 后端服务器
-旧 http://frps.retailwell.com:20055/
+### 域名与端口
 
-新 http://frps.retailwell.com:20065/
+测试线: http://frps.retailwell.com:20065/
 
-生产线 http://frps.retailwell.com:20071/
-## 查看日志
+生产线: http://frps.retailwell.com:20071/
+
+注: 该域名通过frp注册，测试线的域名端口配置在dockefile里注明。生产线的域名端口在
+helm的chart: deployment: meta-product-web-frpc 统一分配每个后端的frpc域名端口。
+
+### 服务镜像
+测试线: SXKJ:32775/meta_be
+dockerfile: meta_be/Dockerfile
+
+生产线: SXKJ:32775/meta_be_product
+dockerfile: meta_be/Dockerfile_product
+
+### 关于部署
+测试线命名空间: pixel
+
+生产线命名空间: meta-product
+
+部署方式: 生产线采用helm本地仓库安装到k8s的方式部署
+
+helm本地仓库地址：192.168.199.109服务器 /home/sxkj/wjh/my_resp/helm/meta-product-web/
+
+### 查看日志
 supervisorctl tail -f be
+
+### 代码分支
+测试线: master
+
+生产线: product
 
 ## 数据库设计
 
