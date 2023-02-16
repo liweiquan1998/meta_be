@@ -1,5 +1,21 @@
 # 元宇宙商户管理
 
+
+## 涉及的数据库表
+
+### user
+| 名称            | 类型           | 备注           |
+|---------------|--------------|--------------|
+| auth_token    | VARCHAR(255) | 登录token      |
+| create_time   | INTEGER      | 创建时间         |
+| id            | INTEGER      | id           |
+| last_login    | INTEGER      | 最近时间         |
+| password_hash | VARCHAR(255) | 加密后的登录密码     |
+| status        | INTEGER      | 状态 0:正常 1:禁用 |
+| storename     | VARCHAR(50)  | 店铺名称         |
+| update_time   | INTEGER      | 更新时间         |
+| name      | VARCHAR(255) | 用户名          |
+
 ## 创建商户
 
 基本流程：
