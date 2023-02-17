@@ -122,4 +122,16 @@
 
 ### 输入用户名和密码进行登录
 
+![](images/input_login.png)
+
+### 成功登录
+
 ![](images/swagger_login.png)
+
+### web页面进行登录（页面调用的是"/user/login"接口）
+
+![](images/web_login.png)
+
+### 成功登录
+
+![](images/login_successful.png)
