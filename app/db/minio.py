@@ -10,9 +10,9 @@ class FileHandler(object):
     def __init__(self, bucket_name):
         self.bucket_name = bucket_name
 
-        self.minio_client = Minio(config.get('minio_url'),
-                                  access_key=config.get('minio_access_key'),
-                                  secret_key=config.get('minio_secret_key'),
+        self.minio_client = Minio(config.get('minio', 'url'),
+                                  access_key=config.get('minio', 'access_key'),
+                                  secret_key=config.get('minio', 'secret_key'),
                                   secure=False)
         # 创桶
         try:

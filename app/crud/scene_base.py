@@ -15,6 +15,6 @@ def get_scene_base(db: Session, item: schemas.SceneBaseGet):
     return db_query.all()
 
 def get_scene_base_once(db: Session, item_id: int):
-    if res := db.query(models.SceneBase).filter(models.SceneBase.id == item_id).first():
-        return res
+    return db.query(models.SceneBase).filter(models.SceneBase.id == item_id).first()
+
 

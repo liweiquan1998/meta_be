@@ -83,53 +83,54 @@ EXPOSE 8080
 
 FROM builder2 as builder3
 
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && rm -rf /var/lib/apt/lists/*
-RUN mkdir /var/run/sshd
-RUN echo 'root:root' | chpasswd
-RUN sed -i 's/.*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
-# SSH login fix. Otherwise user is kicked off after login
-RUN sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
+# RUN apt-get update && apt-get install -y --no-install-recommends openssh-server && rm -rf /var/lib/apt/lists/*
+# RUN mkdir /var/run/sshd
+# RUN echo 'root:root' | chpasswd
+# RUN sed -i 's/.*PermitRootLogin .*/PermitRootLogin yes/' /etc/ssh/sshd_config
+# # SSH login fix. Otherwise user is kicked off after login
+# RUN sed -i 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
 
-RUN echo "\
-[program:sshd] \n\
-command=/usr/sbin/sshd -D\n\
-autorestart=True\n\
-autostart=True\n\
-redirect_stderr = true\n\
-" > /etc/supervisor/conf.d/sshd.conf
+# RUN echo "\
+# [program:sshd] \n\
+# command=/usr/sbin/sshd -D\n\
+# autorestart=True\n\
+# autostart=True\n\
+# redirect_stderr = true\n\
+# " > /etc/supervisor/conf.d/sshd.conf
 
-FROM builder3 as builder4
+# FROM builder3 as builder4
+
 ADD . /workspace
 RUN mkdir "/mnt/nfs"
 
 
-FROM builder4 as builder5
-RUN wget  https://ghproxy.com/https://github.com/fatedier/frp/releases/download/v0.12.0/frp_0.12.0_linux_amd64.tar.gz -O /frp.tar.gz && \
-    mkdir /frp && \
-    tar -xzvf /frp.tar.gz -C /frp --strip-components 1 && \
-    rm -rf frp.tar.gz
-RUN echo "\
-[common] \n\
-server_addr = frps.retailwell.com \n\
-server_port = 8764 \n\
-#auth_token = soaringnova \n\
-privilege_token = zfwzyzxq \n\
-[meta-be] \n\
-type = tcp \n\
-local_ip = 0.0.0.0 \n\
-local_port = 8080 \n\
-remote_port = 20065 \n\
-" > /frp/frpc.ini
-RUN echo "\
-[program:frpc] \n\
-directory=/frp \n\
-command=/frp/frpc -c /frp/frpc.ini \n\
-autorestart=True \n\
-autostart=True \n\
-startretries=1000 \n\
-stdout_logfile=/var/log/frp.log \n\
-redirect_stderr = true \n\
-stdout_logfile_maxbytes = 20MB \n\
-stopasgroup=true \n\
-killasgroup=true \n\
-" > /etc/supervisor/conf.d/frp.conf
+# FROM builder4 as builder5
+# RUN wget  https://ghproxy.com/https://github.com/fatedier/frp/releases/download/v0.12.0/frp_0.12.0_linux_amd64.tar.gz -O /frp.tar.gz && \
+#     mkdir /frp && \
+#     tar -xzvf /frp.tar.gz -C /frp --strip-components 1 && \
+#     rm -rf frp.tar.gz
+# RUN echo "\
+# [common] \n\
+# server_addr = frps.retailwell.com \n\
+# server_port = 8764 \n\
+# #auth_token = soaringnova \n\
+# privilege_token = zfwzyzxq \n\
+# [meta-be] \n\
+# type = tcp \n\
+# local_ip = 0.0.0.0 \n\
+# local_port = 8080 \n\
+# remote_port = 20065 \n\
+# " > /frp/frpc.ini
+# RUN echo "\
+# [program:frpc] \n\
+# directory=/frp \n\
+# command=/frp/frpc -c /frp/frpc.ini \n\
+# autorestart=True \n\
+# autostart=True \n\
+# startretries=1000 \n\
+# stdout_logfile=/var/log/frp.log \n\
+# redirect_stderr = true \n\
+# stdout_logfile_maxbytes = 20MB \n\
+# stopasgroup=true \n\
+# killasgroup=true \n\
+# " > /etc/supervisor/conf.d/frp.conf

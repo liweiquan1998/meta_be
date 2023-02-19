@@ -19,12 +19,12 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/swagger/login")
 
-ACCESS_TOKEN_EXPIRE_MINUTES = config.get('user_expire_minutes')
-ALGORITHM = config.get('user_algorithm')
+ACCESS_TOKEN_EXPIRE_MINUTES = config.get('token', 'expire_minutes')
+ALGORITHM = config.get('token', 'algorithm')
 JWT_SECRET_KEY = {
-    'user': config.get('user_secret_keys_user'),
-    'admin': config.get('user_secret_keys_admin'),
-    'customer': config.get('user_secret_keys_customer')
+    'user': config.get('token', 'secret_keys_user'),
+    'admin': config.get('token', 'secret_keys_admin'),
+    'customer': config.get('token', 'secret_keys_customer')
 }
 
 

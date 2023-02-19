@@ -11,8 +11,8 @@ router_user = APIRouter(
     prefix="/user",
     tags=["user-商户管理"],
 )
-PING_INTERVAL = int(config.get('user_ping_interval'))
-LOGIN_EXPIRED = int(config.get('user_login_expired'))
+PING_INTERVAL = int(config.get('token', 'ping_interval'))
+LOGIN_EXPIRED = int(config.get('token', 'login_expired'))
 
 
 @router_user.post("/create", summary="创建商户")

@@ -70,7 +70,8 @@ def get_minio_file(path: str):
 
 
 def get_minio_file_byte(path: str):
-    if file_byte := FMH.get_file(path):
+    file_byte = FMH.get_file(path)
+    if file_byte:
         return file_byte
     else:
         raise Exception(404, f"文件 {path} 不存在")
