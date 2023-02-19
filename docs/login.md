@@ -23,7 +23,7 @@
 
 
 
-![](images/create_user.jpg)
+![](images/create_user.png)
 
 接口："/user/create"（post请求）
 
@@ -37,7 +37,7 @@
 
 基本流程：
 
-![](images/login.jpg)
+![](images/login.png)
 
 接口："/user/login"（post请求)
 
@@ -54,7 +54,7 @@
 ## websocket链接
 
 基本流程：
-![](images/websocket.jpg)
+![](images/websocket.png)
 
 
 
@@ -74,7 +74,7 @@
 
 基本流程：
 
-![](images/update.jpg)
+![](images/update.png)
 
 
 接口："/user/user"（put请求）
@@ -89,7 +89,7 @@
 
 基本流程：
 
-![](images/get_user_list.jpg)
+![](images/get_user_list.png)
 
 
 
@@ -122,4 +122,16 @@
 
 ### 输入用户名和密码进行登录
 
+![](images/input_login.png)
+
+### 成功登录
+
 ![](images/swagger_login.png)
+
+### web页面进行登录（页面调用的是"/user/login"接口）
+
+![](images/web_login.png)
+
+### 成功登录
+
+![](images/login_successful.png)
