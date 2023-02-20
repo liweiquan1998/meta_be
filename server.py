@@ -24,10 +24,14 @@ from app.routers.background import router_backgrounds
 from app.routers.apparel import router_apparel
 from app.routers.blueprint import router_blueprint
 from utils.sx_log import format_print
+from configs.setting import root_path
+
 
 format_print()
 Base.metadata.create_all(bind=engine)
-app = FastAPI(docs_url='/meta/docs', redoc_url='/meta/redoc',  title="元宇宙电商平台后台")
+
+app = FastAPI(root_path=f"{root_path}", title="元宇宙电商平台后台")
+
 
 # CORS 跨源资源共享
 app.add_middleware(

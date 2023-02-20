@@ -11,13 +11,14 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from app import get_db, models
-from configs.setting import config
+from configs.setting import config, root_path
 
 sx_servers = {"sxkjue", 'sxkjALG'}
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/swagger/login")
+tokenUrl = f"{root_path}/admin/login_fastapi" if config.get('app', 'enabled') in ['True', 'true', True] else "/user/swagger/login"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=tokenUrl)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('token', 'expire_minutes')
 ALGORITHM = config.get('token', 'algorithm')
