@@ -27,7 +27,7 @@ from utils.sx_log import format_print
 
 format_print()
 Base.metadata.create_all(bind=engine)
-app = FastAPI(docs_url='/meta/docs', redoc_url='/meta/redoc', openapi_url=f'/meta/openapi.json', title="元宇宙电商平台后台")
+app = FastAPI(docs_url='/meta/docs', redoc_url='/meta/redoc',  title="元宇宙电商平台后台")
 
 # CORS 跨源资源共享
 app.add_middleware(
