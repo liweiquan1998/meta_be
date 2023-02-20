@@ -62,15 +62,15 @@ RUN ln /opt/conda/bin/mamba /usr/local/bin/mamba && mamba init zsh
 
 FROM builder1 as builder2
 
-ENV WORKDIR /workspace
-WORKDIR ${WORKDIR}
+WORKDIR /workspace
 ADD environment.yml /environment.yml
 RUN mamba update -n base -c defaults conda -y && mamba env create -f /environment.yml && rm -rf /root/.cache
 
+# /opt/conda/envs/py38/bin/gunicorn server:app --workers 1 --worker-class=utils.r_uvicorn_worker.RestartableUvicornWorker  --bind 0.0.0.0:8080 --reload
 RUN echo "\
 [program:be]\n\
 directory=/workspace\n\
-command=/opt/conda/envs/py38/bin/gunicorn server:app --workers 1 --worker-class=utils.r_uvicorn_worker.RestartableUvicornWorker  --bind 0.0.0.0:8080 --reload\n\
+command=/opt/conda/envs/py38/bin/python run.py\n\
 autorestart=true\n\
 startretries=100\n\
 redirect_stderr=true\n\

@@ -72,6 +72,6 @@ def ping():
     return "pong!!!"
 
 # Get 健康检查
-@app.get("/meta/test", description="健康检查")
+@app.get(f"{root_path}/ping", description="健康检查")
 def ping():
-    return "test!"
+    return "metabe pong!"
