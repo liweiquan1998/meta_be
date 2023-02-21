@@ -47,6 +47,7 @@ def update_user(update_item: schemas.UserUpdate, db: Session = Depends(get_db),
 @web_try()
 @sxtimeit
 def get_users(get_item: schemas.UserGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db),):
+    print(type(paginate(crud.get_users(db, get_item), params)))
     return paginate(crud.get_users(db, get_item), params)
 
 
