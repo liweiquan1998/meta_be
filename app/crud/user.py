@@ -10,9 +10,9 @@ from app.crud.basic import update_to_db
 from app.common.validation import *
 from configs.setting import config
 
-ACCESS_TOKEN_EXPIRE_MINUTES = config.get('user_expire_minutes')
-LOGIN_EXPIRED = int(config.get('user_login_expired'))
-PING_INTERVAL = int(config.get('user_ping_interval'))
+ACCESS_TOKEN_EXPIRE_MINUTES = config.get('token', 'expire_minutes')
+LOGIN_EXPIRED = int(config.get('token', 'login_expired'))
+PING_INTERVAL = int(config.get('token', 'ping_interval'))
 ping_uid_list = list()
 
 

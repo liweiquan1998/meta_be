@@ -11,20 +11,21 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from app import get_db, models
-from configs.setting import config
+from configs.setting import config, root_path
 
 sx_servers = {"sxkjue", 'sxkjALG'}
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/swagger/login")
+tokenUrl = f"{root_path}/admin/login_fastapi" if config.get('app', 'enabled') in ['True', 'true', True] else "/user/swagger/login"
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl=tokenUrl)
 
-ACCESS_TOKEN_EXPIRE_MINUTES = config.get('user_expire_minutes')
-ALGORITHM = config.get('user_algorithm')
+ACCESS_TOKEN_EXPIRE_MINUTES = config.get('token', 'expire_minutes')
+ALGORITHM = config.get('token', 'algorithm')
 JWT_SECRET_KEY = {
-    'user': config.get('user_secret_keys_user'),
-    'admin': config.get('user_secret_keys_admin'),
-    'customer': config.get('user_secret_keys_customer')
+    'user': config.get('token', 'secret_keys_user'),
+    'admin': config.get('token', 'secret_keys_admin'),
+    'customer': config.get('token', 'secret_keys_customer')
 }
 
 

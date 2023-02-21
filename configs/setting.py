@@ -1,27 +1,19 @@
-import os
 import configparser
-import copy
+import json
+import os
 
 
-environment = 'k8s'
-config_path = '/etc/sx_config'
-try:
-    os.listdir(config_path)
-except FileNotFoundError:
-    environment = 'local'
-config = dict()
-print(f'env:{environment}\n{"-"*30}\n')
 
-if environment == 'local':
-    config = configparser.ConfigParser()
-    config.read_file(open(f'./development.ini'))
-    get_copy = copy.deepcopy(config.get)
-    config.get = lambda key: get_copy('config', key)
+config = configparser.ConfigParser()
+if os.environ.get('APP_ENV', 'development') == 'development':
+    config.readfp(open('development.ini'))
+elif os.environ.get('APP_ENV') == 'sxtest':
+    config.readfp(open('sxtest.ini'))
+elif os.environ.get('APP_ENV') == 'sxprod':
+    config.readfp(open('sxprod.ini'))
 
-elif environment == 'k8s':
-    file_names = os.listdir(config_path)
-    config = {key: open('/'.join([config_path, key])).read() for key in file_names
-              if not key.startswith('.')}
-    for c in config:
-        print(c, ':', '*'*(len(c)))
-    print('-'*30, '\n')
+root_path = config.get('app', 'prefix') if config.get('app', 'enabled') in ['true', 'True', True] else '/'
+print(f'root path is {root_path}')
+
+print(f"get config of {os.environ.get('APP_ENV')}")
+print(f'db config: {config.get("db", "host")}')

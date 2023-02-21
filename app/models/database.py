@@ -7,11 +7,11 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.attributes import flag_modified
 from configs.setting import config
 
-USER = config.get('db_user')
-PWD = config.get('db_pwd')
-DB_NAME = config.get('db_name')
-HOST = config.get('db_host')
-PORT = config.get('db_port')
+USER = config.get('db', 'user')
+PWD = config.get('db', 'pwd')
+DB_NAME = config.get('db', 'name')
+HOST = config.get('db', 'host')
+PORT = config.get('db', 'port')
 
 
 SQLALCHEMY_DATABASE_URI = f"postgresql://{USER}:{PWD}@{HOST}:{PORT}/{DB_NAME}"
