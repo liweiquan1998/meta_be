@@ -33,7 +33,7 @@ def add_market_content(item: schemas.MarketingContentCreate, db: Session = Depen
     res = file.upload_minio_file(files)
     audio_uri = res.get('url')
     content = {"status": 2, "audio_uri": audio_uri}
-    return update_marketing_content(content_id=mc_id, update_item=content)
+    return content
 
 
 @router_marketing_content.post('/compose_video', summary="合成视频")
