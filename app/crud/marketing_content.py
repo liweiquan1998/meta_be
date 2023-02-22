@@ -125,7 +125,8 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     # 向tts发送请求
     # send_tts_request(item.content, vh_sex, db_item.id,db)
     response = send_tts_request(item.content, vh_sex, db_item.id, db)
-    print(type(response.content))
+    print(response.content)
+    print(response.json())
     file_byte = response.content
     file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}' + '.wav'
     result = Path(time.strftime("%Y%m", time.localtime()))
