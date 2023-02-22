@@ -15,7 +15,8 @@ def send_tts_request(content, vh_sex,  mc_id, db: Session):
         "mc_id": mc_id
     }
     print(audio_url, data)
-    requests.post(audio_url, json=data)
+    response = requests.post(audio_url, json=data)
+    return response
 
 
 def send_nerf_request(file_list, mo_id, file_type):
