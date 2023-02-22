@@ -122,5 +122,5 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     # send_tts_request(item.content, vh_sex, db_item.id,db)
     response = send_tts_request(item.content, vh_sex, db_item.id, db)
     print(response.json())
-    response = response.json()
+    response = response.content
     print(type(response['result']['file']))
