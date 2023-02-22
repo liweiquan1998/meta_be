@@ -3,7 +3,6 @@ import time
 from typing import List
 
 import requests
-
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
@@ -53,12 +52,12 @@ def compose_video(db: Session, item: schemas.ComposeVideo):
     res = db.query(models.MarketingContent).filter(models.MarketingContent.id == item.marketing_content_id).first()
     res.status = 3
     db.commit()
-    threading.Thread(target=send_compose_request, args=(item.video_uri, res.audio_uri, item.marketing_content_id)).start()
+    threading.Thread(target=send_compose_request,
+                     args=(item.video_uri, res.audio_uri, item.marketing_content_id)).start()
     return True
 
 
 def update_marketing_content(db: Session, item_id: int, update_item: schemas.MarketingContentUpdate):
-
     return update_to_db(update_item=update_item, db=db, item_id=item_id, model_cls=models.MarketingContent)
 
 
@@ -99,3 +98,32 @@ def delete_marketing_content(db: Session, item_id: int):
     db.delete(item)
     db.commit()
     return True
+
+
+def create_market_content(db: Session, item: schemas.MarketingContentCreate, creator_id: int):
+    # sourcery skip: use-named-expression
+    # meta_obj 存在检查
+    if db.query(models.MetaObj).filter(models.MetaObj.id == item.metaobj_id).first() is None:
+        raise Exception(f"meta_obj {item.metaobj_id} 不存在")
+    # 创建者 存在检查
+    if db.query(models.User).filter(models.User.id == creator_id).first() is None:
+        raise Exception(f"创建者 {creator_id} 不存在")
+    # 删除virtual_human_sex
+    vh_sex = item.virtual_human_sex
+    del item.virtual_human_sex
+    # 创建 添加create_id
+    db_item = models.MarketingContent(**item.dict(), **{'create_time': int(time.time()),
+                                                        'creator_id': creator_id,
+                                                        'status': 0})
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    # 向tts发送请求
+    # send_tts_request(item.content, vh_sex, db_item.id,db)
+    file = threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
+    mc_id = db_item.id
+    context = {
+        "file": file,
+        "mc_id": mc_id
+    }
+    return context
