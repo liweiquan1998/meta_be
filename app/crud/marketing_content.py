@@ -122,5 +122,5 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     # send_tts_request(item.content, vh_sex, db_item.id,db)
     file = threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
     mc_id = db_item.id
-    print(file)
+    return {"file":file}
 
