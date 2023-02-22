@@ -26,7 +26,7 @@ def add_marketing_content(item: schemas.MarketingContentCreate, db: Session = De
 @web_try()
 @sxtimeit
 def add_market_content(item: schemas.MarketingContentCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    crud.create_market_content(db=db, item=item, creator_id=user.id)
+    return crud.create_market_content(db=db, item=item, creator_id=user.id)
 
 
 @router_marketing_content.post('/compose_video', summary="合成视频")
