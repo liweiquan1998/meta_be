@@ -3,7 +3,7 @@ import threading
 import time
 from pathlib import Path
 from typing import List
-
+from utils.override_threading import MyThread
 import requests
 from app import models, schemas
 from sqlalchemy.orm import Session
@@ -124,7 +124,11 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     db.refresh(db_item)
     # 向tts发送请求
     # send_tts_request(item.content, vh_sex, db_item.id,db)
-    response = send_tts_request(item.content, vh_sex, db_item.id, db)
+
+    mt = MyThread(func=send_tts_request, args=(item.content, vh_sex, db_item.id, db))
+    mt.start()
+    mt.join()
+    response = mt.get_result()
     file_byte = response.content
     file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}' + '.wav'
     result = Path(time.strftime("%Y%m", time.localtime()))
