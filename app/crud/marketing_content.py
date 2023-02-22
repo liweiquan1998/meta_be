@@ -1,10 +1,14 @@
+import random
 import threading
 import time
+from pathlib import Path
 from typing import List
 
 import requests
 from app import models, schemas
 from sqlalchemy.orm import Session
+
+from app.crud import FMH
 from app.crud.basic import update_to_db
 from app.common.validation import *
 from app.crud.aigc import *
@@ -122,3 +126,9 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     # send_tts_request(item.content, vh_sex, db_item.id,db)
     response = send_tts_request(item.content, vh_sex, db_item.id, db)
     print(type(response.content))
+    file_byte = response.content
+    file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}' + '.wav'
+    result = Path(time.strftime("%Y%m", time.localtime()))
+    real_path = result / file_name
+    path = FMH.put_file(real_path, file_byte)
+    return {'uri': f'/file/minio/{path}'}
