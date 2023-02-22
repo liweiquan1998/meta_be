@@ -138,3 +138,4 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
+    return db_item
