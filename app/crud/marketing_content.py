@@ -135,6 +135,7 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     path = FMH.put_file(real_path, file_byte)
     uri = f'/file/minio/{path}'
     db_item.audio_uri = uri
+    db_item.status = 2
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
