@@ -12,7 +12,8 @@ def send_tts_request(content, vh_sex,  mc_id, db: Session):
     data = {
         "content": content,
         "sound_type": sound_type,
-        "mc_id": mc_id
+        "mc_id": mc_id,
+        "url": "http://frps.retailwell.com:20068",
     }
     print(audio_url, data)
     response = requests.post(audio_url, json=data)
