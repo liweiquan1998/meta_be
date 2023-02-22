@@ -4,10 +4,9 @@ from app.routers import file
 from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
-from fastapi import Depends
+from fastapi import Depends,File,UploadFile
 from fastapi import APIRouter
 from app.common.validation import *
-from app.crud.basic import update_to_db
 
 router_marketing_content = APIRouter(
     prefix="/marketing_contents",
@@ -28,12 +27,7 @@ def add_marketing_content(item: schemas.MarketingContentCreate, db: Session = De
 @sxtimeit
 def add_market_content(item: schemas.MarketingContentCreate, db: Session = Depends(get_db), user=Depends(check_user)):
     response = crud.create_market_content(db=db, item=item, creator_id=user.id)
-    files = response.get('file')
-    mc_id = response.get('mc_id')
-    res = file.upload_minio_file(files)
-    audio_uri = res.get('url')
-    content = {"status": 2, "audio_uri": audio_uri}
-    return content
+
 
 
 @router_marketing_content.post('/compose_video', summary="合成视频")
