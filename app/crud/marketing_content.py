@@ -121,5 +121,5 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     # 向tts发送请求
     # send_tts_request(item.content, vh_sex, db_item.id,db)
     response = send_tts_request(item.content, vh_sex, db_item.id, db)
-    print(type(response))
-    print(response)
+    filebyte = response.read()
+    print(filebyte)
