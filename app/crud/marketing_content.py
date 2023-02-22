@@ -124,7 +124,6 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     db.refresh(db_item)
     # 向tts发送请求
     # send_tts_request(item.content, vh_sex, db_item.id,db)
-
     mt = MyThread(func=send_tts_request, args=(item.content, vh_sex, db_item.id, db))
     mt.start()
     mt.join()
@@ -134,4 +133,8 @@ def create_market_content(db: Session, item: schemas.MarketingContentCreate, cre
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
     path = FMH.put_file(real_path, file_byte)
-    return {'uri': f'/file/minio/{path}'}
+    uri = f'/file/minio/{path}'
+    db_item.audio_uri = uri
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
