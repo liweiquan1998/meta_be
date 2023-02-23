@@ -11,10 +11,6 @@ class MarketingContentCreate(BaseModel):
     content: str
     metaobj_id: int
     virtual_human_sex: int
-    host: str
-    url: str
-    method: str
-    params: dict
 
     # creator_id: int
     # virtual_human_id: int
