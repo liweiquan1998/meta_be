@@ -40,6 +40,7 @@ def upload_minio_file(file, params, db, model_cls):
     path = FMH.put_file(real_path, file_byte)
     uri = f'/file/minio/{path}'
     print(params)
+    print(type(params))
     params = eval(params)
     item_id = params.get('mc_id')
     db_item = db.query(model_cls).filter(model_cls.id == item_id).first()
