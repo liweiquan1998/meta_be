@@ -5,7 +5,7 @@ from app.routers import file
 from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
-from fastapi import Depends, File, UploadFile
+from fastapi import Depends, File, UploadFile, Form
 from fastapi import APIRouter
 from app.common.validation import *
 
@@ -23,11 +23,14 @@ def add_marketing_content(item: schemas.MarketingContentCreate, db: Session = De
     return crud.create_marketing_content(db=db, item=item, creator_id=user.id)
 
 
-@router_marketing_content.post("/market_content", summary="创建营销内容", )
+@router_marketing_content.post("/market_minio_content", summary="上传minio并更新数据", )
 @web_try()
 @sxtimeit
-def add_market_content(item: schemas.MarketingContentCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_market_content(db=db, item=item, creator_id=user.id)
+def upload_minio_file(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
+    # , user=Depends(check_user)):
+    return crud.market_minio_content(file=file, params=params, db=db, model_cls=models.MarketingContent)
+
+
 
 
 @router_marketing_content.post('/compose_video', summary="合成视频")

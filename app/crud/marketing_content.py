@@ -103,39 +103,23 @@ def delete_marketing_content(db: Session, item_id: int):
     return True
 
 
-def create_market_content(db: Session, item: schemas.MarketingContentCreate, creator_id: int):
-    # sourcery skip: use-named-expression
-    # meta_obj 存在检查
-    if db.query(models.MetaObj).filter(models.MetaObj.id == item.metaobj_id).first() is None:
-        raise Exception(f"meta_obj {item.metaobj_id} 不存在")
-    # 创建者 存在检查
-    if db.query(models.User).filter(models.User.id == creator_id).first() is None:
-        raise Exception(f"创建者 {creator_id} 不存在")
-    # 删除virtual_human_sex
-    vh_sex = item.virtual_human_sex
-    del item.virtual_human_sex
-    # 创建 添加create_id
-    db_item = models.MarketingContent(**item.dict(), **{'create_time': int(time.time()),
-                                                        'creator_id': creator_id,
-                                                        'status': 0})
-    db.add(db_item)
-    db.commit()
-    db.refresh(db_item)
-    # 向tts发送请求
-    # send_tts_request(item.content, vh_sex, db_item.id,db)
-    mt = MyThread(func=send_tts_request, args=(item.content, vh_sex, db_item.id, db))
-    mt.start()
-    mt.join()
-    response = mt.get_result()
-    file_byte = response.content
-    file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}' + '.wav'
+def market_minio_content(file, params, db, model_cls):
+    file_byte = file.file.read()
+    file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file.filename).suffix}'
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
     path = FMH.put_file(real_path, file_byte)
     uri = f'/file/minio/{path}'
-    db_item.audio_uri = uri
+    print(params)
+    print(type(params))
+    params = eval(params)
+    item_id = params.get('mc_id')
+    db_item = db.query(model_cls).filter(model_cls.id == item_id).first()
+    if not db_item:
+        raise Exception('未找到该任务')
     db_item.status = 2
-    db.add(db_item)
+    db_item.audio_uri = uri
     db.commit()
+    db.flush()
     db.refresh(db_item)
     return db_item

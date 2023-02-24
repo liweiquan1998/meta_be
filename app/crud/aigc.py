@@ -16,7 +16,7 @@ def send_tts_request(content, vh_sex, mc_id, db: Session):
         "params": {"mc_id": mc_id},
         "method": "post",
         "host": host,
-        "url": "/file/MinioFile"
+        "url": "/marketing_contents/market_minio_content"
     }
     print(audio_url, data)
     response = requests.post(audio_url, json=data)
