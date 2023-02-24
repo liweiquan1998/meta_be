@@ -13,7 +13,7 @@ def send_tts_request(content, vh_sex, mc_id, db: Session):
     data = {
         "content": content,
         "sound_type": sound_type,
-        "params": {"mc_id": str(mc_id)},
+        "params": {"mc_id": mc_id},
         "method": "post",
         "host": host,
         "url": "/file/MinioFile"
