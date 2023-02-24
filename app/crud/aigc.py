@@ -8,7 +8,7 @@ video_sound_url = config.get("aigc", "video_sound_url")
 host = config.get("aigc", "host")
 
 
-def send_tts_request(content, vh_sex, mc_id, db: Session):
+def send_tts_request(content, vh_sex, mc_id):
     sound_type = "male" if vh_sex == 1 else "female"
     data = {
         "content": content,

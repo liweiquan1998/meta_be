@@ -6,7 +6,6 @@ from typing import List
 import requests
 from app import models, schemas
 from sqlalchemy.orm import Session
-
 from app.crud import FMH
 from app.crud.basic import update_to_db
 from app.common.validation import *
@@ -27,7 +26,7 @@ def mc_add_username(mc, db: Session):
     return res
 
 
-def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, creator_id: int):
+def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, creator_id: int, background_tasks):
     # sourcery skip: use-named-expression
     # meta_obj 存在检查
     if db.query(models.MetaObj).filter(models.MetaObj.id == item.metaobj_id).first() is None:
@@ -47,7 +46,8 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, 
     db.refresh(db_item)
     # 向tts发送请求
     # send_tts_request(item.content, vh_sex, db_item.id,db)
-    threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
+    # threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
+    background_tasks.add_task(target=send_tts_request, args=(item.content, vh_sex, db_item.id))
     return db_item
 
 
