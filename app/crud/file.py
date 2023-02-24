@@ -32,13 +32,15 @@ def upload_nfs_file(file):
         raise Exception(400, f"上传失败{e}")
 
 
-def upload_minio_file(file):
+def upload_minio_file(file, params):
     file_byte = file.file.read()
-    file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000,9999)}{Path(file.filename).suffix}'
+    file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file.filename).suffix}'
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
     path = FMH.put_file(real_path, file_byte)
+    print(params)
     return {'uri': f'/file/minio/{path}'}
+
 
 def get_file(path: str):
     if 'minio' in path:
@@ -47,6 +49,7 @@ def get_file(path: str):
         return get_nfs_file(path.split('nfs/')[-1])
     else:
         raise Exception(404, f'path:{path},文件路径不合法，应包含"minio"或"nfs"')
+
 
 def get_nfs_file(path: str):
     # 兼容老地址
@@ -76,4 +79,3 @@ def get_minio_file_byte(path: str):
         return file_byte
     else:
         raise Exception(404, f"文件 {path} 不存在")
-

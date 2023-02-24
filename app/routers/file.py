@@ -32,15 +32,16 @@ def upload_file(file: UploadFile = File(...)):
 @router_file.post('/MinioFile', summary="minio上传文件")
 @web_try()
 @sxtimeit
-def upload_minio_file(file: UploadFile = File(...)):
+def upload_minio_file(file: UploadFile = File(...), params: dict = ...):
     # , user=Depends(check_user)):
-    return crud.upload_minio_file(file)
+    return crud.upload_minio_file(file, params)
 
 
 @router_file.get("/{uri:path}", summary="获取文件")
 @sxtimeit
 def get_nfs_file(uri):
     return crud.get_file(uri)
+
 
 # @router_file.get("/NfsFile/{uri:path}", summary="nfs获取文件")
 # @sxtimeit

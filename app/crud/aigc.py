@@ -5,6 +5,7 @@ from configs.setting import config
 audio_url = config.get("aigc", "audio_url")
 threeD_url = config.get("aigc", "threeD_url")
 video_sound_url = config.get("aigc", "video_sound_url")
+host = config.get("aigc", "host")
 
 
 def send_tts_request(content, vh_sex, mc_id, db: Session):
@@ -14,7 +15,7 @@ def send_tts_request(content, vh_sex, mc_id, db: Session):
         "sound_type": sound_type,
         "params": {"mc_id": mc_id},
         "method": "post",
-        "host": "http://frps.retailwell.com:20068",
+        "host": host,
         "url": "/file/MinioFile"
     }
     print(audio_url, data)
