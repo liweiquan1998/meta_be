@@ -47,7 +47,7 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, 
     # 向tts发送请求
     # send_tts_request(item.content, vh_sex, db_item.id,db)
     # threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
-    background_tasks.add_task(target=send_tts_request, args=(item.content, vh_sex, db_item.id))
+    background_tasks.add_task(func=send_tts_request, args=(item.content, vh_sex, db_item.id))
     return db_item
 
 
