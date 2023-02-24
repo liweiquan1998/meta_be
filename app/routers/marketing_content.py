@@ -24,14 +24,19 @@ def add_marketing_content(item: schemas.MarketingContentCreate, background_tasks
     return crud.create_marketing_content(db=db, item=item, creator_id=user.id,background_tasks=background_tasks)
 
 
-@router_marketing_content.post("/market_minio_content", summary="上传minio并更新数据", )
+@router_marketing_content.post("/market_minio_content", summary="语音上传minio并更新数据", )
 @web_try()
 @sxtimeit
-def upload_minio_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
+def upload_audio_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
     # , user=Depends(check_user)):
-    return crud.market_minio_content(file=file, params=params, db=db, model_cls=models.MarketingContent)
+    return crud.market_audio_content(file=file, params=params, db=db)
 
-
+@router_marketing_content.post("/video_minio_content", summary="语音上传minio并更新数据", )
+@web_try()
+@sxtimeit
+def upload_video_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
+    # , user=Depends(check_user)):
+    return crud.market_video_content(file=file, params=params, db=db)
 @router_marketing_content.post('/compose_video', summary="合成视频")
 @web_try()
 @sxtimeit

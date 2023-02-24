@@ -14,8 +14,6 @@ from app.crud.user import *
 from app.crud.file import *
 
 
-
-
 def meta_obj_add_username(mo, db: Session, ):
     if type(mo) == list:
         res = [r.to_dict() for r in mo]
@@ -37,7 +35,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         max_id_row = db.execute('select max(id) from public.meta_obj').fetchone()
         if max_id_row:
             max_id = max_id_row[0]
-            _db_item.id = max_id+1
+            _db_item.id = max_id + 1
         db.add(_db_item)
         try:
             db.commit()
@@ -82,7 +80,6 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         # 存入数据库
         _db_item = db_save(_item, _model_dict)
         return _db_item
-
 
     # 重复名称检查
     item.name = is_valid_name(item.name, 10)
@@ -179,7 +176,7 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     meta_objs = db_query.all()
     for mo in meta_objs:
         if mo.aigc:
-            mo.aigc = mo.aigc.replace('{', '').replace('}','').split(',')
+            mo.aigc = mo.aigc.replace('{', '').replace('}', '').split(',')
     return meta_obj_add_username(meta_objs, db)
 
 
@@ -191,3 +188,31 @@ def delete_meta_obj(db: Session, item_id: int):
     db.commit()
     db.flush()
     return True
+
+
+def upload_update_meta(file, params: str, db: Session):
+    file_byte = file.file.read()
+    file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
+    result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+    sys_path = '/mnt/nfs/' / result
+    sys_path.mkdir(parents=True, exist_ok=True)
+    real_path = sys_path / file_name
+    try:
+        with real_path.open('wb') as f:
+            f.write(file_byte)
+        real_path.chmod(0o777)
+        uri = f'/file/nfs/{str(result / file_name)}'
+    except Exception as e:
+        raise Exception(400, f"上传失败{e}")
+    params = eval(params)
+    item_id = params.get("mo_id")
+    db_item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
+    if not db_item:
+        raise Exception('未找到该任务')
+    db_item.status = 1
+    db_item.thumbnail = uri
+    db.commit()
+    db.flush()
+    db.refresh(db_item)
+    return db_item
+
