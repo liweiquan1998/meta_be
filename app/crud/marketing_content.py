@@ -3,7 +3,6 @@ import threading
 import time
 from pathlib import Path
 from typing import List
-from utils.override_threading import MyThread
 import requests
 from app import models, schemas
 from sqlalchemy.orm import Session

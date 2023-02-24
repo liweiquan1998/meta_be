@@ -32,13 +32,24 @@ def upload_nfs_file(file):
         raise Exception(400, f"上传失败{e}")
 
 
-def upload_minio_file(file):
+def upload_minio_file(file, params, db, model_cls):
     file_byte = file.file.read()
     file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file.filename).suffix}'
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
     path = FMH.put_file(real_path, file_byte)
-    return {'uri': f'/file/minio/{path}'}
+    uri = f'/file/minio/{path}'
+    params = eval(params)
+    item_id = params.get('mc_id')
+    db_item = db.query(model_cls).filter(model_cls.id == item_id).first()
+    if not db_item:
+        raise Exception('未找到该任务')
+    db_item.status = 2
+    db_item.audio_uri = uri
+    db.commit()
+    db.flush()
+    db.refresh(db_item)
+    return db_item
 
 
 def get_file(path: str):

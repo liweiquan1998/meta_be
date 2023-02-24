@@ -32,11 +32,9 @@ def upload_file(file: UploadFile = File(...)):
 @router_file.post('/MinioFile', summary="minio上传文件")
 @web_try()
 @sxtimeit
-def upload_minio_file(params: str = Form(...)):
+def upload_minio_file(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
     # , user=Depends(check_user)):
-    params = eval(params)
-    print(params)
-    # return crud.upload_minio_file(file)
+    return crud.upload_minio_file(file=file, params=params, db=db, model_cls=models.MarketingContent)
 
 
 @router_file.get("/{uri:path}", summary="获取文件")
