@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, File, UploadFile, Form
 from fastapi import Depends
 from fastapi import APIRouter
 from typing import List
@@ -32,10 +32,10 @@ def upload_file(file: UploadFile = File(...)):
 @router_file.post('/MinioFile', summary="minio上传文件")
 @web_try()
 @sxtimeit
-def upload_minio_file(file: UploadFile = File(...), params: dict = ...):
+def upload_minio_file(params: dict = Form(...)):
     # , user=Depends(check_user)):
-    print(params)
-    return crud.upload_minio_file(file)
+    return {"params": params}
+    # return crud.upload_minio_file(file)
 
 
 @router_file.get("/{uri:path}", summary="获取文件")
