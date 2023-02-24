@@ -34,6 +34,7 @@ def upload_file(file: UploadFile = File(...)):
 @sxtimeit
 def upload_minio_file(file: UploadFile = File(...), params: dict = ...):
     # , user=Depends(check_user)):
+    print(params)
     return crud.upload_minio_file(file)
 
 
