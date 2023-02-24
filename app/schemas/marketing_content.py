@@ -11,6 +11,7 @@ class MarketingContentCreate(BaseModel):
     content: str
     metaobj_id: int
     virtual_human_sex: int
+
     # creator_id: int
     # virtual_human_id: int
     # work_space: str
@@ -42,8 +43,8 @@ class MarketingContentUpdate(BaseModel):
 class MarketingContentGet(BaseModel):
     creator_id: Optional[int] = None
     name: Optional[str] = None
-    status:  Optional[int] = None
-    create_time:  Optional[int] = None
+    status: Optional[int] = None
+    create_time: Optional[int] = None
 
 
 class MarketingContent(BaseModel):

@@ -7,12 +7,15 @@ threeD_url = config.get("aigc", "threeD_url")
 video_sound_url = config.get("aigc", "video_sound_url")
 
 
-def send_tts_request(content, vh_sex,  mc_id, db: Session):
+def send_tts_request(content, vh_sex, mc_id, db: Session):
     sound_type = "male" if vh_sex == 1 else "female"
     data = {
         "content": content,
         "sound_type": sound_type,
-        "mc_id": mc_id
+        "params": {"mc_id": mc_id},
+        "method": "post",
+        "host": "http://frps.retailwell.com:20068",
+        "url": "/file/MinioFile"
     }
     print(audio_url, data)
     response = requests.post(audio_url, json=data)
