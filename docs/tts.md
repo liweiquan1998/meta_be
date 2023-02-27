@@ -23,6 +23,10 @@
 
 ![](images/tts.png)
 
+时序图：
+
+![](images/tts01.png)
+
 涉及接口：
 
 - 商户端接口："/marketing_contents/marketing_content"（post请求） , "/marketing_contents/market_minio_content"（post请求）

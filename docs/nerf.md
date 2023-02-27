@@ -24,6 +24,10 @@
 
 ![](images/nerf.jpg)
 
+时序图：
+
+![](images/nerf01.png)
+
 涉及接口：
 
 - 商户端接口："/meta_objs/create_by_images"（post请求） , "/meta_objs/meta_nerf_content"（post请求）
