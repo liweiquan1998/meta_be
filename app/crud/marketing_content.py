@@ -1,6 +1,7 @@
 import random
 import threading
 import time
+import uuid
 from pathlib import Path
 from typing import List
 import requests
@@ -105,7 +106,7 @@ def delete_marketing_content(db: Session, item_id: int):
 
 def market_audio_content(file, params, db):
     file_byte = file.file.read()
-    file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file.filename).suffix}'
+    file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
     result = Path(time.strftime("%Y%m", time.localtime()))
     real_path = result / file_name
     path = FMH.put_file(real_path, file_byte)
