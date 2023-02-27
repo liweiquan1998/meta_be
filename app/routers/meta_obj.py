@@ -5,7 +5,7 @@ from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
 
-from fastapi import Depends, UploadFile, File
+from fastapi import Depends, UploadFile, File, Form
 from fastapi import APIRouter
 from app.common.validation import *
 from app.common.validation import *
@@ -26,7 +26,7 @@ def add_meta_obj_create(item: schemas.MetaObjCreate, db: Session = Depends(get_d
 @router_meta_obj.post("/meta_nerf_content", summary="上传文件并更新数据")
 @web_try()
 @sxtimeit
-def meta_obj_create(file: UploadFile = File(...), params: str = ..., db: Session = Depends(get_db)):
+def meta_obj_create(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
     return crud.upload_update_meta(file=file, params=params, db=db)
 
 
