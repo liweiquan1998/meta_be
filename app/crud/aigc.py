@@ -32,6 +32,7 @@ def send_nerf_request(file_list, mo_id, file_type):
         "host": host,
         "url": "/meta_objs/meta_nerf_content"
     }
+    print('xxxx')
     requests.post(threeD_url, json=data)
 
 
