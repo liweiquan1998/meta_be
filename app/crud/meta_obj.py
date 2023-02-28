@@ -53,18 +53,18 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         nfs_p = f"/mnt/nfs/SceneAssets/{yearmonth}/{minio_p.split('/')[-1]}"
         with open(nfs_p, "wb") as f:
             f.write(file_byte)
-        return '/file/' + nfs_p
+        # return '/file/' + nfs_p
+        return nfs_p
 
     def video_fist_frame(video_p):
         root_p = Path(f"{minio2nfs(video_p)}")
         print(root_p)
         vidcap = cv2.VideoCapture(str(root_p))
         ret, image = vidcap.read()
-        while vidcap.isOpened():
+        n = 1
+        while n < 30:
             ret, image = vidcap.read()
-            if ret is not True:
-                print("读取完成,退出")
-                break
+            n += 1
         thumbnail_path = str(root_p.parent / f"{uuid.uuid1()}.png")
         print(ret, image)
         imag = cv2.imwrite(thumbnail_path, image)
