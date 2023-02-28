@@ -67,6 +67,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
             n += 1
         thumbnail_path = str(root_p.parent / f"{uuid.uuid1()}.png")
         print(ret, image)
+        print(thumbnail_path)
         imag = cv2.imwrite(thumbnail_path, image)
         if imag:
             return thumbnail_path
