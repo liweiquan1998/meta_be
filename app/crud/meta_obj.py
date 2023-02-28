@@ -64,7 +64,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
             success, image = vidcap.read()
             n += 1
         thumbnail_path = str(root_p.parent / f"{uuid.uuid1()}.png")
-        print(image)
+        print(success, image)
         imag = cv2.imwrite(thumbnail_path, image)
         if imag:
             return thumbnail_path
@@ -216,4 +216,3 @@ def upload_update_meta(file, params: str, db: Session):
     db.flush()
     db.refresh(db_item)
     return db_item
-
