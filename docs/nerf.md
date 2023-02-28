@@ -1,4 +1,4 @@
-# 多个图片渲染动图
+# nerf服务
 
 ## 涉及的数据库表
 
@@ -18,7 +18,7 @@
 | creator_id | Integer | 创建者id |
 | height | Float | 物品高度 |
 
-## 流程介绍
+## 由图片创建元对象
 
 基本流程：
 
@@ -38,4 +38,21 @@
 - 前端接收相关参数对"/meta_objs/create_by_images"发送post请求
 - 后端接收参数保存数据到数据库并对ai服务的"/nerf/v2/3d_reconstruction"发送post请求
 - ai服务接收参数将多张图片渲染成一张动图并向"/meta_objs/meta_nerf_content"发送post请求
+- 后端接收参数后将动图上传保存至nfs并将文件地址信息和状态保存至数据库
+## 由视频创建元对象
+
+时序图：
+
+![](images/nerf02.png)
+
+涉及接口：
+
+- 商户端接口："/meta_objs/create_by_video"（post请求） , "/meta_objs/meta_nerf_content"（post请求）
+- ai服务接口："/nerf/v2/3d_reconstruction"（post请求)
+
+简介：
+
+- 前端接收相关参数对"/meta_objs/create_by_video"发送post请求
+- 后端接收参数保存数据到数据库并对ai服务的"/nerf/v2/3d_reconstruction"发送post请求
+- ai服务接收参数通过算法将视频渲染成一张动图并向"/meta_objs/meta_nerf_content"发送post请求
 - 后端接收参数后将动图上传保存至nfs并将文件地址信息和状态保存至数据库
