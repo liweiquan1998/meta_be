@@ -57,7 +57,6 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
 
     def video_fist_frame(video_p):
         root_p = Path(f"{minio2nfs(video_p)}")
-        print(root_p)
         vidcap = cv2.VideoCapture(str(root_p))
         success, image = vidcap.read()
         n = 1
@@ -65,7 +64,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
             success, image = vidcap.read()
             n += 1
         thumbnail_path = str(root_p.parent / f"{uuid.uuid1()}.png")
-        print(thumbnail_path)
+        print(image)
         imag = cv2.imwrite(thumbnail_path, image)
         if imag:
             return thumbnail_path
