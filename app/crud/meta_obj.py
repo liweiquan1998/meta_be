@@ -53,11 +53,11 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         nfs_p = f"/mnt/nfs/SceneAssets/{yearmonth}/{minio_p.split('/')[-1]}"
         with open(nfs_p, "wb") as f:
             f.write(file_byte)
-        # return '/file/' + nfs_p
-        return nfs_p
+        return '/file/' + nfs_p, nfs_p
 
     def video_fist_frame(video_p):
-        root_p = Path(f"{minio2nfs(video_p)}")
+        _, path = minio2nfs(video_p)
+        root_p = Path(f"{path}")
         print(root_p)
         vidcap = cv2.VideoCapture(str(root_p))
         ret, image = vidcap.read()
@@ -70,7 +70,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         print(thumbnail_path)
         imag = cv2.imwrite(thumbnail_path, image)
         if imag:
-            return thumbnail_path
+            return '/file/' + thumbnail_path
         else:
             raise Exception('视频转换缩略图失败')
 
@@ -100,7 +100,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         # 图片生成
         elif item.type == 0:  # todo 要改
             # 取出缩略图
-            nfs_path = minio2nfs(item.aigc[0])
+            nfs_path, _ = minio2nfs(item.aigc[0])
             item.thumbnail = nfs_path  # todo
             # 补充字段
             image_dict = {
@@ -122,7 +122,6 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
                 'create_time': int(time.time()),
                 'creator_id': creator_id,
                 'status': 0,
-                # 'thumbnail': nfs_path
             }
             # 存入数据库
             db_item = db_save(item, video_dict)
