@@ -59,6 +59,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         root_p = Path(f"{minio2nfs(video_p)}")
         print(root_p)
         vidcap = cv2.VideoCapture(str(root_p))
+        ret, image = vidcap.read()
         while vidcap.isOpened():
             ret, image = vidcap.read()
             if ret is not True:
