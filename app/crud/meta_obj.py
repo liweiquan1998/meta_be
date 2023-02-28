@@ -70,7 +70,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         print(thumbnail_path)
         imag = cv2.imwrite(thumbnail_path, image)
         if imag:
-            return thumbnail_path
+            return '/file' + thumbnail_path
         else:
             raise Exception('视频转换缩略图失败')
 
