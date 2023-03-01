@@ -66,6 +66,9 @@ def login_user(db: Session, item: schemas.UserLogin):
     # 密码错误
     if not verify_password(item.password, res.password_hash):
         raise Exception(401, "用户密码错误")
+
+    if res.status == 1:
+        raise Exception(402, "用户被禁用")
     if res.last_ping:
         if time.time() - res.last_ping > LOGIN_EXPIRED:
             res.occupied = 0
