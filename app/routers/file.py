@@ -43,18 +43,6 @@ def get_nfs_file(uri):
     return crud.get_file(uri)
 
 
-# @router_file.get("/NfsFile/{uri:path}", summary="nfs获取文件")
-# @sxtimeit
-# def get_nfs_file(uri):
-#     return crud.get_nfs_file(uri)
-#
-#
-# @router_file.get("/MinioFile/{uri:path}", summary="minio获取文件")
-# @sxtimeit
-# def get_minio_file(uri):
-#     return crud.get_minio_file(uri)
-
-
 # 多个文件
 @router_file.post("/MinioFiles", summary="minio上传多个文件")
 async def create_files(files: List[UploadFile] = File(...)):

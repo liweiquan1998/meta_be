@@ -18,7 +18,6 @@ FMH = FileHandler("metaverse")
 def upload_nfs_file(file):
     file_byte = file.file.read()
     file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
-    # result = Path(f'SceneAssets/{time.strftime("%Y%m", time.localtime())}')
     result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
     sys_path = '/mnt/nfs/' / result
     sys_path.mkdir(parents=True, exist_ok=True)
