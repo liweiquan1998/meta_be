@@ -91,7 +91,7 @@ def get_marketing_contents(db: Session, item: schemas.MarketingContentGet):
     if item.create_time is not None:
         db_query = db_query.filter(models.MarketingContent.create_time <= item.create_time + 86400)
         db_query = db_query.filter(models.MarketingContent.create_time >= item.create_time)
-    res = db_query.order_by(models.MarketingContent.id).all()
+    res = db_query.order_by(-models.MarketingContent.create_time).all()
     return mc_add_username(res, db)
 
 
