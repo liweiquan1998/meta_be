@@ -1,41 +1,86 @@
-import uuid
+import io
 import random
 import time
+import uuid
+import magic
 from pathlib import Path
+from fastapi.responses import StreamingResponse
+from app.db.minio import FileHandler
+from configs.setting import config
+
+from app.core.storage.base import FileStorage
+
+nfs_prefix = config.get("nfs", "sys_prefix")
+FMH = FileHandler("metaverse")
 
 
-class Handler(object):
-    def __init__(self):
-        self.nfs_uri_prefix = '/file/nfs'
-        self.minio_uri_prefix = '/file/minio'
+class NfsStorage(FileStorage):
+    def get_file_name(self, file_name):
+        file_name = f'{uuid.uuid1()}{Path(file_name).suffix}'
+        return file_name
 
-    # 生成nfs文件名称
-    def get_nfs_name(self, file_name):
-        nfs_name = f'{uuid.uuid1()}{Path(file_name).suffix}'
-        return nfs_name
+    def get_file_uri(self, end_nfs):
+        uri = '/file/nfs/' + end_nfs
+        return uri
 
-    # 写入nfs文件到指定目录
-    def upload_nfs_file(self, real_path, file_byte):
-        with real_path.open('wb') as f:
-            f.write(file_byte)
+    def upload_file(self, file):
+        file_byte = file.file.read()
+        file_name = self.get_file_name(file.filename)
+        result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+        sys_path = nfs_prefix / result
+        sys_path.mkdir(parents=True, exist_ok=True)
+        real_path = sys_path / file_name
+        try:
+            with real_path.open('wb') as f:
+                f.write(file_byte)
+            real_path.chmod(0o777)
+            uri = self.get_file_uri(str(result / file_name))
+            return {'uir': uri}
+        except Exception as e:
+            raise Exception(400, f"上传文件失败{e}")
 
-    # 获取nfs文件的uri地址信息
-    def get_nfs_uri(self, path_string):
-        nfs_uri = self.nfs_uri_prefix + path_string
-        return nfs_uri
-
-    # 获取nfs文件信息
-    def get_nfs_file(self, file_path):
+    def get_file(self, path):
+        # 兼容老地址
+        path = path.split("metaverse_assets/")[-1]
+        file_path = Path(nfs_prefix) / Path(path)
         with file_path.open('rb') as f:
             file_byte = f.read()
-        return file_byte
+        content_type = magic.from_buffer(file_byte, mime=True)
+        if file_byte:
+            return StreamingResponse(io.BytesIO(file_byte), media_type=content_type)
+        else:
+            raise Exception(404, f"文件 {path} 不存在")
 
-    # 生成minio文件名称
-    def get_minio_name(self, file_name):
-        minio_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file_name).suffix}'
-        return minio_name
 
-    # 获取minio文件的uri地址信息
-    def get_minio_uri(self, path_string):
-        minio_uri = self.minio_uri_prefix + path_string
-        return minio_uri
+class MinioStorage(FileStorage):
+    def get_file_name(self, file_name):
+        file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file_name).suffix}'
+        return file_name
+
+    def get_file_uri(self, end_minio):
+        uri = '/file/minio/' + end_minio
+        return uri
+
+    def upload_file(self, file):
+        file_byte = file.file.read()
+        file_name = self.get_file_name(file.filename)
+        result = Path(time.strftime("%Y%m", time.localtime()))
+        real_path = result / file_name
+        path = FMH.put_file(real_path, file_byte)
+        uri = self.get_file_uri(path)
+        return {'uri': uri}
+
+    def get_file(self, path):
+        file_byte = FMH.get_file(path)
+        content_type = magic.from_buffer(file_byte, mime=True)
+        if file_byte:
+            return StreamingResponse(io.BytesIO(file_byte), media_type=content_type)
+        else:
+            raise Exception(404, f"文件 {path} 不存在")
+
+    def get_file_byte(self, path):
+        file_byte = FMH.get_file(path)
+        if file_byte:
+            return file_byte
+        else:
+            raise Exception(404, f"文件 {path} 不存在")
