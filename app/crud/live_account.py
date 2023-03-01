@@ -41,7 +41,7 @@ def get_live_account_once_by_creator_id(db: Session, creator_id: int):
 def get_live_accounts(db: Session, item: schemas.LiveAccountGet):
     db_query = db.query(models.LiveAccount)
     if item.creator_id:
-        db_query = db_query.filter(models.LiveAccount.creator_id == item.creator_id).all()
+        db_query = db_query.filter(models.LiveAccount.creator_id == item.creator_id)
     return db_query.order_by(models.LiveAccount.id).all()
 
 
