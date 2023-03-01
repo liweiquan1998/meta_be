@@ -1,0 +1,16 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('拉取git仓库代码') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[credentialsId: 'gogs', url: 'http://gogs.soaringnova.com/sxwl_DL/meta_be.git']]])
+            }
+        }
+        stage('构建镜像') {
+            steps {
+                echo '构建镜像...'
+            }
+        }
+    }
+}
