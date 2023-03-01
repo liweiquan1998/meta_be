@@ -68,7 +68,7 @@ def login_user(db: Session, item: schemas.UserLogin):
         raise Exception(401, "用户密码错误")
 
     if res.status == 1:
-        raise Exception(402, "用户被禁用")
+        raise Exception(402, "该用户处于闭店状态")
     if res.last_ping:
         if time.time() - res.last_ping > LOGIN_EXPIRED:
             res.occupied = 0
