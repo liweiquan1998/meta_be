@@ -7,7 +7,7 @@ from typing import List
 import requests
 from app import models, schemas
 from sqlalchemy.orm import Session
-from app.crud import FMH
+from app.core.storage.file import FMH
 from app.crud.basic import update_to_db
 from app.common.validation import *
 from app.crud.aigc import *
