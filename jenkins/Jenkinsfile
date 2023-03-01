@@ -1,5 +1,24 @@
 pipeline {
-    agent any
+    agent kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: docker
+            image: docker:latest
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+             - mountPath: /var/run/docker.sock
+               name: docker-sock
+          volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock
+        '''
+    }
 
     stages {
         stage('拉取git仓库代码') {
@@ -9,7 +28,9 @@ pipeline {
         }
         stage('构建镜像') {
             steps {
-                echo '构建镜像...' && sh 'docker build .'
+                container('docker') {
+                    sh 'docker build -t SXKJ:32775/metabe:latest .'
+                }
             }
         }
     }
