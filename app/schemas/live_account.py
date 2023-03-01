@@ -24,7 +24,7 @@ class LiveAccountCreate(BaseModel):
                 "key": faker.md5()[0:10],
                 "token": faker.md5()[0:10],
                 "creator_id": faker.pyint(5, 10)}
-            }
+        }
 
 
 class LiveAccountUpdate(BaseModel):
@@ -46,6 +46,7 @@ class LiveAccountUpdate(BaseModel):
 
 
 class LiveAccountGet(BaseModel):
+    creator_id: int
     name: Optional[str] = None
 
 
