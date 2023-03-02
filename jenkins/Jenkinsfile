@@ -1,3 +1,35 @@
+// pipeline {
+//   agent {
+//     kubernetes {
+//       yaml '''
+//         apiVersion: v1
+//         kind: Pod
+//         spec:
+//           containers:
+//           - name: maven
+//             image: maven:alpine
+//             command:
+//             - cat
+//             tty: true
+//         '''
+//     }
+//   }
+//   stages {
+//     stage('Clone') {
+//       steps {
+//         checkout([$class: 'GitSCM', branches: [[name: '${tag}']], extensions: [], userRemoteConfigs: [[credentialsId: 'gogs', url: 'http://gogs.soaringnova.com/sxwl_DL/meta_be.git']]])
+//       }
+//     }
+//     stage('构建镜像') {
+//         steps {
+//             container('docker') {
+//                 sh 'docker build -t SXKJ:32775/metabe:latest .'
+//             }
+//         }
+//     }
+//   }
+// }
+
 pipeline {
   agent {
     kubernetes {
@@ -11,21 +43,34 @@ pipeline {
             command:
             - cat
             tty: true
+          - name: docker
+            image: docker:latest
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+              - mountPath: /var/run/docker.sock
+                name: docker-sock
+          volumes:
+          - name: docker-sock
+            hostPath:
+              path: /var/run/docker.sock
         '''
     }
   }
   stages {
     stage('Clone') {
       steps {
-        checkout([$class: 'GitSCM', branches: [[name: '${tag}']], extensions: [], userRemoteConfigs: [[credentialsId: 'gogs', url: 'http://gogs.soaringnova.com/sxwl_DL/meta_be.git']]])
+        container('maven') {
+          git branch: 'main', changelog: false, poll: false, url: 'https://mohdsabir-cloudside@bitbucket.org/mohdsabir-cloudside/java-app.git'
+        }
       }
     }
-    stage('构建镜像') {
-        steps {
-            container('docker') {
-                sh 'docker build -t SXKJ:32775/metabe:latest .'
-            }
+    stage('Build-Jar-file') {
+      steps {
+        container('maven') {
+          sh 'mvn package'
         }
+      }
     }
-  }
 }
