@@ -38,10 +38,10 @@ def get_live_account_once_by_creator_id(db: Session, creator_id: int):
         raise Exception(f"直播账号创建者id {creator_id} 不存在")
 
 
-def get_live_accounts(db: Session, item: schemas.LiveAccountGet):
+def get_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
     db_query = db.query(models.LiveAccount)
-    if item.creator_id:
-        db_query = db_query.filter(models.LiveAccount.creator_id == item.creator_id)
+    if user.id:
+        db_query = db_query.filter(models.LiveAccount.creator_id == user.id)
     return db_query.order_by(models.LiveAccount.id).all()
 
 

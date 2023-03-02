@@ -43,14 +43,15 @@ def get_live_account_once(creator_id: int, db: Session = Depends(get_db), user=D
 @web_try()
 @sxtimeit
 def get_live_account(get_item: schemas.LiveAccountGet = Depends(), params: Params = Depends(),
-                     db: Session = Depends(get_db), user=Depends(check_user) ):
-    return paginate(crud.get_live_accounts(db, get_item), params)
+                     db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_live_accounts(db, get_item, user), params)
 
 
 @router_live_account.put("/{account_id}", summary="更新直播账号信息")
 @web_try()
 @sxtimeit
-def update_live_account(account_id: int, update_item: schemas.LiveAccountUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+def update_live_account(account_id: int, update_item: schemas.LiveAccountUpdate, db: Session = Depends(get_db),
+                        user=Depends(check_user)):
     return crud.update_live_account(db=db, item_id=account_id, update_item=update_item)
 
 
