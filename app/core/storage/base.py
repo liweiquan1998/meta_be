@@ -1,12 +1,12 @@
 class FileStorage:
-    def get_file_name(self, file_name):
+    def get_name(self, file_name):
         pass
 
-    def get_file_uri(self, path_end):
+    def get_uri(self, path_end):
         pass
 
-    def upload_file(self, file):
+    def upload(self, file):
         pass
 
-    def get_file(self, path):
+    def get_content(self, path):
         pass

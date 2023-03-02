@@ -52,7 +52,8 @@ def get_live_streaming_once(db: Session, item_id: int):
 
 
 def get_live_streamings(db: Session, item: schemas.LiveStreamingGet, user):
-    db_query = db.query(models.LiveStreaming.creator_id == user.id)
+    db_query = db.query(models.LiveStreaming)
+    db_query = db_query.filter(models.LiveStreaming.id == user.id)
     if not db_query:
         raise Exception(f"该账号不存在直播列表信息")
 
@@ -64,6 +65,7 @@ def get_live_streamings(db: Session, item: schemas.LiveStreamingGet, user):
     if item.status is not None:
         db_query = db_query.filter(models.LiveStreaming.status == item.status)
     res = db_query.order_by(models.LiveStreaming.id).all()
+    print(res)
     return live_streaming_add_username(res, db)
 
 
