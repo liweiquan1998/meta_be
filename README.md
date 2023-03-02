@@ -9,7 +9,7 @@ MVC架构，数据库模型用sqlalchemy1.4.9建立。
 ## 后端服务器
 ### 域名与端口
 
-测试线: http://frps.retailwell.com:20065/
+测试线: http://frps.retailwell.com:20068/
 
 生产线: http://frps.retailwell.com:20071/
 
