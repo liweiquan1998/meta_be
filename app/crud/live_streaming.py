@@ -64,6 +64,7 @@ def get_live_streamings(db: Session, item: schemas.LiveStreamingGet, user):
     if item.status is not None:
         db_query = db_query.filter(models.LiveStreaming.status == item.status)
     res = db_query.order_by(models.LiveStreaming.id).all()
+    print(res)
     return live_streaming_add_username(res, db)
 
 
