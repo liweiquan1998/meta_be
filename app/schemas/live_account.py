@@ -46,7 +46,6 @@ class LiveAccountUpdate(BaseModel):
 
 
 class LiveAccountGet(BaseModel):
-    creator_id: int
     name: Optional[str] = None
 
 
