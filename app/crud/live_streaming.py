@@ -9,6 +9,7 @@ from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 from app.common.validation import *
 
+
 def live_streaming_add_username(ls, db: Session):
     if type(ls) == list:
         res = [r.to_dict() for r in ls]
@@ -23,9 +24,9 @@ def live_streaming_add_username(ls, db: Session):
     return res
 
 
-def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate, user:models.User):
+def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate, user: models.User):
     # 创建
-    account: models.LiveAccount = db.query(models.LiveAccount).\
+    account: models.LiveAccount = db.query(models.LiveAccount). \
         filter(models.LiveAccount.id == item.live_account_id).first()
     if not account:
         raise Exception(f'创建的直播关联账号未找到，请求的直播账号id:{item.live_account_id}')
@@ -50,8 +51,12 @@ def get_live_streaming_once(db: Session, item_id: int):
         raise Exception(f"直播流id {item_id} 不存在")
 
 
-def get_live_streamings(db: Session, item: schemas.LiveStreamingGet):
-    db_query = db.query(models.LiveStreaming)
+def get_live_streamings(db: Session, item: schemas.LiveStreamingGet, user):
+    try:
+        db_query = db.query(models.LiveStreaming.creator_id == user.id)
+    except Exception:
+        raise Exception(f"该账号不存在直播列表信息")
+
     if item.name:
         db_query = db_query.filter(models.LiveStreaming.name.like(f"%{item.name}%"))
     if item.create_time is not None and item.create_time != 0:

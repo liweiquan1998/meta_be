@@ -26,7 +26,7 @@ def add_live_streaming(item: schemas.LiveStreamingCreate, db: Session = Depends(
 @router_live_streaming.get("/{stream_id}", summary="获取直播间信息")
 @web_try()
 @sxtimeit
-def get_live_streaming_once(stream_id: int, db: Session = Depends(get_db), user=Depends(check_user) ):
+def get_live_streaming_once(stream_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_live_streaming_once(db=db, item_id=stream_id)
 
 
@@ -34,14 +34,15 @@ def get_live_streaming_once(stream_id: int, db: Session = Depends(get_db), user=
 @web_try()
 @sxtimeit
 def get_live_streaming(get_item: schemas.LiveStreamingGet = Depends(), params: Params = Depends(),
-                       db: Session = Depends(get_db), user=Depends(check_user) ):
-    return paginate(crud.get_live_streamings(db, get_item), params)
+                       db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_live_streamings(db, get_item, user), params)
 
 
 @router_live_streaming.put("/{stream_id}", summary="更新直播间信息")
 @web_try()
 @sxtimeit
-def update_live_streaming(stream_id: int, update_item: schemas.LiveStreamingUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+def update_live_streaming(stream_id: int, update_item: schemas.LiveStreamingUpdate, db: Session = Depends(get_db),
+                          user=Depends(check_user)):
     return crud.update_live_streaming(db=db, item_id=stream_id, update_item=update_item)
 
 
