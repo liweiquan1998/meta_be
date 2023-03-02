@@ -52,9 +52,11 @@ def get_live_streaming_once(db: Session, item_id: int):
 
 
 def get_live_streamings(db: Session, item: schemas.LiveStreamingGet, user):
-    db_query = db.query(models.LiveStreaming.creator_id == user.id)
-    if db_query is None:
-        raise Exception(f"该账户没有直播列表")
+    try:
+        db_query = db.query(models.LiveStreaming.creator_id == user.id)
+    except Exception:
+        raise Exception(f"该账号不存在直播列表信息")
+
     if item.name:
         db_query = db_query.filter(models.LiveStreaming.name.like(f"%{item.name}%"))
     if item.create_time is not None and item.create_time != 0:
