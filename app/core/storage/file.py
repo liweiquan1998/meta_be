@@ -49,7 +49,6 @@ class NfsStorage(FileStorage):
         content_type = magic.from_buffer(file_byte, mime=True)
         if file_byte:
             return io.BytesIO(file_byte), content_type
-            # return StreamingResponse(io.BytesIO(file_byte), media_type=content_type)
         else:
             raise Exception(404, f"文件 {path} 不存在")
 
