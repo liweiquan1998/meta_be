@@ -19,7 +19,9 @@ def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: mo
     if item.status not in [0, 1]:
         raise Exception(f'虚拟人状态出错 实为{item.status} 应为 0:禁用 1:启用')
     # 创建
-    db_item = models.VirtualHuman(**item.dict(), **{'create_time': int(time.time())})
+    db_item = models.VirtualHuman(**item.dict(), **{'create_time': int(time.time()),
+                                                    'creator_id': user.id
+                                                    })
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
