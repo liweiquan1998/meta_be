@@ -1,43 +1,33 @@
-// pipeline {
-//   agent {
-//     kubernetes {
-//       yaml '''
-//         apiVersion: v1
-//         kind: Pod
-//         spec:
-//           containers:
-//           - name: maven
-//             image: maven:alpine
-//             command:
-//             - cat
-//             tty: true
-//         '''
-//     }
-//   }
-//   stages {
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        spec:
+          containers:
+          - name: maven
+            image: maven:alpine
+            command:
+            - cat
+            tty: true
+        '''
+    }
+  }
+  stages {
 //     stage('Clone') {
 //       steps {
 //         checkout([$class: 'GitSCM', branches: [[name: '${tag}']], extensions: [], userRemoteConfigs: [[credentialsId: 'gogs', url: 'http://gogs.soaringnova.com/sxwl_DL/meta_be.git']]])
 //       }
 //     }
-//     stage('构建镜像') {
-//         steps {
-//             container('docker') {
-//                 sh 'docker build -t SXKJ:32775/metabe:latest .'
-//             }
-//         }
-//     }
-//   }
-// }
-
-def label = "mypod-${UUID.randomUUID().toString()}"
-podTemplate(label: label, cloud: 'kubernetes') {
-    node(label) {
-        stage('Run shell') {
-            sh 'sleep 130s'
-            sh 'echo hello world.'
+    stage('构建镜像') {
+        steps {
+            container('maven') {
+                sh 'maven -version'
+            }
         }
     }
+  }
 }
 
 
