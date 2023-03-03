@@ -11,34 +11,38 @@
 //             command:
 //             - cat
 //             tty: true
-//         '''
+//       '''
 //     }
 //   }
 //   stages {
-//     stage('Clone') {
-//       steps {
-//         checkout([$class: 'GitSCM', branches: [[name: '${tag}']], extensions: [], userRemoteConfigs: [[credentialsId: 'gogs', url: 'http://gogs.soaringnova.com/sxwl_DL/meta_be.git']]])
-//       }
-//     }
+// //     stage('Clone') {
+// //       steps {
+// //         checkout([$class: 'GitSCM', branches: [[name: '${tag}']], extensions: [], userRemoteConfigs: [[credentialsId: 'gogs', url: 'http://gogs.soaringnova.com/sxwl_DL/meta_be.git']]])
+// //       }
+// //     }
 //     stage('构建镜像') {
 //         steps {
-//             container('docker') {
-//                 sh 'docker build -t SXKJ:32775/metabe:latest .'
+//             container('maven') {
+//                 sh 'maven -version'
 //             }
 //         }
 //     }
 //   }
 // }
-
-def label = "mypod-${UUID.randomUUID().toString()}"
-podTemplate(label: label, cloud: 'kubernetes') {
+//
+//
+//
+def label = "slave-${UUID.randomUUID().toString()}"
+podTemplate(cloud: 'kubernetes', namespace: 'jenkins', label: label,
+    containers: [
+        containerTemplate(name: "maven", image: "maven:alpine", ttyEnabled: true, command: "cat")
+    ]
+) {
     node(label) {
-        stage('Run shell') {
-            sh 'sleep 130s'
-            sh 'echo hello world.'
+        container("maven") {
+            stage("build") {
+                sh "mvn --version"
+            }
         }
     }
 }
-
-
-
