@@ -46,12 +46,12 @@ def get_virtual_human_once_by_creator_id(db: Session, creator_id: int):
         raise Exception(f"虚拟人id {creator_id} 不存在")
 
 
-def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet, user: models.User):
+def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet, user):
     db_query = db.query(models.VirtualHuman)
-    if not item.creator_id:
-        item.creator_id = user.id
-    if item.creator_id:
-        db_query = db_query.filter(models.VirtualHuman.creator_id == item.creator_id)
+    # if not item.creator_id:
+    #     item.creator_id = user.id
+    # if item.creator_id:
+    db_query = db_query.filter(models.VirtualHuman.creator_id == user.id)
     if item.name:
         db_query = db_query.filter(models.VirtualHuman.name.like(f"%{item.name}%"))
     if item.sex is not None:
