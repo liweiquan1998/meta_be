@@ -20,7 +20,6 @@ class VirtualHumanCreate(BaseModel):
                 "name": faker.name(),
                 "sex": faker.pyint(0, 1, 2),
                 "status": faker.pyint(0, 1),
-                "creator_id": faker.pyint(50, 100),
                 "headimg_uri": "xxxx",
                 "work_space": "xxxxxxxx"}}
 
