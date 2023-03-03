@@ -33,7 +33,7 @@
 //
 //
 def label = "slave-${UUID.randomUUID().toString()}"
-podTemplate(cloud: 'kubernetes', namespace: 'jenkins',
+podTemplate(cloud: 'kubernetes', namespace: 'jenkins', label: label,
     containers: [
         containerTemplate(name: "maven", image: "maven:alpine", ttyEnabled: true, command: "cat")
     ]
