@@ -9,7 +9,7 @@ from app.common.validation import *
 def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: models.User):
     # sourcery skip: use-named-expression
     # 重复虚拟人检查
-    item.creator_id = user.id
+    # item.creator_id = user.id
     res: models.VirtualHuman = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == item.name).first()
     # if res:
     #     raise Exception(f"虚拟人 {item.name} 已存在")

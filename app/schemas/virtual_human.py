@@ -10,7 +10,7 @@ class VirtualHumanCreate(BaseModel):
     name: str
     sex: int
     status: int = 1
-    creator_id: Optional[int] = None
+    # creator_id: Optional[int] = None
     headimg_uri: str
     work_space: str
 
