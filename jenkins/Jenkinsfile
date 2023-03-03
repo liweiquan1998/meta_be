@@ -32,14 +32,13 @@
 //
 //
 //
-
-podTemplate(
-    label: "kubernetes",
+def label = "slave-${UUID.randomUUID().toString()}"
+podTemplate(cloud: 'kubernetes', namespace: 'jenkins',
     containers: [
         containerTemplate(name: "maven", image: "maven:alpine", ttyEnabled: true, command: "cat")
     ]
 ) {
-    node("kubernetes") {
+    node(label) {
         container("maven") {
             stage("build") {
                 sh "mvn --version"
