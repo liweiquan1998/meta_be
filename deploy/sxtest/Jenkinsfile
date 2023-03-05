@@ -9,6 +9,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
 ]) {
   node(label) {
     stage('构建 Docker 镜像') {
+      git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
       container('docker') {
         echo "构建 Docker 镜像阶段"
         sh "docker build -t SXKJ:32775/metebe:latest ."
