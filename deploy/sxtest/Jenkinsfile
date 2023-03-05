@@ -12,9 +12,9 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
       git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
       container('docker') {
         echo "构建 Docker 镜像阶段"
-        sh "docker build -t SXKJ:32775/metebe:latest ."
+        sh "docker build -t SXKJ:32775/metabe:latest ."
         sh "echo '192.168.199.31 SXKJ' >> /etc/hosts"
-        sh "docker push SXKJ:32775/metebe:latest"
+        sh "docker push SXKJ:32775/metabe:latest"
       }
     }
     stage('运行 Kubectl') {
