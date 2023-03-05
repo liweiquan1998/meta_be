@@ -10,7 +10,7 @@ class VirtualHumanCreate(BaseModel):
     name: str
     sex: int
     status: int = 1
-    creator_id: Optional[int] = None
+    # creator_id: Optional[int] = None
     headimg_uri: str
     work_space: str
 
@@ -20,7 +20,6 @@ class VirtualHumanCreate(BaseModel):
                 "name": faker.name(),
                 "sex": faker.pyint(0, 1, 2),
                 "status": faker.pyint(0, 1),
-                "creator_id": faker.pyint(50, 100),
                 "headimg_uri": "xxxx",
                 "work_space": "xxxxxxxx"}}
 
