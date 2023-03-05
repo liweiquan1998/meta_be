@@ -13,7 +13,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
       container('docker') {
         echo "构建 Docker 镜像阶段"
         sh "echo '192.168.199.31 SXKJ' >> /etc/hosts"
-        sh "docker build -t SXKJ:32775/metabe:latest . && docker push SXKJ:32775/metabe:latest"
+        sh "docker build -t SXKJ:32775/metabe:latest . && docker images"
       }
     }
     stage('运行 Kubectl') {
