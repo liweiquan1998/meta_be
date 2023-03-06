@@ -1,6 +1,8 @@
 import os.path
 import threading
 import time
+import uuid
+
 import cv2
 from typing import List
 from app import models, schemas
