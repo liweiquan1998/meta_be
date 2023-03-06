@@ -18,4 +18,4 @@ from app.models.live_streaming import *
 from app.models.background import *
 from app.models.apparel import *
 from app.models.blueprint import *
-
+from app.models.effects import *
