@@ -19,5 +19,5 @@ from app.schemas.live_streaming import *
 from app.schemas.background import *
 from app.schemas.apparel import *
 from app.schemas.blueprint import *
-
+from app.schemas.effects import *
 

@@ -20,3 +20,4 @@ from app.crud.live_streaming import *
 from app.crud.background import *
 from app.crud.apprael import *
 from app.crud.blueprint import *
+from app.crud.effects import *
