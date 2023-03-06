@@ -14,13 +14,13 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
       container('docker') {
         echo "构建 Docker 镜像阶段"
         sh "echo '192.168.199.31 SXKJ' >> /etc/hosts"
-        sh "docker build -t SXKJ:32775/metabe:latest . "
+        sh "docker build -t SXKJ:32775/metabe:latest ."
         echo "build success"
       }
     }
     stage('Docker Push 镜像') {
         container('docker') {
-          sh "docker push SXKJ:32775/metabe:latest"
+          sh "docker push SXKJ:32775/central"
           echo "Push success"
         }
     }
