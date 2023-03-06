@@ -9,6 +9,8 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
   hostPathVolume(mountPath: '/etc/docker/daemon.json', hostPath: '/etc/docker/daemon.json')
 ], yaml: """
 spec:
+  nodeSelector:
+    kubernetes.io/hostname: h153
   hostalias:
   - ip: 192.168.199.31
     hostnames:
