@@ -15,7 +15,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
         echo "构建 Docker 镜像阶段"
         sh "echo '192.168.199.31 SXKJ' >> /etc/hosts"
         sh "docker build --target builder2 -t metabe  ."
-        sh "docker images | grep -i metabe"
+        sh "docker images"
         echo "build success"
       }
     }
