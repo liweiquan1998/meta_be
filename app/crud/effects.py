@@ -35,6 +35,5 @@ def delete_effect(db: Session, item_id):
         raise Exception(f"effects {item_id} 已删除")
     item.status = 1
     db.commit()
-    db.flush()
     db.refresh(item)
     return True
