@@ -1,5 +1,5 @@
 import random
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import BaseModel
 from faker import Faker
@@ -20,6 +20,5 @@ class EffectCreate(BaseModel):
 
 
 class EffectGet(BaseModel):
-    name: Union[str, None] = None
-    create_time: Union[int, None] = None
-
+    name: Optional[str] = None
+    create_time: Optional[int] = None
