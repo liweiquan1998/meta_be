@@ -8,7 +8,6 @@ def create_effect(db: Session, item: schemas.EffectCreate, user):
     db_item = models.Effects(**item.dict(), **{'create_time': int(time.time()),
                                                'create_id': user.id,
                                                'status': 1,
-                                               'id':1
                                                })
     db.add(db_item)
     db.commit()
