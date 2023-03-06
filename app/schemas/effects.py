@@ -1,5 +1,5 @@
 import random
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import BaseModel
 from faker import Faker
@@ -17,3 +17,8 @@ class EffectCreate(BaseModel):
                 "pkg": "SceneAssets/202211",
                 "thumbnail": "SceneAssets/202211"
             }}
+
+
+class EffectGet(BaseModel):
+    name: Union[str, None] = None
+    create_time: Union[int, None] = None
