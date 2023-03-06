@@ -26,6 +26,8 @@ def delete_effect(db: Session, item_id):
     item = db.query(models.Effects).filter(models.Effects.id == item_id).first()
     if not item:
         raise Exception(f"effects {item_id} 不存在")
+    if item.status == 1:
+        raise Exception(f"effects {item_id} 已删除")
     item.status = 1
     db.commit()
     db.flush()
