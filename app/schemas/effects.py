@@ -6,8 +6,8 @@ from faker import Faker
 
 
 class EffectCreate(BaseModel):
-    name = str
-    pkg = str
+    name: str
+    pkg: str
     thumbnail: str
 
     class Config:
