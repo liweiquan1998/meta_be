@@ -100,8 +100,8 @@ FROM builder2 as builder3
 
 # FROM builder3 as builder4
 
-ADD . /workspace
 RUN mkdir "/mnt/nfs"
+ADD . /workspace
 
 
 # FROM builder4 as builder5
