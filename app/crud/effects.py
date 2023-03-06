@@ -1,9 +1,9 @@
 import time
 from sqlalchemy.orm import Session
-from app import models, schemas
+from app import models
 
 
-def create_effect(db: Session, item: schemas.EffectCreate, user):
+def create_effect(db: Session, item, user):
     print(item)
     # 创建特效
     db_item = models.Effects(**item.dict(), **{'create_time': int(time.time()),
