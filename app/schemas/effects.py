@@ -16,5 +16,4 @@ class EffectCreate(BaseModel):
                 "name": "爆炸",
                 "pkg": "SceneAssets/202211",
                 "thumbnail": "SceneAssets/202211"
-            }
-        }
+            }}
