@@ -22,7 +22,7 @@ def add_effect(item: schemas.EffectCreate, db: Session = Depends(get_db), user=D
 @router_effect.get("/effect", summary="获取特效列表")
 @web_try()
 @sxtimeit
-def get_effect(item: schemas.EffectGet, params: Params = Depends(), db: Session = Depends(get_db),
+def get_effect(item: schemas.EffectGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db),
                user=Depends(check_user)):
     return paginate(crud.get_effect(db=db, user=user, item=item), params)
 

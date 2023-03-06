@@ -20,5 +20,5 @@ class EffectCreate(BaseModel):
 
 
 class EffectGet(BaseModel):
-    name: Optional[str] = None
-    create_time: Optional[int] = None
+    name: Union[str, None] = None
+    create_time: Union[int, None] = None
