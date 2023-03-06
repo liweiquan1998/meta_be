@@ -36,7 +36,7 @@ spec:
     stage('运行 Kubectl') {
       container('kubectl') {
         echo "查看 K8S 集群 Pod 列表"
-        sh "kubectl get pods -n meta-demo"
+        sh "kubectl rollout restart deployments/app-be  -n meta-demo"
       }
     }
   }
