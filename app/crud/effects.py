@@ -28,4 +28,5 @@ def delete_effect(db: Session, item_id):
     item.status = 1
     db.commit()
     db.flush()
+    db.refresh()
     return True
