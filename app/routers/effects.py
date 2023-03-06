@@ -19,7 +19,7 @@ def add_effect(item: schemas.EffectCreate, db: Session = Depends(get_db), user=D
     return crud.create_effect(db=db, item=item, user=user)
 
 
-@router_effect.post("/effect", summary="获取特效列表")
+@router_effect.get("/effect", summary="获取特效列表")
 @web_try()
 @sxtimeit
 def get_effect(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
