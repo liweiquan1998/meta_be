@@ -4,7 +4,7 @@ from app.models.database import BaseModel
 
 
 class Effects(BaseModel):
-    __tablename__ = 'effects'
+    __tablename__ = "effects"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(255), comment='名称')
     pkg = Column(String(255), comment='pkg文件地址')
