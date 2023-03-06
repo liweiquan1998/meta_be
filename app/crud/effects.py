@@ -22,7 +22,7 @@ def get_effect(db: Session, user):
 
 def delete_effect(db: Session, item_id):
     # 删除
-    item = db.query(models.Effects).filter(models.Effects.id == item_id).filter()
+    item = db.query(models.Effects).filter(models.Effects.id == item_id).first()
     if not item:
         raise Exception(f"effects {item_id} 不存在")
     item.status = 1
