@@ -5,6 +5,7 @@ from app.routers.file import router_file
 from app.routers.store import router_store
 from app.routers.user import router_user
 from app.routers.admin import router_admin
+from app.routers.effects import router_effect
 from app.routers.product import router_product
 from app.routers.sku import router_sku
 from app.routers.scene import router_scene
@@ -26,12 +27,10 @@ from app.routers.blueprint import router_blueprint
 from utils.sx_log import format_print
 from configs.setting import root_path
 
-
 format_print()
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(root_path=f"{root_path}", title="元宇宙电商平台后台")
-
 
 # CORS 跨源资源共享
 app.add_middleware(
@@ -49,6 +48,7 @@ app.include_router(router_product)
 app.include_router(router_sku)
 app.include_router(router_scene)
 app.include_router(router_scene_base)
+app.include_router(router_effect)
 app.include_router(router_order)
 app.include_router(router_after_care)
 app.include_router(router_meta_obj)
@@ -66,10 +66,12 @@ app.include_router(router_backgrounds)
 app.include_router(router_apparel)
 app.include_router(router_blueprint)
 
+
 # Get 健康检查
 @app.get("/ping", description="健康检查")
 def ping():
     return "pong!!!"
+
 
 # Get 健康检查
 @app.get(f"{root_path}/ping", description="健康检查")
