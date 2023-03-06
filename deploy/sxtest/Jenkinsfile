@@ -19,7 +19,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
     stage('运行 Kubectl') {
       container('kubectl') {
         echo "查看 K8S 集群 Pod 列表"
-        sh "kubectl get pods -n devops"
+        sh "kubectl get pods -n meta-demo"
       }
     }
   }
