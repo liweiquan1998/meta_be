@@ -4,6 +4,7 @@ from app import models, schemas
 
 
 def create_effect(db: Session, item: schemas.EffectCreate, user):
+    print(item)
     # 创建特效
     db_item = models.Effects(**item.dict(), **{'create_time': int(time.time()),
                                                'create_id': user.id,
