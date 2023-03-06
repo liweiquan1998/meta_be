@@ -17,6 +17,7 @@ def create_effect(db: Session, item, user):
 
 def get_effect(db: Session, user):
     db_query = db.query(models.Effects).filter(models.Effects.create_id == user.id)
+    db_query = db_query.filter(models.Effects.status == 0)
     return db_query.order_by(models.Effects.id).all()
 
 
