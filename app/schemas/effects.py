@@ -17,3 +17,9 @@ class EffectCreate(BaseModel):
                 "pkg": "SceneAssets/202211",
                 "thumbnail": "SceneAssets/202211"
             }}
+
+
+class EffectGet(BaseModel):
+    name: Union[str, None] = None
+    create_time: Union[int, None] = None
+

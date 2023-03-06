@@ -15,9 +15,14 @@ def create_effect(db: Session, item, user):
     return db_item
 
 
-def get_effect(db: Session, user):
+def get_effect(db: Session, user, item):
     db_query = db.query(models.Effects).filter(models.Effects.create_id == user.id)
     db_query = db_query.filter(models.Effects.status == 0)
+    if item.name and item.name != "":
+        db_query = db_query.filter(models.Effects.name.like(f"%{item.name}%"))
+    if item.create_time is not None and item.create_time != -1:
+        db_query = db_query.filter(models.Effects.create_time <= item.create_time + 86400)
+        db_query = db_query.filter(models.Effects.create_time >= item.create_time)
     return db_query.order_by(models.Effects.id).all()
 
 
