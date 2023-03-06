@@ -6,6 +6,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
 ],volumes: [
   hostPathVolume(mountPath: '/home/jenkins/.kube', hostPath: '/root/.kube'),
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock')
+  hostPathVolume(mountPath: '/etc/docker/daemon.json', hostPath: '/etc/docker/daemon.json')
 ]) {
   node(label) {
     stage('构建 Docker 镜像') {
@@ -13,7 +14,9 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
       container('docker') {
         echo "构建 Docker 镜像阶段"
         sh "echo '192.168.199.31 SXKJ' >> /etc/hosts"
-        sh "docker build -t SXKJ:32775/metabe:latest . && docker images"
+        sh "docker build -t SXKJ:32775/metabe:latest . "
+        echo "build success"
+        sh "docker push SXKJ:32775/metabe:latest ."
       }
     }
     stage('运行 Kubectl') {
