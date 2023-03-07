@@ -185,6 +185,11 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     return meta_obj_add_username(meta_objs, db)
 
 
+def get_meta_all(db):
+    db_query = db.query(models.MetaObj)
+    return db_query.all()
+
+
 def delete_meta_obj(db: Session, item_id: int):
     item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
     if not item:
