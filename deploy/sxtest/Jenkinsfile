@@ -17,14 +17,7 @@ spec:
     - "SXKJ"
 """
 ) {
-  node(label) {
-    environment {
-        IMAGE_REPO = "SXKJ:32775/meta-app"
-        DINGTALK_CREDS = credentials('dingTalk')
-        TAB_STR = "\n                    \n                    "
-    }
-
-    stage('git-log') {
+  stage('git-log') {
         steps {
             script{
                 sh "git log --oneline -n 1 > gitlog.file"
@@ -32,6 +25,12 @@ spec:
             }
             sh 'printenv'
         }
+  }
+  node(label) {
+    environment {
+        IMAGE_REPO = "SXKJ:32775/meta-app"
+        DINGTALK_CREDS = credentials('dingTalk')
+        TAB_STR = "\n                    \n                    "
     }
 
     stage('构建 Docker 镜像') {
