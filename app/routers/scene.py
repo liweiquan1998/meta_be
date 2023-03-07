@@ -20,7 +20,7 @@ router_scene = APIRouter(
 @web_try()
 @sxtimeit
 def add_scene(item: schemas.SceneCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_scene(db=db, item=item,user = user)
+    return crud.create_scene(db=db, item=item, user=user)
 
 
 @router_scene.delete("/{scene_id}", summary="删除场景")
@@ -33,14 +33,16 @@ def delete_scene(scene_id: int, db: Session = Depends(get_db), user=Depends(chec
 @router_scene.put("/{scene_id}", summary="更新场景信息")
 @web_try()
 @sxtimeit
-def update_scene(scene_id: int, update_item: schemas.SceneUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+def update_scene(scene_id: int, update_item: schemas.SceneUpdate, db: Session = Depends(get_db),
+                 user=Depends(check_user)):
     return crud.update_scene(db=db, item_id=scene_id, update_item=update_item)
 
 
 @router_scene.get("", summary="获取场景列表")
 @web_try()
 @sxtimeit
-def get_scenes(get_item: schemas.SceneGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+def get_scenes(get_item: schemas.SceneGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db),
+               user=Depends(check_user)):
     return paginate(crud.get_scenes(db, get_item, user), params)
 
 
@@ -49,5 +51,3 @@ def get_scenes(get_item: schemas.SceneGet = Depends(), params: Params = Depends(
 @sxtimeit
 def get_scene_once(scene_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_scene_once(db=db, item_id=scene_id)
-
-
