@@ -16,7 +16,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
 ], yaml: """
 spec:
   nodeSelector:
-    kubernetes.io/hostname: h249/*  */
+    kubernetes.io/hostname: h249
   hostalias:
   - ip: 192.168.199.31
     hostnames:
