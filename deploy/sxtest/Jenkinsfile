@@ -17,15 +17,6 @@ spec:
     - "SXKJ"
 """
 ) {
-  stage('git-log') {
-        steps {
-            script{
-                sh "git log --oneline -n 1 > gitlog.file"
-                env.GIT_LOG = readFile("gitlog.file").trim()
-            }
-            sh 'printenv'
-        }
-  }
   node(label) {
     environment {
         IMAGE_REPO = "SXKJ:32775/meta-app"
