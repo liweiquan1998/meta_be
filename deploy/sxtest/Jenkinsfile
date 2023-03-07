@@ -13,9 +13,7 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
   hostPathVolume(mountPath: '/home/jenkins/.kube', hostPath: '/root/.kube'),
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   hostPathVolume(mountPath: '/etc/docker/daemon.json', hostPath: '/etc/docker/daemon.json')
-], envVars: [
-]
-yaml: """
+], yaml: """
 spec:
   nodeSelector:
     kubernetes.io/hostname: h249/*  */
