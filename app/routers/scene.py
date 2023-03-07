@@ -20,7 +20,7 @@ router_scene = APIRouter(
 @web_try()
 @sxtimeit
 def add_scene(item: schemas.SceneCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_scene(db=db, item=item)
+    return crud.create_scene(db=db, item=item,user = user)
 
 
 @router_scene.delete("/{scene_id}", summary="删除场景")

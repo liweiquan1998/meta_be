@@ -13,7 +13,6 @@ class SceneCreate(BaseModel):
     base_id: int
     thumbnail: str
     config: str
-    creator_id: int
 
     class Config:
         schema_extra = {
@@ -21,10 +20,9 @@ class SceneCreate(BaseModel):
                 "name": f"{faker.company_prefix()}的场景",
                 "tag": random.choice([1, 2]),  # 1:直播 2:商铺
                 "base_id": random.choice([1, 2, 3]),  # 基础场景id
-                "thumbnail": 'SceneAssets/202211',
-                "config": 'SceneAssets/202211',
-                "creator_id": faker.pyint(5, 10)}
-        }
+                "thumbnail": '/file/nfs/SceneAssets/2A0206964478EFE72AF8F3B0260C66D8.png',
+                "config": '/file/nfs/SceneAssets/202212/1669986425'
+        }}
 
 
 class SceneGet(BaseModel):
