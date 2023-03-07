@@ -13,45 +13,48 @@ podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount
   hostPathVolume(mountPath: '/home/jenkins/.kube', hostPath: '/root/.kube'),
   hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
   hostPathVolume(mountPath: '/etc/docker/daemon.json', hostPath: '/etc/docker/daemon.json')
-], yaml: """
+], envVars: [
+]
+yaml: """
 spec:
   nodeSelector:
-    kubernetes.io/hostname: h249
+    kubernetes.io/hostname: h249/*  */
   hostalias:
   - ip: 192.168.199.31
     hostnames:
     - "SXKJ"
 """
 ) {
-  node(label) {
-
-
-    stage('构建 Docker 镜像') {
-      git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
-      container('docker') {
-        echo "构建 Docker 镜像阶段"
-        retry { sh "docker build  -t ${IMAGE_REPO}:latest --output type=docker ." }
-        echo "build success"
-      }
-    }
-    stage('Docker Push 镜像') {
-        container('docker') {
-          retry(2) { sh "docker push ${IMAGE_REPO}:latest" }
-          echo "Push success"
+    retry(count: 2, conditions: [kubernetesAgent(), nonresumable()]) {
+        node(label) {
+            stage('构建 Docker 镜像') {
+              git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
+              container('docker') {
+                echo "构建 Docker 镜像阶段"
+                sh "docker build  -t SXKJ:32775/meta-app:latest --output type=docker ."
+                echo "build success"
+              }
+            }
+            stage('Docker Push 镜像') {
+                container('docker') {
+                  sh "docker push SXKJ:32775/meta-app:latest"
+                  echo "Push success"
+                }
+            }
+            stage('运行 Kubectl') {
+              container('kubectl') {
+                echo "重启 pod"
+                sh "kubectl rollout restart deployments/app-be  -n meta-demo"
+              }
+            }
         }
     }
-    stage('运行 Kubectl') {
-      container('kubectl') {
-        echo "重启 pod"
-        sh "kubectl rollout restart deployments/app-be  -n meta-demo"
-      }
-    }
-  }
-  post {
-    always {
-        echo 'I will always say Hello again!'
-    }
-  }
+
+//   post {
+//     always {
+//         echo 'I will always say Hello again!'
+//     }
+//   }
 }
 
 
