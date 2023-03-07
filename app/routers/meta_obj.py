@@ -77,7 +77,7 @@ def get_meta_objs(get_item: schemas.MetaObjGet = Depends(), params: Params = Dep
 @router_meta_obj.get("/all", summary="拿到所有元对象")
 @web_try()
 @sxtimeit
-def get_meta_objs():
+def get_meta_all_objs():
     # return paginate(crud.get_meta_all(db), params)
     return f'xxx'
 
