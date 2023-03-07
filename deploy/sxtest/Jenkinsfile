@@ -18,17 +18,33 @@ spec:
 """
 ) {
   node(label) {
+    environment {
+        IMAGE_REPO = "SXKJ:32775/meta-app"
+        DINGTALK_CREDS = credentials('dingTalk')
+        TAB_STR = "\n                    \n                    "
+    }
+
+    stage('git-log') {
+        steps {
+            script{
+                sh "git log --oneline -n 1 > gitlog.file"
+                env.GIT_LOG = readFile("gitlog.file").trim()
+            }
+            sh 'printenv'
+        }
+    }
+
     stage('构建 Docker 镜像') {
       git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
       container('docker') {
         echo "构建 Docker 镜像阶段"
-        sh "docker build  -t SXKJ:32775/meta-app:latest --output type=docker ."
+        retry { sh "docker build  -t ${IMAGE_REPO}:latest --output type=docker ." }
         echo "build success"
       }
     }
     stage('Docker Push 镜像') {
         container('docker') {
-          sh "docker push SXKJ:32775/meta-app:latest"
+          retry(2) { sh "docker push ${IMAGE_REPO}:latest" }
           echo "Push success"
         }
     }
@@ -39,4 +55,148 @@ spec:
       }
     }
   }
+  post {
+    always {
+        echo 'I will always say Hello again!'
+    }
+  }
 }
+
+
+//
+// pipeline {
+//     agent { label 'jnlp-slave'}
+//
+//     options {
+//         buildDiscarder(logRotator(numToKeepStr: '10'))
+//         disableConcurrentBuilds()
+//         timeout(time: 20, unit: 'MINUTES')
+//         gitLabConnection('gitlab')
+//     }
+//
+//     environment {
+//         IMAGE_REPO = "112.29.146.236:5000/demo/myblog"
+//         DINGTALK_CREDS = credentials('dingTalk')
+//         TAB_STR = "\n                    \n                    "
+//     }
+//
+//     stages {
+//         stage('git-log') {
+//             steps {
+//                 script{
+//                     sh "git log --oneline -n 1 > gitlog.file"
+//                     env.GIT_LOG = readFile("gitlog.file").trim()
+//                 }
+//                 sh 'printenv'
+//             }
+//         }
+//         stage('checkout') {
+//             steps {
+//                 container('tools') {
+//                     checkout scm
+//                 }
+//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
+//                 script{
+//                     env.BUILD_TASKS = env.STAGE_NAME + "√..." + env.TAB_STR
+//                 }
+//             }
+//         }
+//         stage('CI'){
+//             failFast true
+//             parallel {
+//                 stage('Unit Test') {
+//                     steps {
+//                         echo "Unit Test Stage Skip..."
+//                     }
+//                 }
+//                 stage('Code Scan') {
+//                     steps {
+//                         container('tools') {
+//                             withSonarQubeEnv('sonarqube') {
+//                                 sh 'sonar-scanner -X'
+//                                 sleep 3
+//                             }
+//                             script {
+//                                 timeout(1) {
+//                                     def qg = waitForQualityGate('sonarqube')
+//                                     if (qg.status != 'OK') {
+//                                         error "未通过Sonarqube的代码质量阈检查，请及时修改！failure: ${qg.status}"
+//                                     }
+//                                 }
+//                             }
+//                         }
+//                     }
+//                 }
+//             }
+//         }
+//         stage('build-image') {
+//             steps {
+//                 container('tools') {
+//                     retry(2) { sh 'docker build . -t ${IMAGE_REPO}:${GIT_COMMIT}'}
+//                 }
+//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
+//                 script{
+//                     env.BUILD_TASKS += env.STAGE_NAME + "√..." + env.TAB_STR
+//                 }
+//             }
+//         }
+//         stage('push-image') {
+//             steps {
+//                 container('tools') {
+//                     retry(2) { sh 'docker push ${IMAGE_REPO}:${GIT_COMMIT}'}
+//                 }
+//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
+//                 script{
+//                     env.BUILD_TASKS += env.STAGE_NAME + "√..." + env.TAB_STR
+//                 }
+//             }
+//         }
+//         stage('deploy') {
+//             steps {
+//                 container('tools') {
+//                     sh "sed -i 's#{{IMAGE_URL}}#${IMAGE_REPO}:${GIT_COMMIT}#g' deploy/*"
+//                     timeout(time: 1, unit: 'MINUTES') {
+//                         sh "kubectl apply -f deploy/"
+//                     }
+//                 }
+//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
+//                 script{
+//                     env.BUILD_TASKS += env.STAGE_NAME + "√..." + env.TAB_STR
+//                 }
+//             }
+//         }
+//     }
+//     post {
+//         success {
+//             echo 'Congratulations!'
+//             sh """
+//                 curl 'https://oapi.dingtalk.com/robot/send?access_token=${DINGTALK_CREDS_PSW}' \
+//                     -H 'Content-Type: application/json' \
+//                     -d '{
+//                         "msgtype": "markdown",
+//                         "markdown": {
+//                             "title":"myblog",
+//                             "text": "😄👍 构建成功 👍😄  \n**项目名称**：jairmir  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${BRANCH_NAME}   \n**构建地址**：${RUN_DISPLAY_URL}  \n**构建任务**：${BUILD_TASKS}"
+//                         }
+//                     }'
+//             """
+//         }
+//         failure {
+//             echo 'Oh no!'
+//             sh """
+//                 curl 'https://oapi.dingtalk.com/robot/send?access_token=${DINGTALK_CREDS_PSW}' \
+//                     -H 'Content-Type: application/json' \
+//                     -d '{
+//                         "msgtype": "markdown",
+//                         "markdown": {
+//                             "title":"myblog",
+//                             "text": "😖❌ 构建失败 ❌😖  \n**项目名称**：jairmir  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${BRANCH_NAME}  \n**构建地址**：${RUN_DISPLAY_URL}  \n**构建任务**：${BUILD_TASKS}"
+//                         }
+//                     }'
+//             """
+//         }
+//         always {
+//             echo 'I will always say Hello again!'
+//         }
+//     }
+// }
