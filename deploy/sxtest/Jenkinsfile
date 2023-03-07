@@ -1,5 +1,11 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
+environment {
+    IMAGE_REPO = "SXKJ:32775/meta-app"
+    DINGTALK_CREDS = credentials('dingTalk')
+    TAB_STR = "\n                    \n                    "
+}
+
 podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount: 'jenkins',containers: [
   containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
   containerTemplate(name: 'kubectl', image: 'cnych/kubectl', command: 'cat', ttyEnabled: true)
@@ -18,11 +24,7 @@ spec:
 """
 ) {
   node(label) {
-    environment {
-        IMAGE_REPO = "SXKJ:32775/meta-app"
-        DINGTALK_CREDS = credentials('dingTalk')
-        TAB_STR = "\n                    \n                    "
-    }
+
 
     stage('构建 Docker 镜像') {
       git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
