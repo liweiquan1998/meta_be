@@ -21,11 +21,7 @@ LOGIN_EXPIRED = int(config.get('token', 'login_expired'))
 def add_user(item: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, item=item)
 
-@router_user.get("/all", summary="拿到所有元对象")
-@web_try()
-@sxtimeit
-def get_meta_objs(db: Session = Depends(get_db), params: Params = Depends()):
-    return paginate(crud.get_meta_all(db), params)
+
 @router_user.post("/login", summary="商户登录")
 @web_try()
 @sxtimeit
