@@ -76,8 +76,8 @@ def get_meta_objs(get_item: schemas.MetaObjGet = Depends(), params: Params = Dep
     return paginate(crud.get_meta_objs(db, get_item), params)
 
 
-@router_meta_obj.get("/xxx")
-def get_xxx():
+@router_meta_obj.post("/post_qwe")
+def post_qwe():
     return f'xxx'
 @router_meta_obj.put("/{item_id}", summary="更新元对象状态")
 @web_try()
