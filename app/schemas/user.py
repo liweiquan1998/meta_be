@@ -44,8 +44,9 @@ class UserLogin(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "name": faker.name(),
-                "password": faker.password()}}
+                "name": "元宇宙测试账户",
+                "password": "123456"
+            }}
 
 
 class User(UserBase):
