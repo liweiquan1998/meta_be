@@ -6,10 +6,12 @@ from app.crud.basic import update_to_db
 from app.common.validation import *
 
 
-def create_scene(db: Session, item: schemas.SceneCreate):
+def create_scene(db: Session, item: schemas.SceneCreate, user):
     # sourcery skip: use-named-expression
     # 创建
-    db_item = models.Scene(**item.dict(), **{'create_time': int(time.time())})
+    db_item = models.Scene(**item.dict(), **{'create_time': int(time.time()),
+                                             'creator_id': user.id
+                                             })
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

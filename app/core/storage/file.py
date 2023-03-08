@@ -36,7 +36,7 @@ class NfsStorage(FileStorage):
                 f.write(file_byte)
             real_path.chmod(0o777)
             uri = self.get_uri(str(result / file_name))
-            return {'uir': uri}
+            return {'uri': uri}
         except Exception as e:
             raise Exception(400, f"上传文件失败{e}")
 
