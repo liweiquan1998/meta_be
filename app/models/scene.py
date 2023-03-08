@@ -13,4 +13,4 @@ class Scene(BaseModel):
     config = Column(String(255), comment='配置文件')
     creator_id = Column(String(255), comment='创建者id')
     create_time = Column(Integer, comment='创建时间')
-    virtual_human_ids = Column(JSON, comment='场景关联的虚拟人', default='[]')
+    virtual_human_ids = Column(JSON, comment='场景关联的虚拟人', default=[])
