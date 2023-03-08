@@ -1,10 +1,5 @@
 def label = "slave-${UUID.randomUUID().toString()}"
 
-environment {
-    IMAGE_REPO = "SXKJ:32775/meta-app"
-    DINGTALK_CREDS = credentials('dingTalk')
-    TAB_STR = "\n                    \n                    "
-}
 
 podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount: 'jenkins',containers: [
   containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
@@ -29,7 +24,7 @@ spec:
           git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
           container('docker') {
             echo "构建 Docker 镜像阶段"
-            retry(2) { sh "docker build  -t ${IMAGE_REPO}:latest --output type=docker ." }
+            retry(2) { sh "docker build  -t SXKJ:32775/meta-app:latest --output type=docker ." }
             echo "build success"
           }
         }
