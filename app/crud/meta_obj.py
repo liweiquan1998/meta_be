@@ -2,27 +2,24 @@ import os.path
 import threading
 import time
 import uuid
-
 import cv2
-from typing import List
+from pathlib import Path
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-from app.common.validation import *
 from app.crud.meta_obj_tag import create_meta_obj_tag
 from utils.valid_name import is_valid_name
-from app.crud.aigc import *
-from app.crud.user import *
-from app.crud.file import *
+from app.crud.aigc import send_nerf_request
+from app.crud.file import get_minio_file_byte
 
 
-def meta_obj_add_username(mo, db: Session, ):
+def meta_obj_add_username(mo, db: Session):
     if type(mo) == list:
         res = [r.to_dict() for r in mo]
         for m in res:
             try:
                 m['creator_name'] = db.query(models.User).filter(models.User.id == m['creator_id']).first().name
-            except Exception as e:
+            except Exception:
                 raise Exception(f"meta_obj {m['id']} 的创建者不存在")
     else:
         res = mo.to_dict()

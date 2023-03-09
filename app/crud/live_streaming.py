@@ -7,7 +7,6 @@ import requests
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-from app.common.validation import *
 
 
 def live_streaming_add_username(ls, db: Session):

@@ -1,10 +1,13 @@
 import time
 from fastapi_pagination import paginate, Params
+from sqlalchemy.orm import Session
 from app import schemas, crud
-from utils import web_try, sxtimeit, get_utc_now
-from fastapi import APIRouter, WebSocket
-from app.common.validation import *
-import asyncio
+from utils import web_try, sxtimeit
+from fastapi import APIRouter, WebSocket, Depends
+from app.common.validation import TokenSchemas, OAuth2PasswordRequestForm, check_user, check_user_id, check_user_ws
+from app import get_db, models
+
+
 from configs.setting import config
 
 router_user = APIRouter(
@@ -46,7 +49,7 @@ def update_user(update_item: schemas.UserUpdate, db: Session = Depends(get_db),
 @router_user.get("", summary="获取商户列表")
 @web_try()
 @sxtimeit
-def get_users(get_item: schemas.UserGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db),):
+def get_users(get_item: schemas.UserGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), ):
     print(type(paginate(crud.get_users(db, get_item), params)))
     return paginate(crud.get_users(db, get_item), params)
 
@@ -55,7 +58,7 @@ def get_users(get_item: schemas.UserGet = Depends(), params: Params = Depends(),
 @web_try()
 @sxtimeit
 def get_user_once(item_id: int, db: Session = Depends(get_db)):
-                  # user=Depends(check_admin)):
+    # user=Depends(check_admin)):
     return crud.get_user_once(db=db, item_id=item_id)
 
 
@@ -68,8 +71,8 @@ def get_user_id(token: str, db: Session = Depends(get_db)):
 
 @router_user.websocket("/ws")
 async def check_alive(
-    websocket: WebSocket,
-    db=Depends(get_db),
-    user: models.User = Depends(check_user_ws),
+        websocket: WebSocket,
+        db=Depends(get_db),
+        user: models.User = Depends(check_user_ws),
 ):
     await crud.check_alive(websocket, db, user)

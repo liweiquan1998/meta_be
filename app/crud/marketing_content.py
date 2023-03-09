@@ -9,8 +9,7 @@ from app import models, schemas
 from sqlalchemy.orm import Session
 from app.core.storage.file import FMH
 from app.crud.basic import update_to_db
-from app.common.validation import *
-from app.crud.aigc import *
+from app.crud.aigc import send_tts_request, send_compose_request
 
 
 def mc_add_username(mc, db: Session):
@@ -45,9 +44,6 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, 
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
-    # 向tts发送请求
-    # send_tts_request(item.content, vh_sex, db_item.id,db)
-    # threading.Thread(target=send_tts_request, args=(item.content, vh_sex, db_item.id, db)).start()
     background_tasks.add_task(func=send_tts_request, content=item.content, vh_sex=vh_sex, mc_id=db_item.id)
     return db_item
 
@@ -124,6 +120,7 @@ def market_audio_content(file, params, db):
     db.flush()
     db.refresh(db_item)
     return db_item
+
 
 def market_video_content(file, params, db):
     file_byte = file.file.read()

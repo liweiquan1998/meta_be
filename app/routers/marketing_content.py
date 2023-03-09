@@ -1,13 +1,10 @@
 from fastapi_pagination import paginate, Params
-from pydantic import HttpUrl
 from sqlalchemy.orm import Session
-from app.routers import file
 from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
 from fastapi import Depends, File, UploadFile, Form
 from fastapi import APIRouter, BackgroundTasks
-from app.common.validation import *
 
 router_marketing_content = APIRouter(
     prefix="/marketing_contents",

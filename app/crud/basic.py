@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import time
 from sqlalchemy.orm.attributes import flag_modified
 
-from app.common.validation import *
+from app.common.validation import get_password_hash
 from app.models import BaseModel
 
 

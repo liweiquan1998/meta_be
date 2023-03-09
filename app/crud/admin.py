@@ -3,7 +3,7 @@ from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-from app.common.validation import *
+from app.common.validation import get_password_hash, create_access_token, verify_password, TokenSchemas
 
 
 def create_admin(db: Session, item: schemas.AdminCreate):
@@ -55,7 +55,6 @@ def login_admin(db: Session, item: schemas.AdminLogin):
     res.last_login = int(time.time())
     db.commit()
     db.flush()
-    # return {"access_token": res.auth_token, "token_type": "bearer"}
     return res
 
 

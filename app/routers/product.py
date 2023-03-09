@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
-from app.common.validation import *
+from app.common.validation import check_user
 
 router_product = APIRouter(
     prefix="/products",

@@ -7,8 +7,7 @@ from utils import web_try, sxtimeit
 
 from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
-from app.common.validation import *
+
 
 router_scene_base = APIRouter(
     prefix="/scene_bases",

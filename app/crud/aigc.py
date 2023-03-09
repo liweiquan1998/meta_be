@@ -1,5 +1,4 @@
 import requests
-from app.common.validation import *
 from configs.setting import config
 
 audio_url = config.get("aigc", "audio_url")

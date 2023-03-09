@@ -1,4 +1,4 @@
-from testing.order.utils import *
+from testing.order.utils import url
 import random as rd
 import unittest
 import requests

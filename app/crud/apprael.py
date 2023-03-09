@@ -1,7 +1,9 @@
 import time
-from app import schemas
+
+from sqlalchemy.orm import Session
+from app import schemas, models
 from app.crud.basic import update_to_db
-from app.common.validation import *
+
 
 
 def create_apparel(db: Session, item: schemas.ApparelCreate):

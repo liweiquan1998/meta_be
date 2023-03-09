@@ -7,8 +7,6 @@ from utils import web_try, sxtimeit
 
 from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
-from app.common.validation import *
 
 router_meta_obj_tag = APIRouter(
     prefix="/meta_obj_tags",

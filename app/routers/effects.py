@@ -4,7 +4,6 @@ from app.common.validation import check_user
 from utils import web_try, sxtimeit
 from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
 
 router_effect = APIRouter(
     prefix="/effects",

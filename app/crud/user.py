@@ -7,7 +7,7 @@ import websockets.exceptions
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-from app.common.validation import *
+from app.common.validation import get_password_hash, create_access_token, verify_password, TokenSchemas
 from configs.setting import config
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('token', 'expire_minutes')
@@ -157,7 +157,7 @@ async def check_alive(websocket, db, user):
             except Exception as e:
                 retry += 1
                 print(f'websocket 心跳异常: retry={retry}, user={user.name},e:{str(e)}')
-                if retry >= LOGIN_EXPIRED//PING_INTERVAL:
+                if retry >= LOGIN_EXPIRED // PING_INTERVAL:
                     print(f'{retry}次心跳失败,websocket关闭,user={user.name},exception:{str(e)}')
                     user.occupied = 0
                     db.commit()
