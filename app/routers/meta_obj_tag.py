@@ -1,7 +1,7 @@
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
 
-from app import schemas, get_db, crud
+from app import get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
 

@@ -1,10 +1,7 @@
 import random
 import threading
 import time
-import uuid
 from pathlib import Path
-from typing import List
-import requests
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.core.storage.file import FMH

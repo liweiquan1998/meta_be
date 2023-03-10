@@ -1,9 +1,6 @@
 import time
 import asyncio
-from typing import List
-
 import websockets.exceptions
-
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db

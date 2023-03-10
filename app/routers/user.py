@@ -1,4 +1,3 @@
-import time
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
 from app import schemas, crud

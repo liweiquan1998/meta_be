@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends
-from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
-
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
 from app.common.validation import TokenSchemas, OAuth2PasswordRequestForm

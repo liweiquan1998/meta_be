@@ -1,5 +1,3 @@
-import time
-
 from sqlalchemy.orm import Session
 from app import schemas, models
 from app.crud.basic import update_to_db

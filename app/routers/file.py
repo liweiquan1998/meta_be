@@ -1,12 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor
-
-from fastapi_pagination import paginate, Params
-from sqlalchemy.orm import Session
-
-from app import schemas, get_db, crud
+from app import crud
 from utils import web_try, sxtimeit
-from fastapi import FastAPI, File, UploadFile, Form
-from fastapi import Depends
+from fastapi import File, UploadFile
 from fastapi import APIRouter
 from typing import List
 

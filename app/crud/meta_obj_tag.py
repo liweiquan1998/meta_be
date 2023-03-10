@@ -1,9 +1,5 @@
-import time
-from typing import List
-from app import models, schemas
+from app import models
 from sqlalchemy.orm import Session
-from app.crud.basic import update_to_db
-from app.common.validation import *
 from utils.valid_name import is_valid_name
 
 
