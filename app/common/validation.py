@@ -5,7 +5,7 @@ from typing import Union
 import fastapi.exceptions
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer,OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
@@ -16,7 +16,8 @@ sx_servers = {"sxkjue", 'sxkjALG'}
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-tokenUrl = f"{root_path}/admin/login_fastapi" if config.get('app', 'enabled') in ['True', 'true', True] else "/user/swagger/login"
+tokenUrl = f"{root_path}/admin/login_fastapi" if config.get('app', 'enabled') in ['True', 'true',
+                                                                                  True] else "/user/swagger/login"
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl=tokenUrl)
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config.get('token', 'expire_minutes')
