@@ -2,6 +2,7 @@ import time
 from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
+from sqlalchemy.orm import exc
 from app.crud.basic import update_to_db
 from app.common.validation import get_password_hash, create_access_token, verify_password, TokenSchemas
 
@@ -11,7 +12,7 @@ def create_admin(db: Session, item: schemas.AdminCreate):
     # 重复用户名检查
     res: models.Admin = db.query(models.Admin).filter(models.Admin.name == item.name).first()
     if res:
-        raise Exception(f"用户 {item.name} 已存在")
+        return f"用户 {item.name} 已存在"
     # 创建
     password = item.password
     del item.password
