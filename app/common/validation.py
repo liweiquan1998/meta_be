@@ -1,13 +1,12 @@
 from datetime import timezone
-from typing import Union, Any
+from typing import Any
 from datetime import datetime, timedelta
 from typing import Union
-
 import fastapi.exceptions
 from sqlalchemy.orm import Session
-from fastapi import Depends, FastAPI, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
+from fastapi import Depends, HTTPException
+from fastapi.security import OAuth2PasswordBearer
+from jose import jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 from app import get_db, models
