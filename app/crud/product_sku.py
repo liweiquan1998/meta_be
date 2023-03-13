@@ -1,13 +1,12 @@
 # @author: wanjinhong
 # @remarks: sku模块数据库设计为product+sku,目前逻辑为product和sku,所以先临时针对当前业务设计接口
 import time
-from typing import List,Union
+from typing import Union
 from app import models, schemas
 from sqlalchemy.orm import Session
-from app.crud.basic import update_to_db
-from app.crud.sku import *
-from app.crud.product import *
-from utils.sx_time import *
+from app.crud.sku import delete_sku, get_sku_once
+from app.crud.product import delete_product
+from utils.sx_time import t2date
 
 
 def split_params(item: schemas.ProductSkuBase):

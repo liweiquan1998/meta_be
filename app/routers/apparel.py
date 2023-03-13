@@ -1,12 +1,9 @@
 from fastapi import APIRouter, Depends
-from fastapi_pagination import paginate, Params
+from fastapi_pagination import paginate
 from sqlalchemy.orm import Session
-
 from app.common.validation import check_user
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
-import time
-
 
 router_apparel = APIRouter(
     prefix="/apparels",
@@ -18,7 +15,7 @@ router_apparel = APIRouter(
 @web_try()
 @sxtimeit
 def get_apparel(params: schemas.ApparelParams = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_apparels(db,params), params)
+    return paginate(crud.get_apparels(db, params), params)
 
 
 @router_apparel.get("/{item_id}")
@@ -41,4 +38,3 @@ def update_apparel(item_id: int, update_item: schemas.ApparelUpdate, db: Session
 @sxtimeit
 def delete_apparel(item_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_apparel(db=db, item_id=item_id)
-

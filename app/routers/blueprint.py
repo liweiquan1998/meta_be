@@ -3,7 +3,8 @@ from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
 from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
+from sqlalchemy.orm import Session
+from app.common.validation import check_user
 
 router_blueprint = APIRouter(
     prefix="/blueprints",

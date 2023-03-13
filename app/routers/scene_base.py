@@ -1,14 +1,12 @@
-from fastapi_pagination import paginate, Params
+from fastapi_pagination import Params
 from sqlalchemy.orm import Session
-
 from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
 
 from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
-from app.common.validation import *
+
 
 router_scene_base = APIRouter(
     prefix="/scene_bases",

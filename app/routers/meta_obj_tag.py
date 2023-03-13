@@ -1,14 +1,12 @@
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
 
-from app import schemas, get_db, crud
+from app import get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
 
 from fastapi import Depends
 from fastapi import APIRouter
-from app.common.validation import *
-from app.common.validation import *
 
 router_meta_obj_tag = APIRouter(
     prefix="/meta_obj_tags",

@@ -1,9 +1,6 @@
-import time
-from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
-from app.common.validation import *
 
 
 def create_shelves(db: Session, item: schemas.ShelvesCreate):

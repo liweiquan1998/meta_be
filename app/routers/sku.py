@@ -4,8 +4,7 @@ from sqlalchemy.orm import Session
 from app.crud import product
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
-from app.common.validation import *
-import time
+from app.common.validation import check_user
 
 router_sku = APIRouter(
     prefix="/skus",

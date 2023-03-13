@@ -1,9 +1,8 @@
 import time
-from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
-from app.crud.basic import update_to_db
-from app.common.validation import *
+from app.common.validation import get_password_hash, create_access_token
+
 
 def create_customer(db: Session, item: schemas.CustomerCreate):
     # 重复用户名检查
@@ -24,9 +23,6 @@ def create_customer(db: Session, item: schemas.CustomerCreate):
     db.refresh(db_item)
     return db_item
 
-
-# def update_customer(db: Session, item_id: int, update_item: schemas.CustomerUpdate):
-#     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.Customer)
 
 
 def get_customer_once(db: Session, item_id: int):

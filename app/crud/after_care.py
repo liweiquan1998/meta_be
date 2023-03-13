@@ -1,4 +1,3 @@
-import json
 import time
 from typing import List
 from app import models, schemas
@@ -7,11 +6,11 @@ from app.crud.basic import update_to_db
 from app.crud import order
 
 
-def create_after_care(db: Session,order_id:int, item: schemas.AfterCareCreate):
+def create_after_care(db: Session, order_id: int, item: schemas.AfterCareCreate):
     db_item = models.AfterCare(**item.dict())
     db_item.create_time = time.time()
     db_item.status = 0
-    order_item = order.get_order_once(db,order_id)
+    order_item = order.get_order_once(db, order_id)
     if not order_item:
         raise Exception(407, '创建服务失败，找不到原订单')
     if order_item.after_care_id:
@@ -42,8 +41,8 @@ def get_after_care_once_dict(db: Session, item_id: int) -> dict:
     res_dict = res.to_dict()
     ori_order = order.get_order_once(db, res.order_id)
     if ori_order:
-        res_dict.update({'receiver_phone':ori_order.receiver_phone,
-                         'receiver_name':ori_order.receiver_name})
+        res_dict.update({'receiver_phone': ori_order.receiver_phone,
+                         'receiver_name': ori_order.receiver_name})
     return res_dict
 
 
@@ -52,7 +51,7 @@ def get_after_cares(db: Session):
     return res
 
 
-def get_business_after_cares(db: Session,business_id:int):
+def get_business_after_cares(db: Session, business_id: int):
     res: List[models.AfterCare] = db.query(models.AfterCare).filter(models.AfterCare.business_id == business_id).all()
     return res
 

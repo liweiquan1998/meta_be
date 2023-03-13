@@ -1,12 +1,9 @@
 from fastapi import APIRouter, Depends
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
-
 from app.common.validation import check_user
-from app.crud import product
 from app import schemas, get_db, crud
 from utils import web_try, sxtimeit
-import time
 
 router_product_sku = APIRouter(
     prefix="/product_skus",

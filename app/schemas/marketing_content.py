@@ -12,9 +12,6 @@ class MarketingContentCreate(BaseModel):
     metaobj_id: int
     virtual_human_sex: int
 
-    # creator_id: int
-    # virtual_human_id: int
-    # work_space: str
 
     class Config:
         schema_extra = {

@@ -1,9 +1,8 @@
 import json
 import time
+from typing import List
 from app import models, schemas
 from sqlalchemy.orm import Session
-from app.crud.basic import update_to_db
-from app.crud.product_sku import *
 from utils import t2date, trans_t2date
 
 

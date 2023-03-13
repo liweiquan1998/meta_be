@@ -3,7 +3,6 @@ import random
 import time
 import uuid
 from typing import Tuple
-
 import magic
 from pathlib import Path
 from app.db.minio import FileHandler
