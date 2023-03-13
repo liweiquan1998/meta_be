@@ -14,6 +14,7 @@ dev:
 pro:
 	@docker build -t registry-vpc.cn-hangzhou.aliyuncs.com/sxkj/meta_be:latest --build-arg FLASK_ENV='production' .
 	@docker push registry-vpc.cn-hangzhou.aliyuncs.com/sxkj/metaverse:latest
+
 rsync:
-	@rsync -azP --exclude ".*/"  --exclude "tmp/" --exclude "*/__pycache*"  `pwd` sxkj@192.168.199.110:/home/sxkj/cgl/
+	@rsync -azP --exclude ".*/"  --exclude "tmp/" --exclude "*/__pycache*"  `pwd` sxkj@192.168.199.109:/home/sxkj/zhangli/meta
 

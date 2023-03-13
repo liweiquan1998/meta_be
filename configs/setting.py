@@ -7,6 +7,8 @@ import os
 config = configparser.ConfigParser()
 if os.environ.get('APP_ENV', 'development') == 'development':
     config.readfp(open('development.ini'))
+elif os.environ.get('APP_ENV') == 'sxdev':
+    config.readfp(open('sxdev.ini'))
 elif os.environ.get('APP_ENV') == 'sxtest':
     config.readfp(open('sxtest.ini'))
 elif os.environ.get('APP_ENV') == 'sxprod':
