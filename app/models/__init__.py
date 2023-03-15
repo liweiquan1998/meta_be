@@ -19,3 +19,4 @@ from app.models.background import *
 from app.models.apparel import *
 from app.models.blueprint import *
 from app.models.effects import *
+from app.models.marketing_component import *
