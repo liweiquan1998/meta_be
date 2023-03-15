@@ -36,7 +36,7 @@ class SceneUpdate(BaseModel):
     name: str
     thumbnail: str
     config: str
-    virtual_human_ids: list = []
+    virtual_human_ids: str = '[]'
 
 
 class Scene(BaseModel):
