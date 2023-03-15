@@ -1,7 +1,7 @@
 import psycopg2
 
 conn = psycopg2.connect(
-    host="192.168.199.51",
+    host="192.168.199.50",
     port=5432,
     database="metadb-test",
     user="sxwldba",
