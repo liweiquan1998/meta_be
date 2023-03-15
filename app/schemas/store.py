@@ -13,7 +13,7 @@ class StoreCreate(BaseModel):
     thumbnail: str
     config: str
     creator_id: Union[int] = None
-    sku_ids: Union[str] = None
+    sku_ids: Union[list] = None
 
     class Config:
         schema_extra = {
@@ -23,7 +23,7 @@ class StoreCreate(BaseModel):
                 "thumbnail": "xxxx",
                 "config": "xxxx",
                 "creator_id": faker.pyint(1, 10),
-                "sku_ids": str([faker.pyint(1, 20) for i in range(5)])
+                "sku_ids": [faker.pyint(1, 20) for i in range(5)]
             }}
 
 
