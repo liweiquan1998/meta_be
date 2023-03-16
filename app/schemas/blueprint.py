@@ -39,7 +39,13 @@ class BlueprintUpdate(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "config_uri": ""
+                "config_uri": "",
+                "customer_command": "",
+                "keyword": "",
+                "customer_location": "",
+                "product_uri": "",
+                "virtual_human_word": "",
+                "virtual_human_action": ""
             }}
 
 
