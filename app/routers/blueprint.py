@@ -39,11 +39,11 @@ def update_blueprint(blueprint_id: int, update_item: schemas.BlueprintUpdate, db
     return crud.update_blueprint(db=db, item_id=blueprint_id, update_item=update_item)
 
 
-@router_blueprint.get("/{blueprint_id}", summary="获取蓝图信息")
+@router_blueprint.get("/{store_id}", summary="获取蓝图信息")
 @web_try()
 @sxtimeit
-def get_blueprint_once(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_blueprint_once(db=db, item_id=blueprint_id)
+def get_blueprint_once(store_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_blueprint_once(db=db, item_id=store_id)
 
 
 @router_blueprint.get("/", summary="获取蓝图列表")

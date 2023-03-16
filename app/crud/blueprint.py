@@ -26,7 +26,7 @@ def update_blueprint(db: Session, item_id: int, update_item: schemas.BlueprintUp
 
 
 def get_blueprint_once(db: Session, item_id: int):
-    res: models.BluePrint = db.query(models.BluePrint).filter(models.BluePrint.id == item_id).first()
+    res: models.BluePrint = db.query(models.BluePrint).filter(models.BluePrint.store_id == item_id).first()
     return res
 
 
