@@ -23,7 +23,13 @@ class BlueprintCreate(BaseModel):
             "example": {
                 "store_id": faker.pyint(1, 10),
                 "creator_id": faker.pyint(1, 100),
-                "config_uri": ""
+                "config_uri": "",
+                "customer_command": "",
+                "keyword": "",
+                "customer_location": "",
+                "product_uri": "",
+                "virtual_human_word": "",
+                "virtual_human_action": ""
             }}
 
 
