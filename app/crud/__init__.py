@@ -21,4 +21,3 @@ from app.crud.background import *
 from app.crud.apprael import *
 from app.crud.blueprint import *
 from app.crud.effects import *
-from app.crud.marketing_component import *

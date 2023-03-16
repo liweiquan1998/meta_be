@@ -24,7 +24,6 @@ from app.routers.live_streaming import router_live_streaming
 from app.routers.background import router_backgrounds
 from app.routers.apparel import router_apparel
 from app.routers.blueprint import router_blueprint
-from app.routers.marketing_component import router_marketing_component
 from utils.sx_log import format_print
 from configs.setting import root_path
 
@@ -66,7 +65,7 @@ app.include_router(router_live_streaming)
 app.include_router(router_backgrounds)
 app.include_router(router_apparel)
 app.include_router(router_blueprint)
-app.include_router(router_marketing_component)
+
 
 # Get 健康检查
 @app.get("/ping", description="健康检查")
