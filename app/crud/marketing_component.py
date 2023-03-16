@@ -20,6 +20,7 @@ def get_marketing_component(db: Session, item):
 def update_marketing_component(db: Session, item, item_id):
     db_item = db.query(models.MarketingComponent).filter(models.MarketingComponent.id == item_id).first()
     db_item.content = item.content
+    db_item.update_time = int(time.time())
     db.commit()
     db.flush()
     db.refresh(db_item)
