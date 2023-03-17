@@ -101,12 +101,6 @@ def delete_marketing_content(db: Session, item_id: int):
 
 
 def market_file_content(file, params, db):
-    # file_byte = file.file.read()
-    # file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file.filename).suffix}'
-    # result = Path(time.strftime("%Y%m", time.localtime()))
-    # real_path = result / file_name
-    # path = FMH.put_file(real_path, file_byte)
-    # uri = f'/file/minio/{path}'
     uri_dict = minio.upload(file)
     uri = uri_dict.get('uri')
     file_type = uri.split('.')[-1]
@@ -126,24 +120,3 @@ def market_file_content(file, params, db):
     db.refresh(db_item)
     return db_item
 
-#
-# def market_video_content(file, params, db):
-#     file_byte = file.file.read()
-#     file_name = f'{time.strftime("%d%H%M%S", time.localtime())}{random.randint(1000, 9999)}{Path(file.filename).suffix}'
-#     result = Path(time.strftime("%Y%m", time.localtime()))
-#     real_path = result / file_name
-#     path = FMH.put_file(real_path, file_byte)
-#     uri = f'/file/minio/{path}'
-#     uri_dict = minio.upload(file)
-#     uri = uri_dict.get('uri')
-#     params = eval(params)
-#     item_id = params.get('mc_id')
-#     db_item = db.query(models.MarketingContent).filter(models.MarketingContent.id == item_id).first()
-#     if not db_item:
-#         raise Exception('未找到该任务')
-#     db_item.status = 4
-#     db_item.video_uri = uri
-#     db.commit()
-#     db.flush()
-#     db.refresh(db_item)
-#     return db_item

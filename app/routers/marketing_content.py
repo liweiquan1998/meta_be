@@ -28,12 +28,6 @@ def upload_minio_content(file: UploadFile = File(...), params: str = Form(...), 
     # , user=Depends(check_user)):
     return crud.market_file_content(file=file, params=params, db=db)
 
-# @router_marketing_content.post("/video_minio_content", summary="视频上传minio并更新数据", )
-# @web_try()
-# @sxtimeit
-# def upload_video_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
-#     # , user=Depends(check_user)):
-#     return crud.market_file_content(file=file, params=params, db=db)
 @router_marketing_content.post('/compose_video', summary="合成视频")
 @web_try()
 @sxtimeit
