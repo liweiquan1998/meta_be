@@ -39,7 +39,7 @@ def send_compose_request(video_uri, audio_uri, marketing_content_id):
     data = {
         "video_uri": video_uri,
         "audio_uri": audio_uri,
-        "params": {"marketing_content_id": marketing_content_id},
+        "params": {"mc_id": marketing_content_id},
         "method": "post",
         "host": host,
         "url": "/marketing_contents/market_minio_content"
