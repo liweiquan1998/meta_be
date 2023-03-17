@@ -101,6 +101,7 @@ def market_file_content(file, params, db):
     uri_dict = minio.upload(file)
     uri = uri_dict.get('uri')
     file_type = uri.split('.')[-1]
+    print(params)
     params = eval(params)
     item_id = params.get('mc_id')
     db_item = db.query(models.MarketingContent).filter(models.MarketingContent.id == item_id).first()
