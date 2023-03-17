@@ -11,6 +11,7 @@ def update_to_db(db: Session, item_id: int, update_item, model_cls: Type[BaseMod
     db_item = db.query(model_cls).filter(model_cls.id == item_id).first()
     if not db_item:
         raise Exception('未找到该任务')
+    # 排除可选参数里面未设置的参数
     update_dict = update_item.dict(exclude_unset=True)
     if len(extra) > 1:
         update_dict[extra[0]] = extra[1]
