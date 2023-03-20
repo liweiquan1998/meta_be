@@ -13,9 +13,6 @@ pipeline {
           sh 'docker build  -t SXKJ:32775/meta-app:latest --output type=docker .'
           echo "build success"
         }
-        container('kubectl') {
-          sh 'kubectl version'
-        }
       }
     }
     stage('镜像推送') {
@@ -24,6 +21,13 @@ pipeline {
           echo "Push Docker 镜像阶段"
           sh 'docker push SXKJ:32775/meta-app:latest '
           echo "Push image success"
+        }
+      }
+    }
+    stage('重启服务') {
+      steps {
+        container('kubectl') {
+          sh 'kubectl version'
         }
       }
     }
