@@ -8,8 +8,7 @@ pipeline {
 
   environment {
     IMAGE_REPO = "SXKJ:32775"
-
-
+    env.TAB = "\n   \n  "
   }
   stages {
     stage('git-log') {
