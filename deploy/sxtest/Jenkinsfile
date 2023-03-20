@@ -5,12 +5,25 @@ pipeline {
       retries 2
     }
   }
+
+  environment {
+    IMAGE_REPO = "SXKJ:32775"
+  }
   stages {
+    stage('git-log') {
+      steps {
+        script{
+            sh "git log --oneline -n 1 > gitlog.file"
+            env.GIT_LOG = readFile("gitlog.file").trim()
+        }
+        sh 'printenv'
+       }
+    }
     stage('构建镜像') {
       steps {
         container('docker') {
           echo "构建 Docker 镜像阶段"
-          sh 'docker build  -t SXKJ:32775/meta-app:latest --output type=docker .'
+          sh 'docker build  -t ${IMAGE_REPO}/meta-app:latest --output type=docker .'
           echo "build success"
         }
       }
@@ -19,7 +32,7 @@ pipeline {
       steps {
         container('docker') {
           echo "Push Docker 镜像阶段"
-          sh 'docker push SXKJ:32775/meta-app:latest '
+          sh 'docker push ${IMAGE_REPO}/meta-app:latest '
           echo "Push image success"
         }
       }
