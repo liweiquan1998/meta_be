@@ -40,7 +40,7 @@ pipeline {
           echo "Push image success"
         }
         script {
-          env.BUILD_TASKS = env.STAGE_NAME + "✅" + env.TAB
+          env.BUILD_TASKS += env.STAGE_NAME + "✅" + env.TAB
         }
       }
     }
@@ -50,10 +50,43 @@ pipeline {
           sh 'kubectl version'
         }
         script {
-          env.BUILD_TASKS = env.STAGE_NAME + "✅" + env.TAB
+          env.BUILD_TASKS += env.STAGE_NAME + "✅" + env.TAB
         }
         sh 'printenv'
       }
+    }
+  }
+  post {
+    success {
+        echo 'Congratulations!'
+        sh """
+            curl 'https://oapi.dingtalk.com/robot/send?access_token=19195ef5d3ce080a6966db554d03a348b56cd7c42707deebee51a353fdb2cc7d' \
+                -H 'Content-Type: application/json' \
+                -d '{
+                    "msgtype": "markdown",
+                    "markdown": {
+                        "title":"metabe-sxtest",
+                        "text": "😄👍 构建成功 👍😄  \n**项目名称**：jairmir  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${BRANCH_NAME}   \n**构建地址**：${RUN_DISPLAY_URL}  \n**构建任务**：${BUILD_TASKS}"
+                    }
+                }'
+        """
+    }
+    failure {
+        echo 'Oh no!'
+        sh """
+            curl 'https://oapi.dingtalk.com/robot/send?access_token=19195ef5d3ce080a6966db554d03a348b56cd7c42707deebee51a353fdb2cc7d' \
+                -H 'Content-Type: application/json' \
+                -d '{
+                    "msgtype": "markdown",
+                    "markdown": {
+                        "title":"metabe-sxtest",
+                        "text": "😖❌ 构建失败 ❌😖  \n**项目名称**：jairmir  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${BRANCH_NAME}  \n**构建地址**：${RUN_DISPLAY_URL}  \n**构建任务**：${BUILD_TASKS}"
+                    }
+                }'
+        """
+    }
+    always {
+        echo 'I will always say Hello again!'
     }
   }
 }
