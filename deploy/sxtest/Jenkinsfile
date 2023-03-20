@@ -7,7 +7,9 @@ pipeline {
   }
   stages {
     stage('拉取仓库') {
-      git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
+      steps {
+        git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
+      }
     }
     stage('构建镜像') {
       steps {
