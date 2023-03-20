@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    meta-be: meta-be
+spec:
+  containers:
+  - name: docker
+    image: docker:latest
+    command:
+    - cat
+    tty: true
+    volumeMounts:
+    - mountPath: "/etc/docker/daemon.json"
+      name: "volume-docker1"
+    - mountPath: "/var/run/docker.sock"
+      name: "volume-docker0"
+  - name: kubectl
+    image: cnych/kubectl
+    command:
+    - cat
+    tty: true
+  volumes:
+   - name: volume-docker0
+     hostPath:
+       path: "/var/run/docker.sock"
+   - name: volume-docker1
+     hostPath:
+       path: "/etc/docker/daemon.json"
+  nodeSelector:
+    kubernetes.io/hostname: h249
+  hostAliases:
+  - ip: 192.168.199.31
+    hostnames:
+    - "SXKJ"
