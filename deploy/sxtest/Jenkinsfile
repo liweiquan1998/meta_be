@@ -8,6 +8,8 @@ pipeline {
 
   environment {
     IMAGE_REPO = "SXKJ:32775"
+
+
   }
   stages {
     stage('git-log') {
@@ -26,6 +28,9 @@ pipeline {
           sh 'docker build  -t ${IMAGE_REPO}/meta-app:latest --output type=docker .'
           echo "build success"
         }
+        script {
+          env.BUILD_TASKS = env.STAGE_NAME + "✅" + env.TAB
+        }
       }
     }
     stage('镜像推送') {
@@ -35,6 +40,9 @@ pipeline {
           sh 'docker push ${IMAGE_REPO}/meta-app:latest '
           echo "Push image success"
         }
+        script {
+          env.BUILD_TASKS = env.STAGE_NAME + "✅" + env.TAB
+        }
       }
     }
     stage('重启服务') {
@@ -42,6 +50,10 @@ pipeline {
         container('kubectl') {
           sh 'kubectl version'
         }
+        script {
+          env.BUILD_TASKS = env.STAGE_NAME + "✅" + env.TAB
+        }
+        sh 'printenv'
       }
     }
   }
