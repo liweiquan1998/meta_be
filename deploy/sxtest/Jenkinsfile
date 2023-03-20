@@ -1,183 +1,56 @@
-def label = "slave-${UUID.randomUUID().toString()}"
-
-
-podTemplate(cloud: 'kubernetes', namespace:'devops',label: label, serviceAccount: 'jenkins',containers: [
-  containerTemplate(name: 'docker', image: 'docker:latest', command: 'cat', ttyEnabled: true),
-  containerTemplate(name: 'kubectl', image: 'cnych/kubectl', command: 'cat', ttyEnabled: true)
-],volumes: [
-  hostPathVolume(mountPath: '/home/jenkins/.kube', hostPath: '/root/.kube'),
-  hostPathVolume(mountPath: '/var/run/docker.sock', hostPath: '/var/run/docker.sock'),
-  hostPathVolume(mountPath: '/etc/docker/daemon.json', hostPath: '/etc/docker/daemon.json')
-], yaml: """
-spec:
-  nodeSelector:
-    kubernetes.io/hostname: h249
-  hostalias:
-  - ip: 192.168.199.31
-    hostnames:
-    - "SXKJ"
-"""
-) {
-
-    node(label) {
-        stage('构建 Docker 镜像') {
-          git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
-          container('docker') {
-            echo "构建 Docker 镜像阶段"
-            retry(2) { sh "docker build  -t SXKJ:32775/meta-app:latest --output type=docker ." }
-            echo "build success"
-          }
-        }
-        stage('Docker Push 镜像') {
-            container('docker') {
-              retry(2) { sh "docker push SXKJ:32775/meta-app:latest" }
-              echo "Push success"
-            }
-        }
-        stage('运行 Kubectl') {
-          container('kubectl') {
-            echo "重启 pod"
-            sh "kubectl rollout restart deployments/app-be  -n meta-demo"
-          }
-        }
+pipeline {
+  agent {
+    kubernetes {
+      yaml '''
+        apiVersion: v1
+        kind: Pod
+        metadata:
+          labels:
+            meta-be: meta-be
+        spec:
+          containers:
+          - name: docker
+            image: docker:latest
+            command:
+            - cat
+            tty: true
+            volumeMounts:
+            - mountPath: "/etc/docker/daemon.json"
+              name: "volume-docker1"
+            - mountPath: "/var/run/docker.sock"
+              name: "volume-docker0"
+          - name: kubectl
+            image: cnych/kubectl
+            command:
+            - cat
+            tty: true
+          volumes:
+           - name: volume-docker0
+             hostPath:
+               path: "/var/run/docker.sock"
+           - name: volume-docker1
+             hostPath:
+               path: "/etc/docker/daemon.json"
+          nodeSelector:
+            kubernetes.io/hostname: h249
+          hostalias:
+          - ip: 192.168.199.31
+            hostnames:
+            - "SXKJ"
+        '''
+      retries 2
     }
+  }
+  stages {
+    stage('Run docker') {
+      steps {
+        container('docker') {
+          sh 'docker --version'
+        }
+        container('kubectl') {
+          sh 'kubectl version'
+        }
+      }
+    }
+  }
 }
-
-
-//
-// pipeline {
-//     agent { label 'jnlp-slave'}
-//
-//     options {
-//         buildDiscarder(logRotator(numToKeepStr: '10'))
-//         disableConcurrentBuilds()
-//         timeout(time: 20, unit: 'MINUTES')
-//         gitLabConnection('gitlab')
-//     }
-//
-//     environment {
-//         IMAGE_REPO = "112.29.146.236:5000/demo/myblog"
-//         DINGTALK_CREDS = credentials('dingTalk')
-//         TAB_STR = "\n                    \n                    "
-//     }
-//
-//     stages {
-//         stage('git-log') {
-//             steps {
-//                 script{
-//                     sh "git log --oneline -n 1 > gitlog.file"
-//                     env.GIT_LOG = readFile("gitlog.file").trim()
-//                 }
-//                 sh 'printenv'
-//             }
-//         }
-//         stage('checkout') {
-//             steps {
-//                 container('tools') {
-//                     checkout scm
-//                 }
-//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
-//                 script{
-//                     env.BUILD_TASKS = env.STAGE_NAME + "√..." + env.TAB_STR
-//                 }
-//             }
-//         }
-//         stage('CI'){
-//             failFast true
-//             parallel {
-//                 stage('Unit Test') {
-//                     steps {
-//                         echo "Unit Test Stage Skip..."
-//                     }
-//                 }
-//                 stage('Code Scan') {
-//                     steps {
-//                         container('tools') {
-//                             withSonarQubeEnv('sonarqube') {
-//                                 sh 'sonar-scanner -X'
-//                                 sleep 3
-//                             }
-//                             script {
-//                                 timeout(1) {
-//                                     def qg = waitForQualityGate('sonarqube')
-//                                     if (qg.status != 'OK') {
-//                                         error "未通过Sonarqube的代码质量阈检查，请及时修改！failure: ${qg.status}"
-//                                     }
-//                                 }
-//                             }
-//                         }
-//                     }
-//                 }
-//             }
-//         }
-//         stage('build-image') {
-//             steps {
-//                 container('tools') {
-//                     retry(2) { sh 'docker build . -t ${IMAGE_REPO}:${GIT_COMMIT}'}
-//                 }
-//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
-//                 script{
-//                     env.BUILD_TASKS += env.STAGE_NAME + "√..." + env.TAB_STR
-//                 }
-//             }
-//         }
-//         stage('push-image') {
-//             steps {
-//                 container('tools') {
-//                     retry(2) { sh 'docker push ${IMAGE_REPO}:${GIT_COMMIT}'}
-//                 }
-//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
-//                 script{
-//                     env.BUILD_TASKS += env.STAGE_NAME + "√..." + env.TAB_STR
-//                 }
-//             }
-//         }
-//         stage('deploy') {
-//             steps {
-//                 container('tools') {
-//                     sh "sed -i 's#{{IMAGE_URL}}#${IMAGE_REPO}:${GIT_COMMIT}#g' deploy/*"
-//                     timeout(time: 1, unit: 'MINUTES') {
-//                         sh "kubectl apply -f deploy/"
-//                     }
-//                 }
-//                 updateGitlabCommitStatus(name: env.STAGE_NAME, state: 'success')
-//                 script{
-//                     env.BUILD_TASKS += env.STAGE_NAME + "√..." + env.TAB_STR
-//                 }
-//             }
-//         }
-//     }
-//     post {
-//         success {
-//             echo 'Congratulations!'
-//             sh """
-//                 curl 'https://oapi.dingtalk.com/robot/send?access_token=${DINGTALK_CREDS_PSW}' \
-//                     -H 'Content-Type: application/json' \
-//                     -d '{
-//                         "msgtype": "markdown",
-//                         "markdown": {
-//                             "title":"myblog",
-//                             "text": "😄👍 构建成功 👍😄  \n**项目名称**：jairmir  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${BRANCH_NAME}   \n**构建地址**：${RUN_DISPLAY_URL}  \n**构建任务**：${BUILD_TASKS}"
-//                         }
-//                     }'
-//             """
-//         }
-//         failure {
-//             echo 'Oh no!'
-//             sh """
-//                 curl 'https://oapi.dingtalk.com/robot/send?access_token=${DINGTALK_CREDS_PSW}' \
-//                     -H 'Content-Type: application/json' \
-//                     -d '{
-//                         "msgtype": "markdown",
-//                         "markdown": {
-//                             "title":"myblog",
-//                             "text": "😖❌ 构建失败 ❌😖  \n**项目名称**：jairmir  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${BRANCH_NAME}  \n**构建地址**：${RUN_DISPLAY_URL}  \n**构建任务**：${BUILD_TASKS}"
-//                         }
-//                     }'
-//             """
-//         }
-//         always {
-//             echo 'I will always say Hello again!'
-//         }
-//     }
-// }
