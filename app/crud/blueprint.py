@@ -13,7 +13,8 @@ def create_blueprint(db: Session, item: schemas.BlueprintCreate):
     if db.query(models.Store).filter(models.Store.id == item.store_id).first() is None:
         raise Exception(f"店铺 {item.store_id} 不存在")
     # 创建
-    db_item = models.BluePrint(**item.dict(), **{"create_time": int(time.time())})
+    db_item = models.BluePrint(**item.dict(), **{"create_time": int(time.time())
+                                                 })
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

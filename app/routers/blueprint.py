@@ -34,21 +34,20 @@ def delete_blueprint(blueprint_id: int, db: Session = Depends(get_db), user=Depe
 @router_blueprint.put("/{blueprint_id}", summary="更新蓝图信息")
 @web_try()
 @sxtimeit
-def update_blueprint(blueprint_id: int, update_item: schemas.BlueprintUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+def update_blueprint(blueprint_id: int, update_item: schemas.BlueprintUpdate, db: Session = Depends(get_db),
+                     user=Depends(check_user)):
     return crud.update_blueprint(db=db, item_id=blueprint_id, update_item=update_item)
 
 
 @router_blueprint.get("/{blueprint_id}", summary="获取蓝图信息")
 @web_try()
 @sxtimeit
-def get_blueprint_once(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user) ):
+def get_blueprint_once(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_blueprint_once(db=db, item_id=blueprint_id)
 
 
 @router_blueprint.get("/", summary="获取蓝图列表")
 @web_try()
 @sxtimeit
-def get_blueprints( params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user) ):
+def get_blueprints(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_blueprints(db), params)
-
-

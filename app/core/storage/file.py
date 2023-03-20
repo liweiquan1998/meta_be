@@ -26,7 +26,11 @@ class NfsStorage(FileStorage):
     def upload(self, file) -> dict:
         file_byte = file.file.read()
         file_name = self.get_name(file.filename)
-        result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+        end_type = file_name.split('.')[-1]
+        if end_type == 'pak':
+            result = Path('Pak') / f'{time.strftime("%Y%m", time.localtime())}'
+        else:
+            result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
         sys_path = nfs_prefix / result
         sys_path.mkdir(parents=True, exist_ok=True)
         real_path = sys_path / file_name
