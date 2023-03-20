@@ -6,11 +6,6 @@ pipeline {
     }
   }
   stages {
-//     stage('拉取仓库') {
-//       steps {
-//         git url: ' http://gogs.soaringnova.com/sxwl_DL/meta_be.git', branch: 'master'
-//       }
-//     }
     stage('构建镜像') {
       steps {
         container('docker') {
@@ -20,6 +15,15 @@ pipeline {
         }
         container('kubectl') {
           sh 'kubectl version'
+        }
+      }
+    }
+    stage('镜像推送') {
+      steps {
+        container('docker') {
+          echo "Push Docker 镜像阶段"
+          sh 'docker push SXKJ:32775/meta-app:latest '
+          echo "Push image success"
         }
       }
     }
