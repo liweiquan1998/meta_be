@@ -9,6 +9,7 @@ pipeline {
   environment {
     IMAGE_REPO = "SXKJ:32775"
     TAB = "\n   \n  "
+    BUILD_TASKS = "\n"
   }
   stages {
     stage('git-log') {
@@ -24,7 +25,7 @@ pipeline {
       steps {
         container('docker') {
           echo "构建 Docker 镜像阶段"
-          sh 'docker build  -t ${IMAGE_REPO}/meta-app:latest --output type=docker .'
+          sh 'docker build  -t ${IMAGE_REPO}/meta-app:latest .'
           echo "build success"
         }
         script {
@@ -66,7 +67,7 @@ pipeline {
                     "msgtype": "markdown",
                     "markdown": {
                         "title":"metabe-sxtest",
-                        "text": "😄👍 构建成功 👍😄  \n**项目名称**：metabe  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${GIT_BRANCH}   \n**构建地址**：${BUILD_URL}  \n**构建任务**：${BUILD_TASKS}"
+                        "text": "😄👍 构建成功 👍😄  \n**项目名称**：metabe  \n**Git log**: ${GIT_LOG}  \n**构建分支**: ${GIT_BRANCH}   \n**构建地址**：${BUILD_URL}  \n**构建任务**：${BUILD_TASKS}"
                     }
                 }'
         """
