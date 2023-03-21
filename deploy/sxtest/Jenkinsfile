@@ -9,7 +9,6 @@ pipeline {
   environment {
     IMAGE_REPO = "SXKJ:32775"
     TAB = "\n   \n  "
-    BUILD_TASKS = "\n"
   }
   stages {
     stage('git-log') {
@@ -17,6 +16,7 @@ pipeline {
         script{
             sh "git log --oneline -n 1 > gitlog.file"
             env.GIT_LOG = readFile("gitlog.file").trim()
+            env.BUILD_TASKS = "\n"
         }
         sh 'printenv'
        }
