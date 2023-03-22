@@ -28,7 +28,7 @@ class NfsStorage(FileStorage):
         file_name = self.get_name(file.filename)
         end_type = file_name.split('.')[-1]
         if end_type == 'pak':
-            result = Path('Pak') / f'{time.strftime("%Y%m", time.localtime())}'
+            result = Path('Pak')
         else:
             result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
         sys_path = nfs_prefix / result
