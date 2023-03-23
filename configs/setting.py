@@ -13,8 +13,8 @@ elif os.environ.get('APP_ENV') == 'sxtest':
     config.readfp(open('sxtest.ini'))
 elif os.environ.get('APP_ENV') == 'sxprod':
     config.readfp(open('sxprod.ini'))
-elif os.environ.get('APP_ENV') == 'cmtest':
-    config.readfp(open('cmtest.ini'))
+elif os.environ.get('APP_ENV') == 'ydtest':
+    config.readfp(open('ydtest.ini'))
 
 
 root_path = config.get('app', 'prefix') if config.get('app', 'enabled') in ['true', 'True', True] else '/'
