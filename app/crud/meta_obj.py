@@ -85,7 +85,6 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
         return _db_item
 
     # 重复名称检查
-    item.name = is_valid_name(item.name, 10)
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.name == item.name,
                                                           models.MetaObj.creator_id == creator_id).first()
     if res:
