@@ -32,7 +32,6 @@ def upload_minio_file(file: UploadFile = File(...)):
 @router_file.get("/{uri:path}", summary="获取文件")
 @sxtimeit
 def get_nfs_file(uri):
-    print(uri)
     return crud.get_file(uri)
 
 
