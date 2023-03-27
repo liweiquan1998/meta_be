@@ -45,6 +45,7 @@ class NfsStorage(FileStorage):
 
     def get_content(self, path) -> Tuple[io.BytesIO, str]:
         # 兼容老地址
+        print(path)
         path = path.split("metaverse_assets/")[-1]
         file_path = Path(nfs_prefix) / Path(path)
         with file_path.open('rb') as f:
