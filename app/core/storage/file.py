@@ -1,4 +1,5 @@
 import io
+import os.path
 import random
 import time
 import uuid
@@ -43,18 +44,18 @@ class NfsStorage(FileStorage):
         except Exception as e:
             raise Exception(400, f"上传文件失败{e}")
 
-    def get_content(self, path) -> Tuple[io.BytesIO, str]:
+    def get_content(self, path):
         # 兼容老地址
         print(path)
         path = path.split("metaverse_assets/")[-1]
         file_path = Path(nfs_prefix) / Path(path)
-        try:
+        if os.path.exists(file_path):
             with file_path.open('rb') as f:
                 file_byte = f.read()
             content_type = magic.from_buffer(file_byte, mime=True)
             return io.BytesIO(file_byte), content_type
-        except Exception:
-            raise Exception(400, f"文件 {path} 不存在")
+        else:
+            return {'code': 400, 'msg': '文件不存在'}
 
 
 class MinioStorage(FileStorage):
