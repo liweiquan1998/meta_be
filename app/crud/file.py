@@ -34,7 +34,7 @@ def get_nfs_file(path: str):
         io_content, content_type = nfs.get_content(path)
         return StreamingResponse(io_content, media_type=content_type)
     else:
-        raise Exception(400, "文件不存在")
+        return {'code': 400, 'msg': '图片不存在'}
 
 
 def get_minio_file(path: str):
