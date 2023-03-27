@@ -43,18 +43,14 @@ class NfsStorage(FileStorage):
         except Exception as e:
             raise Exception(400, f"上传文件失败{e}")
 
-    def get_content(self, path) -> Tuple[io.BytesIO, str]:
-        # 兼容老地址
-        path = path.split("metaverse_assets/")[-1]
-        file_path = Path(nfs_prefix) / Path(path)
-        print(file_path)
+    def get_content(self, file_path) -> Tuple[io.BytesIO, str]:
         with file_path.open('rb') as f:
             file_byte = f.read()
         content_type = magic.from_buffer(file_byte, mime=True)
         if file_byte:
             return io.BytesIO(file_byte), content_type
         else:
-            raise Exception(404, f"文件 {path} 不存在")
+            raise Exception(404, f"文件 {file_path} 不存在")
 
 
 class MinioStorage(FileStorage):

@@ -31,7 +31,7 @@ def get_nfs_file(path: str):
     path = path.split("metaverse_assets/")[-1]
     file_path = Path(nfs_prefix) / Path(path)
     if os.path.exists(file_path):
-        io_content, content_type = nfs.get_content(path)
+        io_content, content_type = nfs.get_content(file_path)
         return StreamingResponse(io_content, media_type=content_type)
     else:
         return {'code': 400, 'msg': '图片不存在'}
