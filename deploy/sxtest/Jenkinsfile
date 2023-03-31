@@ -25,7 +25,7 @@ pipeline {
       steps {
         container('docker') {
           echo "构建 Docker 镜像阶段"
-          sh 'docker build  -t ${IMAGE_REPO}/meta-app:latest .'
+          sh 'docker build  -t ${IMAGE_REPO}/meta-app:${ENV_APP} .'
           echo "build success"
         }
         script {
@@ -37,7 +37,7 @@ pipeline {
       steps {
         container('docker') {
           echo "Push Docker 镜像阶段"
-          sh 'docker push ${IMAGE_REPO}/meta-app:latest '
+          sh 'docker push ${IMAGE_REPO}/meta-app:${ENV_APP} '
           echo "Push image success"
         }
         script {
