@@ -1,7 +1,7 @@
 pipeline {
   agent {
     kubernetes {
-      yamlFile 'deploy/sxtest/KubernetesPod.yaml'
+      yamlFile 'deploy/KubernetesPod.yaml'
       retries 2
     }
   }
@@ -67,7 +67,7 @@ pipeline {
                     "msgtype": "markdown",
                     "markdown": {
                         "title":"metabe-sxtest",
-                        "text": "😄👍 构建成功 👍😄  \n**项目名称**：metabe  \n**Git log**: ${GIT_LOG}  \n**构建分支**: ${GIT_BRANCH}   \n**构建地址**：${BUILD_URL}  \n**构建任务**：${BUILD_TASKS}"
+                        "text": "😄👍 构建成功 👍😄  \n**项目名称**：metabe  \n**Git log**: ${GIT_LOG}  \n**构建分支**: ${GIT_BRANCH}   \n**构建地址**：${BUILD_URL}  \n**构建任务**: ${BUILD_TASKS}"
                     }
                 }'
         """
@@ -81,7 +81,7 @@ pipeline {
                     "msgtype": "markdown",
                     "markdown": {
                         "title":"metabe-sxtest",
-                        "text": "😖❌ 构建失败 ❌😖  \n**项目名称**：metabe  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${GIT_BRANCH}  \n**构建地址**：${BUILD_URL}  \n**构建任务**：${BUILD_TASKS}"
+                        "text": "😖❌ 构建失败 ❌😖  \n**项目名称**：metabe  \n**Git log**: ${GIT_LOG}   \n**构建分支**: ${GIT_BRANCH}  \n**构建地址**：${BUILD_URL}  \n**构建任务**: ${BUILD_TASKS}"
                     }
                 }'
         """
