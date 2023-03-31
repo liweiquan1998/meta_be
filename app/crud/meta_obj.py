@@ -201,7 +201,7 @@ def upload_update_meta(file, params: str, db: Session):
     file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
     file_type = file_name.split('.')[-1]
     if file_type == 'gif':
-        result = Path('SceneAssets')
+        result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
         sys_path = '/mnt/nfs/' / result
         sys_path.mkdir(parents=True, exist_ok=True)
         real_path = sys_path / file_name
