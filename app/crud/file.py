@@ -1,6 +1,11 @@
+import os.path
+
 from fastapi.responses import StreamingResponse
 from app.core.storage.file import NfsStorage, MinioStorage
+from pathlib import Path
+from configs.setting import config
 
+nfs_prefix = config.get("nfs", "sys_prefix")
 nfs = NfsStorage()
 minio = MinioStorage()
 
@@ -23,8 +28,13 @@ def get_file(path: str):
 
 
 def get_nfs_file(path: str):
-    io_content, content_type = nfs.get_content(path)
-    return StreamingResponse(io_content, media_type=content_type)
+    path = path.split("metaverse_assets/")[-1]
+    file_path = Path(nfs_prefix) / Path(path)
+    if os.path.exists(file_path):
+        io_content, content_type = nfs.get_content(file_path)
+        return StreamingResponse(io_content, media_type=content_type)
+    else:
+        return {'code': 400, 'msg': '图片不存在'}
 
 
 def get_minio_file(path: str):
