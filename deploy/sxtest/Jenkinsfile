@@ -25,7 +25,7 @@ pipeline {
       steps {
         container('docker') {
           echo "构建 Docker 镜像阶段"
-          sh 'docker build  -t ${IMAGE_REPO}/meta-app:${ENV_APP} .'
+          sh 'docker build  -t ${IMAGE_REPO}/meta-app:${ENV_APP} -type docker .'
           echo "build success"
         }
         script {
