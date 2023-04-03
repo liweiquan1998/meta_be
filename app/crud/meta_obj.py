@@ -199,25 +199,50 @@ def delete_meta_obj(db: Session, item_id: int):
 def upload_update_meta(file, params: str, db: Session):
     file_byte = file.file.read()
     file_name = f'{uuid.uuid1()}{Path(file.filename).suffix}'
-    result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
-    sys_path = '/mnt/nfs/' / result
-    sys_path.mkdir(parents=True, exist_ok=True)
-    real_path = sys_path / file_name
-    try:
-        with real_path.open('wb') as f:
-            f.write(file_byte)
-        real_path.chmod(0o777)
-        uri = f'/file/nfs/{str(result / file_name)}'
-    except Exception as e:
-        raise Exception(400, f"上传失败{e}")
-    params = eval(params)
-    item_id = params.get("mo_id")
-    db_item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
-    if not db_item:
-        raise Exception('未找到该任务')
-    db_item.status = 1
-    db_item.thumbnail = uri
-    db.commit()
-    db.flush()
-    db.refresh(db_item)
-    return db_item
+    file_type = file_name.split('.')[-1]
+    if file_type == 'gif':
+        result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+        sys_path = '/mnt/nfs/' / result
+        sys_path.mkdir(parents=True, exist_ok=True)
+        real_path = sys_path / file_name
+        try:
+            with real_path.open('wb') as f:
+                f.write(file_byte)
+            real_path.chmod(0o777)
+            uri = f'/file/nfs/{str(result / file_name)}'
+        except Exception as e:
+            raise Exception(400, f"上传失败{e}")
+        params = eval(params)
+        item_id = params.get("mo_id")
+        db_item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
+        if not db_item:
+            raise Exception('未找到该任务')
+        db_item.status = 1
+        db_item.thumbnail = uri
+        db.commit()
+        db.flush()
+        db.refresh(db_item)
+        return db_item
+    else:
+        result = Path('MediaAssets')
+        sys_path = '/mnt/nfs/' / result
+        sys_path.mkdir(parents=True, exist_ok=True)
+        real_path = sys_path / file_name
+        try:
+            with real_path.open('wb') as f:
+                f.write(file_byte)
+            real_path.chmod(0o777)
+            uri = f'/file/nfs/{str(result / file_name)}'
+        except Exception as e:
+            raise Exception(400, f"上传失败{e}")
+        params = eval(params)
+        item_id = params.get("mo_id")
+        db_item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
+        if not db_item:
+            raise Exception('未找到该任务')
+        db_item.status = 1
+        db_item.media = uri
+        db.commit()
+        db.flush()
+        db.refresh(db_item)
+        return db_item

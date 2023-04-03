@@ -15,6 +15,7 @@ class MetaObj(BaseModel):
 
     model = Column(String(255), comment='模型文件地址')
     thumbnail = Column(String(255), comment='缩略图地址')
+    media = Column(String(255), comment='视频地址')
     tag = Column(String(255), comment='物品种类')  # todo  字段名改为tags  json格式，存多个tag
 
     create_time = Column(Integer, comment='创建时间')
