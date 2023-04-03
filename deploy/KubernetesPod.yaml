@@ -13,6 +13,8 @@ spec:
     volumeMounts:
     - mountPath: "/etc/docker/daemon.json"
       name: "volume-docker1"
+    - mountPath: "/root/.docker/config.json"
+      name: "docker-auth"
     - mountPath: "/var/run/docker.sock"
       name: "volume-docker0"
   - name: kubectl
@@ -24,6 +26,9 @@ spec:
    - name: volume-docker0
      hostPath:
        path: "/var/run/docker.sock"
+   - name: docker-auth
+     hostPath:
+       path: "/root/.docker/config.json"
    - name: volume-docker1
      hostPath:
        path: "/etc/docker/daemon.json"
