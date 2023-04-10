@@ -19,7 +19,7 @@ class MarketingContentCreate(BaseModel):
                 "name": "内容营销测试",
                 "content": faker.text(),
                 "metaobj_id": 1,
-                "virtual_human_sex": faker.pyint(1, 2)}}
+                "virtual_human_sex": faker.pyint(0, 1)}}
 
 
 class ComposeVideo(BaseModel):

@@ -32,8 +32,8 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, 
     if db.query(models.User).filter(models.User.id == creator_id).first() is None:
         raise Exception(f"创建者 {creator_id} 不存在")
     # 删除virtual_human_sex
-    vh_sex = item.virtual_human_sex
-    del item.virtual_human_sex
+    vh_sex = 0 if item.virtual_human_sex < 1 else 1
+    item.virtual_human_sex = vh_sex
     # 创建 添加create_id
     db_item = models.MarketingContent(**item.dict(), **{'create_time': int(time.time()),
                                                         'creator_id': creator_id,

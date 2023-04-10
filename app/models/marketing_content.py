@@ -12,6 +12,7 @@ class MarketingContent(BaseModel):
     metaobj_id = Column(Integer, comment='关联的metaobj_id')
     creator_id = Column(Integer, comment='创建者id')
     virtual_human_id = Column(Integer, comment='关联的虚拟人id')
+    virtual_human_sex = Column(Integer, comment='虚拟人性别0:女，1:男')
     create_time = Column(Integer, comment='创建时间')
     status = Column(Integer, comment='状态 1、2:音频生成中、已生成  3、4:视频生成中、已生成')  # todo: 状态意义
     audio_uri = Column(String(50), comment='音频地址')
