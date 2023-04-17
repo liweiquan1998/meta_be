@@ -29,7 +29,7 @@ def create_marketing_content(db: Session, item: schemas.MarketingContentCreate, 
     if db.query(models.MetaObj).filter(models.MetaObj.id == item.metaobj_id).first() is None:
         raise Exception(f"meta_obj {item.metaobj_id} 不存在")
     if not db.query(models.MarketingContent).filter(models.MarketingContent.name == item.name).first() is None:
-        raise Exception(f"{item.name} 名称重复")
+        raise Exception(f"内容标题 {item.name} 重复")
     # 创建者 存在检查
     if db.query(models.User).filter(models.User.id == creator_id).first() is None:
         raise Exception(f"创建者 {creator_id} 不存在")
