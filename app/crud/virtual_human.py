@@ -47,7 +47,7 @@ def get_virtual_humans(db: Session, item: schemas.VirtualHumanGet, user):
         db_query = db_query.filter(models.VirtualHuman.name.like(f"%{item.name}%"))
     if item.sex is not None:
         db_query = db_query.filter(models.VirtualHuman.sex == item.sex)
-    return db_query.order_by(models.VirtualHuman.id).all()
+    return db_query.order_by(models.VirtualHuman.create_time.desc()).all()
 
 
 def delete_virtual_human(db: Session, item_id: int, user: models.User):
