@@ -22,6 +22,10 @@ def split_params(item: schemas.ProductSkuBase):
 
 def create_product_sku(db: Session, item: schemas.ProductSkuCreate,business_id:int):
     product_param, sku_param = split_params(item)
+    sku_name = sku_param['sku_name']
+    res = db.query(models.Sku).filter(models.Sku.sku_name == sku_name).first()
+    if res:
+        raise Exception(f'商品名称 {sku_name} 重复')
     db_product_item = models.Product(**product_param)
     db_product_item.create_time = time.time()
     db_product_item.business_id = business_id
