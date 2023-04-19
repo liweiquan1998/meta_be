@@ -38,7 +38,8 @@ def get_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
     if user.id:
         db_query = db_query.filter(models.LiveAccount.creator_id == user.id)
     if name:
-        db_query = db_query.filter(models.LiveAccount.name.like(name))
+        search = "%{}%".format(name)
+        db_query = db_query.filter(models.LiveAccount.name.like(search))
     return db_query.order_by(models.LiveAccount.id).all()
 
 
