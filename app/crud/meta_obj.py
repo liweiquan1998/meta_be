@@ -157,7 +157,7 @@ def get_meta_obj_by_creator_id(db: Session, creator_id: int):
 
 def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     # sourcery skip: inline-immediately-returned-variable
-    db_query = db.query(models.MetaObj)
+    db_query = db.query(models.MetaObj).order_by(models.MetaObj.create_time)
     if item.name and item.name != "":
         db_query = db_query.filter(models.MetaObj.name.like(f"%{item.name}%"))
     if item.kind is not None and item.kind != -1:
