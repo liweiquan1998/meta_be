@@ -88,7 +88,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.name == item.name,
                                                           models.MetaObj.creator_id == creator_id).first()
     if res:
-        raise Exception(f"物品 {item.name} 已存在")
+        raise Exception(f"产品 {item.name} 已存在")
 
     # 商品
     if item.kind == 1:
