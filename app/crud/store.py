@@ -44,7 +44,7 @@ def get_stores(db: Session, item: schemas.StoreGet,user: models.User):
         db_query = db_query.filter(models.Store.creator_id == item.creator_id)
     if item.name:
         db_query = db_query.filter(models.Store.name.like(f"%{item.name}%"))
-    return db_query.all()
+    return db_query.order_by(-models.Store.create_time).all()
 
 def delete_store(db: Session, item_id: int):
     db.query(models.Store).filter(models.Store.id == item_id).delete()
