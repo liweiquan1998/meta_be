@@ -149,9 +149,6 @@ def get_meta_obj_once(db: Session, item_id: int):
         res.aigc = res.aigc.replace('{', '').replace('}', '').split(',')
     return meta_obj_add_username(res, db)
 
-def get_meta_obj_once_for_delete(db: Session, item_id: int):
-    res: models.MetaObj = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
-    return res
 
 def get_meta_obj_by_creator_id(db: Session, creator_id: int):
     meta_objs = db.query(models.MetaObj).filter(models.MetaObj.creator_id == creator_id).all()
@@ -194,11 +191,8 @@ def delete_meta_obj(db: Session, item_id: int):
     if not item:
         raise Exception(f"meta_obj {item_id} 不存在")
     p_item = db.query(models.Product).filter(models.Product.meta_obj_id == item_id).first()
-    # 获取元对象名字
-    item_name = get_meta_obj_once_for_delete(db,item)
-    item_name = item_name.name
     if p_item:
-        raise Exception(f"meta_obj {item_name} 已与商品绑定，不允许删除")
+        raise Exception(f"meta_obj {item_id} 已与商品绑定，不允许删除")
     db.delete(item)
     db.commit()
     db.flush()

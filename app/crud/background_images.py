@@ -1,18 +1,18 @@
-# import time
-# from app import models, schemas
-# from sqlalchemy.orm import Session
-# from app.crud.basic import update_to_db
-#
-#
-# def create_background_images(db: Session, item: schemas.BackgroundCreate):
-#     # sourcery skip: use-named-expression
-#     # 重复名称判断
-#     # 创建
-#     db_item = models.Background(**item.dict(), **{'create_time': int(time.time())})
-#     db.add(db_item)
-#     db.commit()
-#     db.refresh(db_item)
-#     return db_item
+import time
+from app import models, schemas
+from sqlalchemy.orm import Session
+from app.crud.basic import update_to_db
+
+
+def create_background_images(db: Session, item: schemas.BackgroundCreate):
+    # sourcery skip: use-named-expression
+    # 重复名称判断
+    # 创建
+    db_item = models.Background(**item.dict(), **{'create_time': int(time.time())})
+    db.add(db_item)
+    db.commit()
+    db.refresh(db_item)
+    return db_item
 #
 #
 # def get_background_images_once(db: Session, item_id: int):
