@@ -188,11 +188,12 @@ def get_meta_all(db):
 
 def delete_meta_obj(db: Session, item_id: int):
     item = db.query(models.MetaObj).filter(models.MetaObj.id == item_id).first()
+    item_name = item.name
     if not item:
-        raise Exception(f"meta_obj {item_id} 不存在")
+        raise Exception(f"meta_obj {item_name} 不存在")
     p_item = db.query(models.Product).filter(models.Product.meta_obj_id == item_id).first()
     if p_item:
-        raise Exception(f"meta_obj {item_id} 已与商品绑定，不允许删除")
+        raise Exception(f"meta_obj {item_name} 已与商品绑定，不允许删除")
     db.delete(item)
     db.commit()
     db.flush()
