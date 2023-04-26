@@ -23,7 +23,7 @@ def get_effect(db: Session, user, item):
     if item.create_time is not None and item.create_time != -1:
         db_query = db_query.filter(models.Effects.create_time <= item.create_time + 86400)
         db_query = db_query.filter(models.Effects.create_time >= item.create_time)
-    return db_query.order_by(models.Effects.id).all()
+    return db_query.order_by(-models.Effects.create_time).all()
 
 
 def delete_effect(db: Session, item_id):
