@@ -193,7 +193,7 @@ def delete_meta_obj(db: Session, item_id: int):
     item_name = item.name
     p_item = db.query(models.Product).filter(models.Product.meta_obj_id == item_id).first()
     if p_item:
-        raise Exception(f"产品{item_name} 已与商品绑定，不允许删除")
+        raise Exception(f"该产品已与商品绑定，不允许删除")
     db.delete(item)
     db.commit()
     db.flush()
