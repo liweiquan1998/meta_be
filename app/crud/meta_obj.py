@@ -174,7 +174,7 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     if item.creator_id is not None and item.creator_id != -1:
         db_query = db_query.filter(models.MetaObj.creator_id == item.creator_id)
 
-    meta_objs = db_query.order_by(models.MetaObj.create_time).all()
+    meta_objs = db_query.order_by(-models.MetaObj.create_time).all()
     for mo in meta_objs:
         if mo.aigc:
             mo.aigc = mo.aigc.replace('{', '').replace('}', '').split(',')
