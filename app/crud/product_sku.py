@@ -120,7 +120,7 @@ def get_business_product_skus(db: Session, business_id, params: Union[schemas.Pr
     if params.create_time is not None:
         query = query.filter(models.Product.create_time >= params.create_time,
                              models.Product.create_time < params.create_time + 24 * 3600)
-    rows = query.all()
+    rows = query.order_by(-models.Product.create_time).all()
     res = []
 
     def combine(item):
