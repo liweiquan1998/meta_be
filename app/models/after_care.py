@@ -25,7 +25,7 @@ class AfterCare(BaseModel):
     @classmethod
     def get_status_define(cls):
         return {
-            0: "待处理", 1: "已确定", 2: "已拒绝"
+            1: "等待商家确认", 2: "商家同意", 3: "等待商家确认收货", 4: "售后完成"
         }
 
 

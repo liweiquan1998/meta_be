@@ -9,7 +9,7 @@ from utils import t2date, trans_t2date
 def create_order(db: Session, item: schemas.OrderCreate):
     db_item = models.Order(**item.dict())
     db_item.create_time = time.time()
-    db_item.status = 0
+    db_item.status = 1
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -21,12 +21,12 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
     original_status = order_db_item.status
     order_db_item.set_field(update_item.dict())
     after_care = after_care_db_item = False
-    if original_status == -1 and order_db_item.status == 3:  # 商家确认退款
+    if original_status == 4 and order_db_item.status == 4:  # 商家确认退款
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare).\
                             filter(models.AfterCare.id == order_db_item.after_care_id).first()
         after_care_db_item.set_field(update_item.dict())
-        after_care_db_item.status = 1
+        after_care_db_item.status = 2
         order_db_item.close_time = time.time()
     db.commit()
     db.refresh(order_db_item)
