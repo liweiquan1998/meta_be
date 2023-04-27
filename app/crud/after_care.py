@@ -13,6 +13,8 @@ def create_after_care(db: Session, order_id: int,status: int,item: schemas.After
     order_item = order.get_order_once(db, order_id)
     if not order_item:
         raise Exception(407, '创建服务失败，找不到原订单')
+    if order_item.after_care_id:
+        raise Exception(422, '已经创建过异常服务，不可重复')
     db_item.order_id = order_item.id
     db.add(db_item)
     db.commit()
