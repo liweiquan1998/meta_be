@@ -43,6 +43,17 @@ def get_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
     return db_query.order_by(models.LiveAccount.id).all()
 
 
+def get_available_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
+    name = item.name
+    db_query = db.query(models.LiveAccount)
+    if user.id:
+        db_query = db_query.filter(models.LiveAccount.status == 0).filter(models.LiveAccount.creator_id == user.id)
+    if name:
+        search = "%{}%".format(name)
+        db_query = db_query.filter(models.LiveAccount.status == 0).filter(models.LiveAccount.name.like(search))
+    return db_query.order_by(models.LiveAccount.id).all()
+
+
 def delete_live_account(db: Session, item_id: int):
     db.query(models.LiveAccount).filter(models.LiveAccount.id == item_id).delete()
     db.commit()

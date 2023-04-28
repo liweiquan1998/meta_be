@@ -24,6 +24,7 @@ def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate, user: 
         filter(models.LiveAccount.id == item.live_account_id).first()
     if not account:
         raise Exception(f'创建的直播关联账号未找到，请求的直播账号id:{item.live_account_id}')
+    account.status = 1
     account.last_time = int(time.time())
     db.commit()
     db.flush()
