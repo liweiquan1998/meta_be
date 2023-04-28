@@ -23,8 +23,8 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
     after_care = after_care_db_item = False
     if original_status == 4 and order_db_item.status == 4:  # 商家确认退款
         after_care = True
-        after_care_db_item: models.AfterCare = db.query(models.AfterCare).\
-                            filter(models.AfterCare.id == order_db_item.after_care_id).first()
+        after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
+            filter(models.AfterCare.id == order_db_item.after_care_id).first()
         after_care_db_item.set_field(update_item.dict())
         after_care_db_item.status = 2
         order_db_item.close_time = time.time()
@@ -46,7 +46,7 @@ def get_order_once_dict(db: Session, item_id: int):
         res.create_time = t2date(res.create_time)
     if res.deliver_time:
         res.deliver_time = t2date(res.deliver_time)
-    res_dict:dict = res.to_dict()
+    res_dict: dict = res.to_dict()
     business_info: models.User = db.query(models.User).filter(models.User.id == res.business_id).first()
     res_dict['deliver_name'] = business_info.name if business_info else '商家姓名丢失'
     res_dict['deliver_phone'] = business_info.tel_phone if business_info else '商家电话信息丢失'
@@ -93,4 +93,3 @@ def delete_order(db: Session, item_id: int):
     db.commit()
     db.flush()
     return True
-

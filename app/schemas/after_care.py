@@ -1,3 +1,4 @@
+from typing import Optional
 
 from pydantic import BaseModel
 from faker import Faker
@@ -6,10 +7,10 @@ faker = Faker(locale='zh_CN')
 
 
 class AfterCareBase(BaseModel):
-    except_type: str
+    except_type: Optional[str] = None
     order_id: int
-    business_id: int
-    back_reason: str
+    business_id: Optional[int] = None
+    back_reason: Optional[str] = None
 
 
 class AfterCareCreate(AfterCareBase):
@@ -24,12 +25,12 @@ class AfterCareCreate(AfterCareBase):
 
 
 class AfterCareUpdate(AfterCareBase):
-    remark: str
+    remark: Optional[str] = None
     status: int
-    create_time: int
-    deliver_time: int
-    recv_time: int
-    close_time: int
+    create_time: Optional[int] = None
+    deliver_time: Optional[int] = None
+    recv_time: Optional[int] = None
+    close_time: Optional[int] = None
 
 class BusinessAfterCareUpdate(BaseModel):
     remark: str
