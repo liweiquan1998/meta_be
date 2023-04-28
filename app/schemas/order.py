@@ -61,6 +61,7 @@ class OrderUpdate(BaseModel):
     logistic_name: Optional[str] = None
     logistic_order_id: Optional[str] = None
     status: Optional[int] = None
+    after_status: Optional[int] = None
     back_cost: Optional[float] = None
     remark: Optional[str] = None
 

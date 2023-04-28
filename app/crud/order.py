@@ -21,26 +21,19 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
     original_status = order_db_item.status
     order_db_item.set_field(update_item.dict())
     after_care = after_care_db_item = False
-    if original_status == 4 and order_db_item.status == 4:  # 商家拒绝了售后退货
+    if original_status == 4 and order_db_item.status == 4 and update_item.after_status == 4:  # 商家拒绝了售后退货
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
             filter(models.AfterCare.id == order_db_item.after_care_id).first()
         after_care_db_item.status = 4
         after_care_db_item.remark = update_item.remark
         order_db_item.close_time = time.time()
-    if original_status == 4 and order_db_item.status == 4:  # 商家同意了售后退货
+    if original_status == 4 and order_db_item.status == 4 and update_item.after_status == 2:  # 商家同意了售后退货
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
             filter(models.AfterCare.id == order_db_item.after_care_id).first()
         after_care_db_item.set_field(update_item.dict())
         after_care_db_item.status = 2
-        order_db_item.close_time = time.time()
-    if original_status == 4 and order_db_item.status == 4:  # 商家退款成功
-        after_care = True
-        after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
-            filter(models.AfterCare.id == order_db_item.after_care_id).first()
-        after_care_db_item.set_field(update_item.dict())
-        after_care_db_item.status = 4  # 售后完成
         order_db_item.close_time = time.time()
     db.commit()
     db.refresh(order_db_item)
