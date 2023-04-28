@@ -40,7 +40,7 @@ def get_live_account_once(creator_id: int, db: Session = Depends(get_db), user=D
 @sxtimeit
 def get_live_account(get_item: schemas.LiveAccountGet = Depends(), params: Params = Depends(),
                      db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_live_accounts(db, get_item, user), params)
+    return paginate(crud.get_available_live_accounts(db, get_item, user), params)
 
 
 @router_live_account.get("/all", summary="获取所有直播账号列表")
