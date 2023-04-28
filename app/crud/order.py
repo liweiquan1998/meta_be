@@ -26,6 +26,7 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
         after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
             filter(models.AfterCare.id == order_db_item.after_care_id).first()
         after_care_db_item.status = 4
+        after_care_db_item.remark = update_item.remark
         order_db_item.close_time = time.time()
     if original_status == 4 and order_db_item.status == 4:  # 商家确认退款
         after_care = True
