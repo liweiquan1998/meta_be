@@ -21,6 +21,12 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
     original_status = order_db_item.status
     order_db_item.set_field(update_item.dict())
     after_care = after_care_db_item = False
+    if original_status == 2 and order_db_item.status == 2:  # 商家确认退款
+        after_care = True
+        after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
+            filter(models.AfterCare.id == order_db_item.after_care_id).first()
+        after_care_db_item.status = 4
+        order_db_item.close_time = time.time()
     if original_status == 4 and order_db_item.status == 4:  # 商家确认退款
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
