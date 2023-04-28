@@ -21,8 +21,8 @@ def get_orders(params: Params = Depends(), db: Session = Depends(get_db), user=D
 @router_order.get("/{order_id}")
 @web_try()
 @sxtimeit
-def get_order_once(order_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_order_once_dict(db=db, item_id=order_id)
+def get_order_once(update_item: schemas.OrderUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_order_once_dict(db=db, item_id=update_item)
 
 
 @router_order.put("/{order_id}")

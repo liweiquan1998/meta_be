@@ -7,7 +7,7 @@ from app.crud.basic import update_to_db
 def create_live_account(db: Session, item: schemas.LiveAccountCreate):
     # sourcery skip: use-named-expression
     # 创建
-    db_item = models.LiveAccount(**item.dict(), **{'last_time': int(time.time())})
+    db_item = models.LiveAccount(**item.dict(), **{'last_time': int(time.time()),"status": 0})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)

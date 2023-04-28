@@ -12,3 +12,4 @@ class LiveAccount(BaseModel):
     token = Column(String(255), comment='串流token')
     creator_id = Column(Integer, comment='创建者id')
     last_time = Column(Integer, comment='首次创建直播的时间')
+    status = Column(Integer)
