@@ -6,9 +6,9 @@ from fastapi_pagination import Params
 faker = Faker(locale='zh_CN')
 
 class SkuAttr(BaseModel):
-    attribute_name: str
+    attribute_name: Optional[str]
     item: list
-    selected: str
+    selected: Optional[str]
 class ProductSkuBase(BaseModel):
     sku_name: str
     sku_attr: List[SkuAttr]
