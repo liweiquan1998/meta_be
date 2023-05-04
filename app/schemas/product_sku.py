@@ -5,6 +5,7 @@ from fastapi_pagination import Params
 
 faker = Faker(locale='zh_CN')
 
+
 class SkuAttr(BaseModel):
     attribute_name: Optional[str]
     item: list
