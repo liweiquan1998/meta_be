@@ -1,14 +1,17 @@
 from pydantic import BaseModel
 from faker import Faker
-from typing import Optional
+from typing import Optional, List
 from fastapi_pagination import Params
 
 faker = Faker(locale='zh_CN')
 
-
+class SkuAttr(BaseModel):
+    attribute_name: str
+    item: list
+    selected: str
 class ProductSkuBase(BaseModel):
     sku_name: str
-    sku_attr: list
+    sku_attr: List[SkuAttr]
     price: float
     stock: int
     unit: str = "件"
@@ -57,7 +60,7 @@ class ProductSkuCreate(ProductSkuBase):
 
 class Sku(ProductSkuBase):
     desc: str
-    sku_attr: list
+    sku_attr: List[SkuAttr]
 
     class Config:
         orm_mode = True
