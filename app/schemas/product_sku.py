@@ -14,7 +14,7 @@ class SkuAttr(BaseModel):
 
 class ProductSkuBase(BaseModel):
     sku_name: str
-    sku_attr: List[SkuAttr]
+    sku_attr: Optional[List[SkuAttr]] = None
     price: float
     stock: int
     unit: str = "件"
