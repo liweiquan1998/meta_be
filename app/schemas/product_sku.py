@@ -7,9 +7,9 @@ faker = Faker(locale='zh_CN')
 
 
 class SkuAttr(BaseModel):
-    attribute_name: str
-    item: list
-    selected: Optional[str]
+    attribute_name: Optional[str] = None
+    item: Optional[list] = []
+    selected: Optional[str] = None
 
 
 class ProductSkuBase(BaseModel):
