@@ -25,7 +25,6 @@ class ProductSkuBase(BaseModel):
 
 class ProductSkuUpdate(ProductSkuBase):
     sku_name: Optional[str] = None
-    sku_attr: List[SkuAttr]
     price: Optional[float] = None
     stock: Optional[int] = None
     unit: Optional[str] = None
