@@ -32,14 +32,14 @@ def update_order(db: Session, item_id: int, update_item: schemas.OrderUpdate):
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
             filter(models.AfterCare.id == order_db_item.after_care_id).first()
-        after_care_db_item.status = 4
+        after_care_db_item.status = 5
         after_care_db_item.remark = update_item.remark
         order_db_item.close_time = time.time()
     if original_status == 4 and update_item.status == 2 and update_item.after_status == 4:  # 商家拒绝了售后退货
         after_care = True
         after_care_db_item: models.AfterCare = db.query(models.AfterCare). \
             filter(models.AfterCare.id == order_db_item.after_care_id).first()
-        after_care_db_item.status = 4
+        after_care_db_item.status = 6
         after_care_db_item.remark = update_item.remark
         order_db_item.close_time = time.time()
     db.commit()
