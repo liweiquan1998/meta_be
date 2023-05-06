@@ -13,12 +13,12 @@ router_file = APIRouter(
 
 # 单个文件
 
-@router_file.post("/NfsFile", summary="nfs上传文件")
+@router_file.post("/NfsFile/{status}", summary="nfs上传文件")
 @web_try()
 @sxtimeit
-def upload_file(file: UploadFile = File(...)):
+def upload_file(status: int,file: UploadFile = File(...)):
     # , user=Depends(check_user)):
-    return crud.upload_nfs_file(file)
+    return crud.upload_nfs_file(file,status)
 
 
 @router_file.post('/MinioFile', summary="minio上传文件")

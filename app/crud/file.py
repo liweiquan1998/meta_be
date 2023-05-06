@@ -10,8 +10,8 @@ nfs = NfsStorage()
 minio = MinioStorage()
 
 
-def upload_nfs_file(file):
-    return nfs.upload(file)
+def upload_nfs_file(file, status: int):
+    return nfs.upload(file, status)
 
 
 def upload_minio_file(file):
