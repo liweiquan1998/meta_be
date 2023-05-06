@@ -145,6 +145,8 @@ def delete_product_sku(db: Session, item_id: int):
     item = get_sku_once(item_id=item_id, db=db)
     if not item:
         raise Exception(f"删除失败, sku  id {item_id}未找到")
+    if item.status == 1:
+        raise Exception(f"删除失败, sku i {item_id}上架中")
     try:
         delete_product(db, item.product_id)
         delete_sku(db, item.id)
