@@ -27,7 +27,7 @@ def meta_obj_add_username(mo, db: Session):
     return res
 
 
-def create_meta_obj(db: Session, item, creator_id, upload_type=None):
+def create_meta_obj(db: Session, item: schemas.MetaObjCreate, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
     def db_save(_item, more_dict):
         _db_item = models.MetaObj(**item.dict(), **more_dict)
