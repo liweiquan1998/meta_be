@@ -45,10 +45,12 @@ async def create_files(files: List[UploadFile] = File(...)):
     return {'uris': uris}
 
 
-@router_file.post("/NfsFiles", summary="nfs上传多个文件")
-async def create_files(files: List[UploadFile] = File(...)):
+@router_file.post("/NfsFiles/{status}", summary="nfs上传多个文件")
+async def create_files(status: int,files: List[UploadFile] = File(...)):
     # , user=Depends(check_user)):
+    if not status:
+        status = 0
     with ThreadPoolExecutor(max_workers=8) as executor:
-        results = executor.map(crud.upload_nfs_file, files)
+        results = executor.map(crud.upload_nfs_file, (files,status))
     uris = [result['uri'] for result in results]
     return {'uris': uris}
