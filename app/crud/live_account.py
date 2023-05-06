@@ -7,7 +7,7 @@ from app.crud.basic import update_to_db
 def create_live_account(db: Session, item: schemas.LiveAccountCreate):
     # sourcery skip: use-named-expression
     # 创建
-    db_item = models.LiveAccount(**item.dict(), **{'last_time': int(time.time())})
+    db_item = models.LiveAccount(**item.dict(), **{'last_time': int(time.time()),"status": 0})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
@@ -40,6 +40,17 @@ def get_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
     if name:
         search = "%{}%".format(name)
         db_query = db_query.filter(models.LiveAccount.name.like(search))
+    return db_query.order_by(models.LiveAccount.id).all()
+
+
+def get_available_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
+    name = item.name
+    db_query = db.query(models.LiveAccount)
+    if user.id:
+        db_query = db_query.filter(models.LiveAccount.status == 0).filter(models.LiveAccount.creator_id == user.id)
+    if name:
+        search = "%{}%".format(name)
+        db_query = db_query.filter(models.LiveAccount.status == 0).filter(models.LiveAccount.name.like(search))
     return db_query.order_by(models.LiveAccount.id).all()
 
 

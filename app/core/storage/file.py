@@ -23,14 +23,21 @@ class NfsStorage(FileStorage):
         uri = '/file/nfs/' + end_nfs
         return uri
 
-    def upload(self, file) -> dict:
+    def upload(self, file, status) -> dict:
         file_byte = file.file.read()
         file_name = self.get_name(file.filename)
         end_type = file_name.split('.')[-1]
         if end_type == 'pak':
             result = Path('Pak')
         else:
-            result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+            if status == 1:
+                result = Path('MediaAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+            elif status == 2:
+                result = Path('ProductAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+            elif status == 3:
+                result = Path('TTSAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+            else:
+                result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
         sys_path = nfs_prefix / result
         sys_path.mkdir(parents=True, exist_ok=True)
         real_path = sys_path / file_name

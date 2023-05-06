@@ -39,6 +39,13 @@ def create_live_streaming(db: Session, item: schemas.LiveStreamingCreate, user: 
 
 def update_live_streaming(db: Session, item_id: int, update_item: schemas.LiveStreamingUpdate):
     update_item.last_update = int(time.time()) if update_item.status == 1 else None
+    account: models.LiveAccount = db.query(models.LiveAccount). \
+        filter(models.LiveAccount.id == update_item.live_account_id).first()
+    account.last_time = int(time.time())
+    account.status = 1
+    db.commit()
+    db.flush()
+    db.refresh(account)
     return update_to_db(update_item=update_item, db=db, item_id=item_id, model_cls=models.LiveStreaming)
 
 
