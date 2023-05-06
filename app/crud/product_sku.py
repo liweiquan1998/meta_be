@@ -146,7 +146,7 @@ def delete_product_sku(db: Session, item_id: int):
     if not item:
         raise Exception(f"删除失败, sku  id {item_id}未找到")
     if item.status == 1:
-        raise Exception(f"删除失败, sku i {item_id}上架中")
+        raise Exception(f"该商品已经被上架，不可以直接删除")
     try:
         delete_product(db, item.product_id)
         delete_sku(db, item.id)
