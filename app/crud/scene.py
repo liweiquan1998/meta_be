@@ -43,7 +43,7 @@ def get_scenes(db: Session, item: schemas.SceneGet, user: models.User):
         db_query = db_query.filter(models.Scene.tag == item.tag)
     if item.base_id:
         db_query = db_query.filter(models.Scene.base_id == item.base_id)
-    return db_query.order_by(models.Scene.id).all()
+    return db_query.order_by(-models.Scene.create_time).all()
 
 
 def delete_scene(db: Session, item_id: int):
