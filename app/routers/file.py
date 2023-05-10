@@ -50,7 +50,10 @@ async def create_files(status: int, files: List[UploadFile] = File(...)):
     # , user=Depends(check_user)):
     if not status:
         status = 0
+    item_list = []
+    for file in files:
+        item_list.append((file, status))
     with ThreadPoolExecutor(max_workers=8) as executor:
-        results = executor.map(crud.upload_nfs_file, (files, status))
+        results = executor.map(crud.upload_nfs_file, item_list)
     uris = [result['uri'] for result in results]
     return {'uris': uris}
