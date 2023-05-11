@@ -15,6 +15,7 @@ class MetaObjCreate(BaseModel):
     model: Optional[str] = None
     thumbnail: Optional[str] = None
     ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
     tag: Optional[str] = None
 
     height: Optional[float] = None
@@ -58,6 +59,7 @@ class MetaObjByImageCreate(BaseModel):
     kind: Optional[int] = 1
     thumbnail: Optional[str] = None
     ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
 
     class Config:
         schema_extra = {
@@ -212,6 +214,7 @@ class MetaObjUpdate(BaseModel):
     model: Optional[str] = None
     thumbnail: Optional[str] = None
     ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
 
 
 class MetaObjGet(BaseModel):
@@ -223,6 +226,7 @@ class MetaObjGet(BaseModel):
     tag: Union[str, None] = None
     creator_id: Union[int, None] = None
     ue_address: Union[str, None] = None
+    fbx_id: Optional[str] = None
 
 
 class MetaObj(BaseModel):
@@ -239,6 +243,7 @@ class MetaObj(BaseModel):
     creator_id: int
     height: float
     ue_address: str
+    fbx_id: str
 
     class Config:
         orm_mode = True
