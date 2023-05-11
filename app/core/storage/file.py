@@ -37,7 +37,7 @@ class NfsStorage(FileStorage):
             elif status == 3:
                 result = Path('TTSAssets') / f'{time.strftime("%Y%m", time.localtime())}'
             else:
-                result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('SceneAssets')
         sys_path = nfs_prefix / result
         sys_path.mkdir(parents=True, exist_ok=True)
         real_path = sys_path / file_name
