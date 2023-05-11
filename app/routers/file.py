@@ -18,6 +18,7 @@ router_file = APIRouter(
 @sxtimeit
 def upload_file(status: int, file: UploadFile = File(...)):
     # , user=Depends(check_user)):
+
     return crud.upload_nfs_file(file, status)
 
 
