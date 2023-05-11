@@ -82,6 +82,13 @@ class MinioStorage(FileStorage):
         uri = self.get_uri(path)
         return {'uri': uri}
 
+    def upload_byte(self, file_byte, file_name) -> dict:
+        result = Path(time.strftime("%Y%m", time.localtime()))
+        real_path = result / file_name
+        path = FMH.put_file(real_path, file_byte)
+        uri = self.get_uri(path)
+        return {'uri': uri}
+
     def get_content(self, path) -> Tuple[io.BytesIO, str]:
         file_byte = FMH.get_file(path)
         content_type = magic.from_buffer(file_byte, mime=True)
