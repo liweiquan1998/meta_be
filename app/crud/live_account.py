@@ -40,7 +40,7 @@ def get_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
     if name:
         search = "%{}%".format(name)
         db_query = db_query.filter(models.LiveAccount.name.like(search))
-    return db_query.order_by(models.LiveAccount.id).all()
+    return db_query.order_by(-models.LiveAccount.last_time).all()
 
 
 def get_available_live_accounts(db: Session, item: schemas.LiveAccountGet, user):
@@ -51,7 +51,7 @@ def get_available_live_accounts(db: Session, item: schemas.LiveAccountGet, user)
     if name:
         search = "%{}%".format(name)
         db_query = db_query.filter(models.LiveAccount.status == 0).filter(models.LiveAccount.name.like(search))
-    return db_query.order_by(models.LiveAccount.id).all()
+    return db_query.order_by(-models.LiveAccount.last_time).all()
 
 
 def delete_live_account(db: Session, item_id: int):

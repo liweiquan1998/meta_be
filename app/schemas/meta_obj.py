@@ -14,6 +14,8 @@ class MetaObjCreate(BaseModel):
 
     model: Optional[str] = None
     thumbnail: Optional[str] = None
+    ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
     tag: Optional[str] = None
 
     height: Optional[float] = None
@@ -32,6 +34,7 @@ class MetaObjCreate(BaseModel):
                 ],
                 'model': '上传模型时【选填 str】',
                 'thumbnail': '上传模型时【选填 str】',
+                'ue_address': '转换fbx文件时【选填 str】',
                 'tag': '上模型时【选填 str】',
                 'height': '【选填 float】',
             },
@@ -55,6 +58,8 @@ class MetaObjByImageCreate(BaseModel):
     height: Optional[int] = None
     kind: Optional[int] = 1
     thumbnail: Optional[str] = None
+    ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
 
     class Config:
         schema_extra = {
@@ -197,6 +202,7 @@ class MetaObjByModelCreate(MetaObjCreateBase):
                 "kind": 0,
                 "model": "xxxxx",
                 "thumbnail": "xxxxx",
+
                 "tag": "桌子",
                 "creator_id": faker.pyint(1, 10),
                 "height": faker.pyint(1, 100)
@@ -207,6 +213,8 @@ class MetaObjUpdate(BaseModel):
     status: Optional[int] = None
     model: Optional[str] = None
     thumbnail: Optional[str] = None
+    ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
 
 
 class MetaObjGet(BaseModel):
@@ -217,6 +225,8 @@ class MetaObjGet(BaseModel):
     status: Union[int, None] = None
     tag: Union[str, None] = None
     creator_id: Union[int, None] = None
+    ue_address: Union[str, None] = None
+    fbx_id: Optional[str] = None
 
 
 class MetaObj(BaseModel):
@@ -232,6 +242,8 @@ class MetaObj(BaseModel):
     tag: str
     creator_id: int
     height: float
+    ue_address: str
+    fbx_id: str
 
     class Config:
         orm_mode = True

@@ -16,9 +16,10 @@ router_file = APIRouter(
 @router_file.post("/NfsFile/{status}", summary="nfs上传文件")
 @web_try()
 @sxtimeit
-def upload_file(status: int,file: UploadFile = File(...)):
+def upload_file(status: int, file: UploadFile = File(...)):
     # , user=Depends(check_user)):
-    return crud.upload_nfs_file(file,status)
+
+    return crud.upload_nfs_file(file, status)
 
 
 @router_file.post('/MinioFile', summary="minio上传文件")
@@ -46,11 +47,14 @@ async def create_files(files: List[UploadFile] = File(...)):
 
 
 @router_file.post("/NfsFiles/{status}", summary="nfs上传多个文件")
-async def create_files(status: int,files: List[UploadFile] = File(...)):
+async def create_files(status: int, files: List[UploadFile] = File(...)):
     # , user=Depends(check_user)):
     if not status:
         status = 0
+    item_list = []
+    for file in files:
+        item_list.append((file, status))
     with ThreadPoolExecutor(max_workers=8) as executor:
-        results = executor.map(crud.upload_nfs_file, (files,status))
+        results = executor.map(lambda x, y: crud.upload_nfs_file(x, y), files, [status] * len(files))
     uris = [result['uri'] for result in results]
     return {'uris': uris}

@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from faker import Faker
+
 faker = Faker(locale='zh_CN')
 
 
@@ -11,17 +12,15 @@ class SkuBase(BaseModel):
     stock: int
 
 
-
 class SkuCreate(SkuBase):
-
     class Config:
         schema_extra = {
             "example": {
                 "product_id": faker.pyint(),
                 "sku_attr": [],
                 "sku_name": faker.pystr(),
-                "price": faker.pyint(5,2000),
-                "stock" : faker.pyint(1,100),
+                "price": faker.pyint(5, 2000),
+                "stock": faker.pyint(1, 100),
             }}
 
 
@@ -34,5 +33,3 @@ class Sku(SkuBase):
 
     class Config:
         orm_mode = True
-
-

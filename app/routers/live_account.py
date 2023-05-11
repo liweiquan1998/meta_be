@@ -21,8 +21,6 @@ def add_live_account(item: schemas.LiveAccountCreate, db: Session = Depends(get_
     return crud.create_live_account(db=db, item=item)
 
 
-
-
 @router_live_account.get("/{creator_id}/creator_id", summary="由创建者id->获取直播账号信息")
 @web_try()
 @sxtimeit
