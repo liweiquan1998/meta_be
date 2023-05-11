@@ -87,7 +87,7 @@ class MinioStorage(FileStorage):
         real_path = result / file_name
         path = FMH.put_file(real_path, file_byte)
         uri = self.get_uri(path)
-        return {'uri': uri}
+        return uri
 
     def get_content(self, path) -> Tuple[io.BytesIO, str]:
         file_byte = FMH.get_file(path)
