@@ -40,7 +40,7 @@ def nfsTominio(end_nfs):
     file_path = Path(nfs_prefix) / Path(end_nfs)
     file_name = end_nfs.split("/")[-1]
     io_content, _ = nfs.get_content(file_path)
-    minio_uri = minio.upload_byte(io_content,file_name)
+    minio_uri = minio.upload_byte(io_content.read(),file_name)
     return minio_uri
 
 def get_minio_file(path: str):
