@@ -29,13 +29,14 @@ class NfsStorage(FileStorage):
         end_type = file_name.split('.')[-1]
         if end_type == 'pak':
             result = Path('Pak')
+        # result = Path('MediaAssets') / f'{time.strftime("%Y%m", time.localtime())}'
         else:
             if status == 1:
-                result = Path('MediaAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('MediaAssets')
             elif status == 2:
-                result = Path('ProductAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('ProductAssets')
             elif status == 3:
-                result = Path('TTSAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('TTSAssets')
             else:
                 result = Path('SceneAssets')
         sys_path = nfs_prefix / result
