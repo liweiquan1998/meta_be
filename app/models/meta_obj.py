@@ -22,3 +22,4 @@ class MetaObj(BaseModel):
     creator_id = Column(Integer, comment='创建者id')
     height = Column(Float, comment='物品高度')
     ue_address = Column(String(255), comment='ue地址')
+    fbx_id = Column(String(255), comment='fbx_id')
