@@ -52,13 +52,11 @@ def compose_video(db: Session, item: schemas.ComposeVideo):
     res = db.query(models.MarketingContent).filter(models.MarketingContent.id == item.marketing_content_id).first()
     res.status = 3
     db.commit()
-    print(item.video_uri)
-    print("====")
     video_uri = nfsTominio(item.video_uri)
     print(video_uri)
     threading.Thread(target=send_compose_request,
                      args=(video_uri, res.audio_uri, item.marketing_content_id)).start()
-    return False
+    return True
 
 
 def update_marketing_content(db: Session, item_id: int, update_item: schemas.MarketingContentUpdate):
