@@ -38,3 +38,10 @@ def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depe
 @sxtimeit
 def get_tts_blueprint(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_all_tts_blueprint(db, blueprint_id)
+
+
+@router_tts.delete("/{tts_id}", summary="删除tts")
+@web_try()
+@sxtimeit
+def delete_tts(tts_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.delete_tts(db, tts_id)
