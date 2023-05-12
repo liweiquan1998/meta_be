@@ -21,7 +21,7 @@ def add_blueprint(item: schemas.BlueprintCreate, db: Session = Depends(get_db), 
         item.creator_id = user.id
         return crud.create_blueprint(db=db, item=item)
     else:
-        return crud.update_blueprint(db, blueprint.id, schemas.BlueprintUpdate(config_uri=item.config_uri))
+        return crud.update_blueprint(db, blueprint.id, item)
 
 
 @router_blueprint.delete("/{blueprint_id}", summary="删除蓝图")

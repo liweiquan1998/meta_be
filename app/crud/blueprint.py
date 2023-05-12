@@ -21,7 +21,7 @@ def create_blueprint(db: Session, item: schemas.BlueprintCreate):
     return db_item
 
 
-def update_blueprint(db: Session, item_id: int, update_item: schemas.BlueprintUpdate):
+def update_blueprint(db: Session, item_id: int, update_item: schemas.BlueprintCreate):
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.BluePrint)
 
 
