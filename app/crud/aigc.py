@@ -36,6 +36,7 @@ def send_nerf_request(file_list, mo_id, file_type):
 
 
 def send_compose_request(video_uri, audio_uri, marketing_content_id):
+    print("开始调度音视频合成")
     data = {
         "video_uri": video_uri,
         "audio_uri": audio_uri,
@@ -44,4 +45,5 @@ def send_compose_request(video_uri, audio_uri, marketing_content_id):
         "host": host,
         "url": "/marketing_contents/market_minio_content"
     }
+    print(f"data: {data},video_sound_url: {video_sound_url}")
     requests.post(video_sound_url, json=data)
