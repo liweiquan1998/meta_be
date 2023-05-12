@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, JSON
 from app.models.database import BaseModel
 
 
-class BluePrint(BaseModel):
+class TTS(BaseModel):
     __tablename__ = "tts"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     blueprint_id = Column(Integer, index=True, comment='店铺ID', nullable=False)
