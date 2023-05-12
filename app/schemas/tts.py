@@ -7,47 +7,48 @@ from faker import Faker
 faker = Faker(locale='zh_CN')
 
 
-class BlueprintCreate(BaseModel):
-    store_id: int
-    creator_id: Union[int] = None
-    graphdata: Union[str] = None
-    nodedata: Union[str] = None
-    uedata: Union[str] = None
+class TTSCreate(BaseModel):
+    blueprint_id: Union[int] = None
+    pop_id: Union[int] = None
+    status: Union[int] = None
+    config_uri: Union[str] = None
 
     class Config:
         schema_extra = {
             "example": {
-                "store_id": faker.pyint(1, 10),
-                "creator_id": faker.pyint(1, 100),
-                "graphdata": "",
-                "nodedata": "",
-                "uedata": "",
+                "blueprint_id": faker.pyint(1, 10),
+                "pop_id": faker.pyint(1, 100),
+                "status": faker.pyint(1, 10),
+                "config_uri": "",
             }}
 
 
-class BlueprintUpdate(BaseModel):
-    graphdata: Union[str] = None
-    nodedata: Union[str] = None
-    uedata: Union[str] = None
+class TTSUpdate(BaseModel):
+    id: Union[int] = None
+    blueprint_id: Union[int] = None
+    pop_id: Union[int] = None
+    status: Union[int] = None
+    config_uri: Union[str] = None
 
     class Config:
         schema_extra = {
             "example": {
-                "graphdata": "",
-                "nodedata": "",
-                "uedata": "",
+                "id": faker.pyint(1, 10),
+                "blueprint_id": faker.pyint(1, 10),
+                "pop_id": faker.pyint(1, 100),
+                "status": faker.pyint(1, 10),
+                "config_uri": "",
             }}
 
 
-class Blueprint(BaseModel):
+class TTS(BaseModel):
     id: int
-    store_id: int
-    creator_id: int
+    blueprint_id: int
+    pop_id: int
     create_time: int
     update_time: int
-    graphdata: str
-    nodedata: str
-    uedata: str
+    status: int
+    config_uri: str
 
     class Config:
         orm_mode = True
