@@ -12,9 +12,29 @@ router_tts = APIRouter(
 )
 
 
-@router_tts.post("/store", summary="创建tts")
+@router_tts.post("", summary="创建tts")
 @web_try()
 @sxtimeit
-def add_store(item: schemas.TTSCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    item.creator_id = user.id
-    return crud.create_store(db=db, item=item)
+def add_tts(item: schemas.TTSCreate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.create_tts(db=db, item=item)
+
+
+@router_tts.put("/{pop_id}", summary="更新tts")
+@web_try()
+@sxtimeit
+def update_tts(pop_id: int, item: schemas.TTSUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.update_tts(db, pop_id, item)
+
+
+@router_tts.get("", summary="获取tts列表")
+@web_try()
+@sxtimeit
+def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_all_tts(db), params)
+
+
+@router_tts.get("/{blueprint_id}", summary="获取tts详情")
+@web_try()
+@sxtimeit
+def get_tts_blueprint(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_all_tts_blueprint(db, blueprint_id)
