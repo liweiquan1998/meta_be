@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.models.database import Base, engine
 from app.routers.file import router_file
 from app.routers.store import router_store
+from app.routers.tts import router_tts
 from app.routers.user import router_user
 from app.routers.admin import router_admin
 from app.routers.effects import router_effect
@@ -65,6 +66,7 @@ app.include_router(router_live_streaming)
 app.include_router(router_backgrounds)
 app.include_router(router_apparel)
 app.include_router(router_blueprint)
+app.include_router(router_tts)
 
 
 # Get 健康检查
