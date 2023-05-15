@@ -6,3 +6,4 @@ class MetaObjTag(BaseModel):
     __tablename__ = "meta_obj_tag"
     id = Column(Integer, primary_key=True, index=True, comment='id')
     name = Column(String(255), comment='标签')
+    creator_id = Column(Integer, comment='创建者id')

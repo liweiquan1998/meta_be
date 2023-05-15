@@ -130,7 +130,7 @@ def create_meta_obj(db: Session, item: schemas.MetaObjCreate, creator_id, upload
     # 场景素材
     elif item.kind == 0:
         # tag处理
-        create_meta_obj_tag(db, item.tag)
+        create_meta_obj_tag(db, item.tag, creator_id)
         # 保存模型
         db_item = model_save(item)
     else:
