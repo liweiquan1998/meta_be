@@ -17,7 +17,7 @@ def create_meta_obj_tag(db: Session, tag: str, creator_id: int):
 
 
 def get_meta_obj_tag(db: Session,creator_id: int):
-    res = db.query(models.MetaObjTag).filter(models.MetaObjTag).filter(models.MetaObjTag.creator_id == creator_id).all()
+    res: models.MetaObjTag = db.query(models.MetaObjTag).filter(models.MetaObjTag.creator_id == creator_id).all()
     if res:
         return res
     else:
