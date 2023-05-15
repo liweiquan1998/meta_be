@@ -19,21 +19,21 @@ def add_tts(item: schemas.TTSCreate, db: Session = Depends(get_db), user=Depends
     return crud.create_tts(db=db, item=item)
 
 
-@router_tts.put("/{pop_id}", summary="更新tts")
+@router_tts.put("/{pop_id}", summary="更新一个tts")
 @web_try()
 @sxtimeit
 def update_tts(pop_id: int, item: schemas.TTSUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.update_tts(db, pop_id, item)
 
 
-@router_tts.get("", summary="获取tts列表")
+@router_tts.get("", summary="获取全部tts列表")
 @web_try()
 @sxtimeit
 def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     return paginate(crud.get_all_tts(db), params)
 
 
-@router_tts.get("/{blueprint_id}", summary="获取tts详情")
+@router_tts.get("/{blueprint_id}", summary="获取蓝图的tts详情")
 @web_try()
 @sxtimeit
 def get_tts_blueprint(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
