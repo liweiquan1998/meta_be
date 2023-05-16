@@ -35,6 +35,7 @@ class MetaObjCreate(BaseModel):
                 'model': '上传模型时【选填 str】',
                 'thumbnail': '上传模型时【选填 str】',
                 'ue_address': '转换fbx文件时【选填 str】',
+                'fbx_id': '转换fbx文件时【选填 str】',
                 'tag': '上模型时【选填 str】',
                 'height': '【选填 float】',
             },
