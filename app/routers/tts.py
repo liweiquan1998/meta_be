@@ -1,5 +1,9 @@
+import uuid
+
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
+from starlette.background import BackgroundTasks
+from fastapi import Depends, File, UploadFile, Form
 from app import schemas, get_db, crud
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
@@ -15,9 +19,26 @@ router_tts = APIRouter(
 @router_tts.post("", summary="创建tts")
 @web_try()
 @sxtimeit
-def add_tts(item: schemas.TTSCreate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.create_tts(db=db, item=item)
+def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db),
+            user=Depends(check_user)):
+    # 创建素材库的时候，为每一条语音创建两个素材库
+    # 先给这个内容分配一个uuid
+    text_id = uuid.uuid1()
+    # 先创建一个男声的素材
+    sex_1 = 1
+    crud.create_tts(db, item,text_id,sex_1,item.text_content, background_tasks)
+    # 再创建一个女声的素材
+    sex_2 = 0
+    crud.create_tts(db, item, text_id, sex_2, item.text_content, background_tasks)
+    return "123"
 
+
+@router_tts.post("/tts_nfs_content", summary="文件上传nfs并更新数据", )
+@web_try()
+@sxtimeit
+def upload_minio_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
+    # , user=Depends(check_user)):
+    return crud.tts_file_content(file=file, params=params, db=db)
 
 @router_tts.get("", summary="获取全部tts列表")
 @web_try()
@@ -29,5 +50,5 @@ def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depe
 @router_tts.delete("/{text_id}", summary="删除tts")
 @web_try()
 @sxtimeit
-def delete_tts(text_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+def delete_tts(text_id: str, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_tts(db, text_id)

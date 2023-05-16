@@ -47,3 +47,18 @@ def send_compose_request(video_uri, audio_uri, marketing_content_id):
     }
     print(f"data: {data},video_sound_url: {video_sound_url}")
     requests.post(video_sound_url, json=data)
+
+
+def send_tts_request_for_blueprint(content, vh_sex, mc_id):
+    sound_type = "male" if vh_sex == 1 else "female"
+    data = {
+        "content": content,
+        "sound_type": sound_type,
+        "params": {"mc_id": mc_id},
+        "method": "post",
+        "host": host,
+        "url": "/tts/tts_nfs_content"
+    }
+    print(audio_url, data)
+    response = requests.post(audio_url, json=data)
+    return response
