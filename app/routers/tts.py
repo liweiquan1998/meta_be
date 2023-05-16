@@ -26,10 +26,10 @@ def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Sess
     text_id = uuid.uuid1()
     # 先创建一个男声的素材
     sex_1 = 1
-    crud.create_tts(db, item, text_id, sex_1, item.text_content, background_tasks)
+    crud.create_tts(db, item, text_id, sex_1, background_tasks)
     # 再创建一个女声的素材
     sex_2 = 0
-    crud.create_tts(db, item, text_id, sex_2, item.text_content, background_tasks)
+    crud.create_tts(db, item, text_id, sex_2, background_tasks)
     return "123"
 
 

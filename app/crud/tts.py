@@ -10,10 +10,10 @@ from app.crud.aigc import send_tts_request_for_blueprint
 from app.crud.basic import update_to_db
 
 
-def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex,text_content, background_tasks):
+def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex,background_tasks):
     db_item = models.TTS(**item.dict(),
                          **{"create_time": int(time.time()), "update_time": int(time.time()), "text_id": text_id,
-                            "sex": sex,"text_content": text_content,"status": 0})
+                            "sex": sex,"status": 0})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
