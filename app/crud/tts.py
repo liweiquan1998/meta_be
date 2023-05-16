@@ -16,15 +16,6 @@ def create_tts(db: Session, item: schemas.TTSCreate):
     return db_item
 
 
-def update_tts(db: Session, item_id: int, update_item: schemas.TTSUpdate):
-    return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.TTS)
-
-
-def get_tts_once_pop(db: Session, item_id: int):
-    res: models.TTS = db.query(models.TTS).filter(models.TTS.pop_id == item_id).first()
-    return res
-
-
 def get_all_tts(db: Session):
     res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).all()
     return res
