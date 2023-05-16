@@ -26,7 +26,7 @@ def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Sess
     text_id = uuid.uuid1()
     # 先创建一个男声的素材
     sex_1 = 1
-    crud.create_tts(db, item,text_id,sex_1,item.text_content, background_tasks)
+    crud.create_tts(db, item, text_id, sex_1, item.text_content, background_tasks)
     # 再创建一个女声的素材
     sex_2 = 0
     crud.create_tts(db, item, text_id, sex_2, item.text_content, background_tasks)
@@ -36,9 +36,10 @@ def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Sess
 @router_tts.post("/tts_nfs_content", summary="文件上传nfs并更新数据", )
 @web_try()
 @sxtimeit
-def upload_minio_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
+def upload_tts_content(file: UploadFile = File(...), params: str = Form(...), db: Session = Depends(get_db)):
     # , user=Depends(check_user)):
     return crud.tts_file_content(file=file, params=params, db=db)
+
 
 @router_tts.get("", summary="获取全部tts列表")
 @web_try()
