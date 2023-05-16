@@ -19,13 +19,6 @@ def add_tts(item: schemas.TTSCreate, db: Session = Depends(get_db), user=Depends
     return crud.create_tts(db=db, item=item)
 
 
-@router_tts.put("/{id}", summary="更新一个tts")
-@web_try()
-@sxtimeit
-def update_tts(id: int, item: schemas.TTSUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_tts(db, id, item)
-
-
 @router_tts.get("", summary="获取全部tts列表")
 @web_try()
 @sxtimeit
@@ -33,15 +26,8 @@ def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depe
     return paginate(crud.get_all_tts(db), params)
 
 
-@router_tts.get("/{blueprint_id}", summary="获取蓝图的tts详情")
+@router_tts.delete("/{text_id}", summary="删除tts")
 @web_try()
 @sxtimeit
-def get_tts_blueprint(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_all_tts_blueprint(db, blueprint_id)
-
-
-@router_tts.delete("/{tts_id}", summary="删除tts")
-@web_try()
-@sxtimeit
-def delete_tts(tts_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.delete_tts(db, tts_id)
+def delete_tts(text_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.delete_tts(db, text_id)

@@ -20,14 +20,8 @@ def update_tts(db: Session, item_id: int, update_item: schemas.TTSUpdate):
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.TTS)
 
 
-
 def get_tts_once_pop(db: Session, item_id: int):
     res: models.TTS = db.query(models.TTS).filter(models.TTS.pop_id == item_id).first()
-    return res
-
-
-def get_all_tts_blueprint(db: Session,blueprint_id: int):
-    res: List[models.TTS] = db.query(models.TTS).filter(models.TTS.blueprint_id == blueprint_id).order_by(-models.TTS.create_time).all()
     return res
 
 
@@ -36,7 +30,9 @@ def get_all_tts(db: Session):
     return res
 
 
-def delete_tts(db: Session, item_id: int):
-    db.query(models.TTS).filter(models.TTS.id == item_id).delete()
-    db.commit()
+def delete_tts(db: Session, text_id: int):
+    res = List[models.TTS] = db.query(models.TTS).filter(models.TTS.text_id == text_id).all()
+    for item in res:
+        db.delete(item)
+        db.commit()
     return True
