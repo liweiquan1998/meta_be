@@ -19,11 +19,11 @@ def add_tts(item: schemas.TTSCreate, db: Session = Depends(get_db), user=Depends
     return crud.create_tts(db=db, item=item)
 
 
-@router_tts.put("/{pop_id}", summary="更新一个tts")
+@router_tts.put("/{id}", summary="更新一个tts")
 @web_try()
 @sxtimeit
-def update_tts(pop_id: int, item: schemas.TTSUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_tts(db, pop_id, item)
+def update_tts(id: int, item: schemas.TTSUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.update_tts(db, id, item)
 
 
 @router_tts.get("", summary="获取全部tts列表")
