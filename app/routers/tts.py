@@ -30,7 +30,7 @@ def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Sess
     # 再创建一个女声的素材
     sex_2 = 0
     crud.create_tts(db, item, text_id, sex_2, background_tasks)
-    return "123"
+    return "successfully created tts"
 
 
 @router_tts.post("/tts_nfs_content", summary="文件上传nfs并更新数据", )
