@@ -9,6 +9,9 @@ def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: mo
         raise Exception(f'虚拟人性别出错 实为{item.sex} 应为 0:未知 1:男 2:女')
     if item.status not in [0, 1]:
         raise Exception(f'虚拟人状态出错 实为{item.status} 应为 0:禁用 1:启用')
+    one_virtual_human = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == item.name).first()
+    if one_virtual_human:
+        raise Exception(f'虚拟人名字已存在')
     # 创建
     db_item = models.VirtualHuman(**item.dict(), **{'create_time': int(time.time()),
                                                     'creator_id': user.id
