@@ -1,6 +1,5 @@
 import json
 import time
-import uuid
 from typing import List
 
 from app import models, schemas
@@ -41,7 +40,7 @@ def get_tts_by_text_content(db: Session, text_content: str):
 
 
 def delete_tts(db: Session, text_id: str):
-    res = List[models.TTS] = db.query(models.TTS).filter(models.TTS.text_id == uuid.UUID(text_id)).all()
+    res = List[models.TTS] = db.query(models.TTS).filter(models.TTS.text_id == text_id).all()
     for item in res:
         db.delete(item)
         db.commit()

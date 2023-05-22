@@ -22,6 +22,10 @@ router_tts = APIRouter(
 @sxtimeit
 def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db),
             user=Depends(check_user)):
+    tts_list =crud.get_all_tts(db)
+    for tts in tts_list:
+        if tts.text_content == item.text_content:
+            raise Exception("该内容已经存在，请勿重复创建")
     # 创建素材库的时候，为每一条语音创建两个素材库
     # 先给这个内容分配一个uuid
     text_id = uuid.uuid1()
