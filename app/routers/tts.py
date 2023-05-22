@@ -66,7 +66,7 @@ def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depe
                 status = 1
             else:
                 status = 0
-            res.append({"text_content": item.text_content, "text_id": item.text_id, "status": status})
+            res.append({"text_content": item.text_content, "text_id": item.text_id, "status": status, "role": item.role})
     return paginate(res, params)
 
 

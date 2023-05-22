@@ -10,14 +10,15 @@ from app.crud.aigc import send_tts_request_for_blueprint
 from app.crud.basic import update_to_db
 
 
-def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex,background_tasks):
+def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex, background_tasks):
     db_item = models.TTS(**item.dict(),
                          **{"create_time": int(time.time()), "update_time": int(time.time()), "text_id": text_id,
-                            "sex": sex,"status": 0})
+                            "sex": sex, "status": 0})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
-    background_tasks.add_task(func=send_tts_request_for_blueprint, content=item.text_content, vh_sex=db_item.sex, mc_id=db_item.id)
+    background_tasks.add_task(func=send_tts_request_for_blueprint, content=item.text_content, vh_sex=db_item.sex,
+                              mc_id=db_item.id)
     return db_item
 
 
@@ -27,12 +28,14 @@ def get_all_tts(db: Session):
 
 
 def get_tts_by_text_id(db: Session, text_id: str):
-    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(models.TTS.text_id == text_id).all()
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
+        models.TTS.text_id == text_id).all()
     return res
 
 
 def get_tts_by_text_content(db: Session, text_content: str):
-    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(models.TTS.text_content == text_content).all()
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
+        models.TTS.text_content == text_content).all()
     return res
 
 

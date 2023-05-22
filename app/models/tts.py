@@ -12,3 +12,4 @@ class TTS(BaseModel):
     config_uri = Column(String(255), comment='音频文件地址')
     create_time = Column(Integer, comment='创建时间')
     update_time = Column(Integer, comment='更新时间')
+    role = Column(Integer, comment='角色')
