@@ -30,7 +30,15 @@ def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Sess
     # 再创建一个女声的素材
     sex_2 = 0
     crud.create_tts(db, item, text_id, sex_2, background_tasks)
-    return "successfully created tts"
+    res = crud.get_tts_by_text_id(db, str(text_id))
+    return res
+
+
+@router_tts.get("/{text_id}", summary="获取指定uuid的tts")
+@web_try()
+@sxtimeit
+def get_tts_by_text_id(text_id: str, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_tts_by_text_id(db, text_id)
 
 
 @router_tts.post("/tts_nfs_content", summary="文件上传nfs并更新数据", )
