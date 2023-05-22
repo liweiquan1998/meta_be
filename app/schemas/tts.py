@@ -1,6 +1,7 @@
 import time
 from typing import Union
 
+from fastapi_pagination import Params
 from pydantic import BaseModel
 from faker import Faker
 
@@ -17,6 +18,12 @@ class TTSCreate(BaseModel):
                 "text_content": faker.pystr(10),
                 "role": 0
             }}
+
+
+class TTSParams(Params):
+    # 根据key去索引查找
+    key: Union[str] = None
+    role: Union[int] = None
 
 
 class TTS(BaseModel):

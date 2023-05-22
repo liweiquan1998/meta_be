@@ -58,8 +58,18 @@ def upload_tts_content(file: UploadFile = File(...), params: str = Form(...), db
 @router_tts.get("", summary="获取全部tts列表")
 @web_try()
 @sxtimeit
-def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    tts_list = crud.get_all_tts(db)
+def get_tts(params: schemas.TTSParams = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    # 先筛选获取全部的符合条件的tts列表
+    if params.keyword:
+        if params.role:
+            tts_list = crud.get_tts_by_key_and_role(db, params.key, params.role)
+        else:
+            tts_list = crud.get_tts_by_key(db, params.key)
+    else:
+        if params.role:
+            tts_list = crud.get_tts_by_role(db, params.role)
+        else:
+            tts_list = crud.get_all_tts(db)
     content_list = []
     res = []
     for item in tts_list:

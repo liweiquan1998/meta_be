@@ -27,6 +27,24 @@ def get_all_tts(db: Session):
     return res
 
 
+def get_tts_by_key_and_role(db: Session, key: str, role: int):
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
+        models.TTS.text_content.like(f"%{key}%")).filter(models.TTS.role == role).all()
+    return res
+
+
+def get_tts_by_key(db: Session, key: str):
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
+        models.TTS.text_content.like(f"%{key}%")).all()
+    return res
+
+
+def get_tts_by_role(db: Session, role: int):
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
+        models.TTS.role == role).all()
+    return res
+
+
 def get_tts_by_text_id(db: Session, text_id: str):
     res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
         models.TTS.text_id == text_id).all()
