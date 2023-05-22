@@ -1,3 +1,4 @@
+import time
 import uuid
 
 from fastapi_pagination import paginate, Params
@@ -65,7 +66,13 @@ def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depe
             if two_list[0].status == 1 and two_list[1].status == 1:
                 status = 1
             else:
-                status = 0
+                # 判断一下转换是否存在异常(转换时间过长默认为转换失败)
+                now_time = int(time.time())
+                tts_time = now_time - item.create_time
+                if tts_time > 3600:
+                    status = 2
+                else:
+                    status = 0
             res.append({"text_content": item.text_content, "text_id": item.text_id, "status": status, "role": item.role})
     return paginate(res, params)
 
