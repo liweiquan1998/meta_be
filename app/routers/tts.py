@@ -53,7 +53,21 @@ def upload_tts_content(file: UploadFile = File(...), params: str = Form(...), db
 @web_try()
 @sxtimeit
 def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_all_tts(db), params)
+    tts_list = crud.get_all_tts(db)
+    content_list = []
+    res = []
+    for item in tts_list:
+        # 判断一下res中是否存在这个语音信息
+        if item.text_content not in content_list:
+            content_list.append(item.text_content)
+            two_list = crud.get_tts_by_text_content(db, item.text_content)
+            # 判断一下两个语音是否全部生成
+            if two_list[0].status == 1 and two_list[1].status == 1:
+                status = 1
+            else:
+                status = 0
+            res.append({"text_content": item.text_content, "text_id": item.text_id, "status": status})
+    return paginate(res, params)
 
 
 @router_tts.delete("/{text_id}", summary="删除tts")

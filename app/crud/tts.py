@@ -31,6 +31,11 @@ def get_tts_by_text_id(db: Session, text_id: str):
     return res
 
 
+def get_tts_by_text_content(db: Session, text_content: str):
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(models.TTS.text_content == text_content).all()
+    return res
+
+
 def delete_tts(db: Session, text_id: str):
     res = List[models.TTS] = db.query(models.TTS).filter(models.TTS.text_id == text_id).all()
     for item in res:
