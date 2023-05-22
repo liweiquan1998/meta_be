@@ -43,7 +43,9 @@ def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Sess
 @web_try()
 @sxtimeit
 def get_tts_by_text_id(text_id: str, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_tts_by_text_id(db, text_id)
+    res = crud.get_tts_by_text_id(db, text_id)
+    a = uuid.UUID(text_id)
+    return {"res": res, "text_id": text_id,"a": a}
 
 
 @router_tts.post("/tts_nfs_content", summary="文件上传nfs并更新数据", )
