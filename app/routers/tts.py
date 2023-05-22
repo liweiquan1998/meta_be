@@ -60,7 +60,7 @@ def upload_tts_content(file: UploadFile = File(...), params: str = Form(...), db
 @sxtimeit
 def get_tts(params: schemas.TTSParams = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
     # 先筛选获取全部的符合条件的tts列表
-    if params.keyword:
+    if params.key:
         if params.role:
             tts_list = crud.get_tts_by_key_and_role(db, params.key, params.role)
         else:
