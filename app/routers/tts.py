@@ -80,5 +80,5 @@ def get_tts(params: Params = Depends(), db: Session = Depends(get_db), user=Depe
 @router_tts.delete("/{text_id}", summary="删除tts")
 @web_try()
 @sxtimeit
-def delete_tts(text_id: str, db: Session = Depends(get_db), user=Depends(check_user)):
+def delete_tts(text_id, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_tts(db, text_id)
