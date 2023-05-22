@@ -44,7 +44,7 @@ def delete_tts(db: Session, text_id):
     for item in res:
         db.delete(item)
         db.commit()
-    return True
+    return "successful delete"
 
 
 def tts_file_content(file, params, db):
