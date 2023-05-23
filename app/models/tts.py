@@ -5,7 +5,7 @@ from app.models.database import BaseModel
 class TTS(BaseModel):
     __tablename__ = "tts"
     id = Column(Integer, primary_key=True, index=True, comment='id')
-    text_content = Column(JSON, comment='文本内容')
+    text_content = Column(Text, comment='文本内容')
     text_id = Column(String(255), index=True, comment='文本id', nullable=False)
     sex = Column(Integer, comment='语音性别')
     status = Column(Integer, comment='状态')
