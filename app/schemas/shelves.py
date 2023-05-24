@@ -9,12 +9,14 @@ faker = Faker(locale='zh_CN')
 class ShelvesCreate(BaseModel):
     scene_id: int
     data: str
+    shelf_id: str
 
     class Config:
         schema_extra = {
             "example": {
                 "scene_id": faker.pyint(1, 8),
-                "data": "xxxx"}}
+                "data": "xxxx",
+                "shelf_id": "xxxxx"}}
 
 
 class ShelvesUpdate(BaseModel):
@@ -28,6 +30,7 @@ class ShelvesGet(BaseModel):
 class Shelves(BaseModel):
     id: int
     scene_id: int
+    shelf_id: str
     data: str
 
     class Config:

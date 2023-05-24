@@ -38,4 +38,5 @@ def get_shelves(scene_id: int, params: Params = Depends(), db: Session = Depends
 @sxtimeit
 def update_shelves(shelf_id: int, update_item: schemas.ShelvesUpdate, db: Session = Depends(get_db),
                    user=Depends(check_user)):
-    return crud.update_shelves(db=db, item_id=shelf_id, update_item=update_item)
+    one_shelf = crud.get_shelves_once(db=db, item_id=shelf_id)
+    return crud.update_shelves(db=db, item_id=one_shelf.id, update_item=update_item)
