@@ -6,7 +6,7 @@ from utils.valid_name import is_valid_name
 def create_meta_obj_tag(db: Session, tag: str, creator_id: int):
     # sourcery skip: use-named-expression
     tag = is_valid_name(tag, 10)
-    res: models.MetaObjTag = db.query(models.MetaObjTag).filter(models.MetaObjTag.name == tag).first()
+    res: models.MetaObjTag = db.query(models.MetaObjTag).filter(models.MetaObjTag.name == tag).filter(models.MetaObjTag.creator_id == creator_id).first()
     if res:
         return res
     db_item = models.MetaObjTag(**{"name": tag, "creator_id": creator_id})
