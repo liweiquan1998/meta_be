@@ -24,10 +24,10 @@ def update_shelves(db: Session, update_item: schemas.ShelvesUpdate, item_id: int
 
 
 def get_shelves_once(db: Session, item_id: int):
-    res: models.Shelves = db.query(models.Shelves).filter(models.Shelves.scene_id == item_id).first()
+    res: models.Shelves = db.query(models.Shelves).filter(models.Shelves.id == item_id).first()
     return res
 
 
-def get_shelves_all(db: Session):
-    res: List[models.Shelves] = db.query(models.Shelves).order_by(models.Shelves.id).all()
+def get_shelves_all_scene(db: Session, scene_id: int):
+    res: List[models.Shelves] = db.query(models.Shelves).order_by(models.Shelves.id).filter(models.Shelves.scene_id == sence_id).all()
     return res

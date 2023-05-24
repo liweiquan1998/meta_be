@@ -19,23 +19,23 @@ def add_shelves(item: schemas.ShelvesCreate, db: Session = Depends(get_db), user
     return crud.create_shelves(db=db, item=item)
 
 
-@router_shelves.get("/{shelf_id}", summary="获取货架信息")
+@router_shelves.get("/{shelf_id}", summary="获取一个货架信息")
 @web_try()
 @sxtimeit
 def get_shelves_once(shelf_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_shelves_once(db=db, item_id=shelf_id)
 
 
-@router_shelves.get("", summary="获取货架列表")
+@router_shelves.get("/all/{scene_id}", summary="获取一个场景下的货架列表")
 @web_try()
 @sxtimeit
-def get_shelves(params: Params = Depends(), db: Session = Depends(get_db),user=Depends(check_user)):
-    return paginate(crud.get_shelves_all(db), params)
+def get_shelves(scene_id: int, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_shelves_all_scene(db, scene_id), params)
 
 
-@router_shelves.put("/{scene_id}", summary="更新货架信息")
+@router_shelves.put("/{shelf_id}", summary="更新货架信息")
 @web_try()
 @sxtimeit
-def update_shelves(scene_id: int, update_item: schemas.ShelvesUpdate, db: Session = Depends(get_db),
+def update_shelves(shelf_id: int, update_item: schemas.ShelvesUpdate, db: Session = Depends(get_db),
                    user=Depends(check_user)):
-    return crud.update_shelves(db=db, item_id=scene_id, update_item=update_item)
+    return crud.update_shelves(db=db, item_id=shelf_id, update_item=update_item)
