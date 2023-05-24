@@ -26,7 +26,7 @@ def get_shelves_once(shelf_id: int, db: Session = Depends(get_db), user=Depends(
     return crud.get_shelves_once(db=db, item_id=shelf_id)
 
 
-@router_shelves.get("/all/{scene_id}", summary="获取一个场景下的货架列表")
+@router_shelves.get("/scene/{scene_id}", summary="获取一个场景下的货架列表")
 @web_try()
 @sxtimeit
 def get_shelves(scene_id: int, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
