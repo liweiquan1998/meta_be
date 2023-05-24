@@ -22,7 +22,7 @@ router_tts = APIRouter(
 @sxtimeit
 def add_tts(item: schemas.TTSCreate, background_tasks: BackgroundTasks, db: Session = Depends(get_db),
             user=Depends(check_user)):
-    tts_list =crud.get_all_tts(db)
+    tts_list = crud.get_all_tts(db)
     for tts in tts_list:
         if tts.text_content == item.text_content:
             raise Exception("该内容已经存在，请勿重复创建")
@@ -88,7 +88,8 @@ def get_tts(params: schemas.TTSParams = Depends(), db: Session = Depends(get_db)
                     status = 2
                 else:
                     status = 0
-            res.append({"text_content": item.text_content, "text_id": item.text_id, "status": status, "role": item.role})
+            res.append({"text_content": item.text_content, "text_id": item.text_id, "status": status,
+                        "role": item.role, "url_female": two_list[0].config_uri, "url_male": two_list[1].config_uri})
     return paginate(res, params)
 
 
