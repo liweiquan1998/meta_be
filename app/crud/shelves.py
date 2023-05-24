@@ -29,5 +29,5 @@ def get_shelves_once(db: Session, item_id: int):
 
 
 def get_shelves_all_scene(db: Session, scene_id: int):
-    res: List[models.Shelves] = db.query(models.Shelves).order_by(models.Shelves.id).filter(models.Shelves.scene_id == sence_id).all()
+    res: List[models.Shelves] = db.query(models.Shelves).order_by(models.Shelves.id).filter(models.Shelves.scene_id == scene_id).all()
     return res
