@@ -19,11 +19,11 @@ def add_shelves(item: schemas.ShelvesCreate, db: Session = Depends(get_db), user
     return crud.create_shelves(db=db, item=item)
 
 
-@router_shelves.get("/{scene_id}", summary="获取货架信息")
+@router_shelves.get("/{shelf_id}", summary="获取货架信息")
 @web_try()
 @sxtimeit
-def get_shelves_once(scene_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_shelves_once(db=db, item_id=scene_id)
+def get_shelves_once(shelf_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.get_shelves_once(db=db, item_id=shelf_id)
 
 
 @router_shelves.get("", summary="获取货架列表")

@@ -6,6 +6,7 @@ from faker import Faker
 
 faker = Faker(locale='zh_CN')
 
+
 class MetaObjCreate(BaseModel):
     name: str
     type: int

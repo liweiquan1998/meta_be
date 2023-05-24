@@ -24,7 +24,7 @@ def update_shelves(db: Session, update_item: schemas.ShelvesUpdate, item_id: int
 
 
 def get_shelves_once(db: Session, item_id: int):
-    res: models.Shelves = db.query(models.Shelves).filter(models.Shelves.id == item_id).first()
+    res: models.Shelves = db.query(models.Shelves).filter(models.Shelves.scene_id == item_id).first()
     return res
 
 
