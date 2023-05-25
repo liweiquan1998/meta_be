@@ -191,19 +191,24 @@ class MetaObjByVideoCreate(BaseModel):
 
 
 class MetaObjByModelCreate(MetaObjCreateBase):
+    name: Optional[str] = None
     model: str
     thumbnail: str
     kind: Optional[int] = 1
     type: int = 0
+    ue_address: Optional[str] = None
+    fbx_id: Optional[str] = None
 
     class Config:
         schema_extra = {
             "example": {
                 "name": f"{faker.company_prefix()}的摆放物品",
                 "type": 0,
-                "kind": 0,
+                "kind": 1,
                 "model": "xxxxx",
                 "thumbnail": "xxxxx",
+                "ue_address": "xxxxx",
+                "fbx_id": "xxxxx",
 
                 "tag": "桌子",
                 "creator_id": faker.pyint(1, 10),
