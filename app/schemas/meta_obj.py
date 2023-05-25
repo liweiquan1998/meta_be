@@ -198,6 +198,7 @@ class MetaObjByModelCreate(MetaObjCreateBase):
     type: int = 0
     ue_address: Optional[str] = None
     fbx_id: Optional[str] = None
+    tag: Optional[str] = None
 
     class Config:
         schema_extra = {
