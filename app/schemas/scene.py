@@ -40,7 +40,7 @@ class SceneCreate(SceneBase):
 class SceneGet(BaseModel):
     name: Union[str, None] = None
     tag: Union[int, None] = None
-    stage: Union[int, None] = None
+    stage: int = Query(default=..., ge=0, le=2)
 
 
 class SceneUpdate(SceneBase):
