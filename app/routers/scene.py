@@ -31,7 +31,7 @@ def delete_scene(scene_id: int, db: Session = Depends(get_db), user=Depends(chec
 @sxtimeit
 def update_scene(scene_id: int, update_item: schemas.SceneUpdate, db: Session = Depends(get_db),
                  user=Depends(check_user)):
-    return crud.update_scene(db=db, item_id=scene_id, update_item=update_item)
+    return crud.update_scene(db=db, item_id=scene_id, update_item=update_item, user=user)
 
 
 @router_scene.get("", summary="获取场景列表")
