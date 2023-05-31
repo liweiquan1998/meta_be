@@ -57,15 +57,15 @@ def delete_virtual_human(db: Session, item_id: int, user: models.User):
     item: models.VirtualHuman = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
     if not item:
         raise Exception(f"虚拟人 {item_id} 不存在")
-    select_vh_ids_sql = '''SELECT json_array_elements(virtual_human_ids) as vh_id,name
-                                 from scene
-                                 where creator_id='{}'
-                                 '''.format(user.id)
-    vh_ids_rows = db.execute(select_vh_ids_sql).fetchall()
-    if vh_ids_rows:
-        scene_names = [row[1] for row in vh_ids_rows if row[0] == item_id]
-        if scene_names:
-            raise Exception(400, f'该虚拟人已经被{scene_names}使用，不可以在本页面下架')
+    # select_vh_ids_sql = '''SELECT json_array_elements(virtual_human_ids) as vh_id,name
+    #                              from scene
+    #                              where creator_id='{}'
+    #                              '''.format(user.id)
+    # vh_ids_rows = db.execute(select_vh_ids_sql).fetchall()
+    # if vh_ids_rows:
+    #     scene_names = [row[1] for row in vh_ids_rows if row[0] == item_id]
+    #     if scene_names:
+    #         raise Exception(400, f'该虚拟人已经被{scene_names}使用，不可以在本页面下架')
     db.delete(item)
     db.commit()
     db.flush()
