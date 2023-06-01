@@ -47,12 +47,12 @@ def create_product_sku(db: Session, item: schemas.ProductSkuCreate,business_id:i
 def get_shelf_ids_by_creator(db: Session, creator_id: int):
     store_list: List[models.Store] = db.query(models.Store).filter(
         models.Store.creator_id == creator_id).all()
-    shelf_ids = []
+    shelf_sku_ids = []
     for store_item in store_list:
         if store_item.sku_ids:
             sku_ids = json.loads(store_item.sku_ids)
-            shelf_ids.extend([sku_info['shelf_id'] for sku_info in sku_ids])
-    return shelf_ids
+            shelf_sku_ids.extend([sku_info['sku_id'] if 'sku_id' in dict(sku_info).keys() else 0 for sku_info in sku_ids])
+    return shelf_sku_ids
 
 def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSkuUpdate):
     product_param, sku_param = split_params(update_item)
@@ -62,8 +62,8 @@ def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSk
     sku_item_original_status = db_sku_item.status
     db_sku_item.set_field(sku_param)
     if sku_item_original_status == 1 and db_sku_item.status == 0:  # 下架某个商品
-        shelf_ids = get_shelf_ids_by_creator(db, update_item.business_id)
-        if db_sku_item.id in shelf_ids:
+        shelf_sku_ids = get_shelf_ids_by_creator(db, update_item.business_id)
+        if db_sku_item.id in shelf_sku_ids:
             raise Exception(400, '该商品已经被上货架，不可以直接下架')
     db_product_item: models.Product = db.query(models.Product).filter(
         models.Product.id == db_sku_item.product_id).first()
