@@ -44,7 +44,7 @@ def create_product_sku(db: Session, item: schemas.ProductSkuCreate,business_id:i
     return res
 
 # 获取上架sku_ids
-def get_product_sku_once(db: Session, creator_id: int):
+def get_shelf_ids_by_creator(db: Session, creator_id: int):
     store_list: List[models.Store] = db.query(models.Store).filter(
         models.Store.creator_id == creator_id).all()
     shelf_ids = []
@@ -62,7 +62,7 @@ def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSk
     sku_item_original_status = db_sku_item.status
     db_sku_item.set_field(sku_param)
     if sku_item_original_status == 1 and db_sku_item.status == 0:  # 下架某个商品
-        shelf_ids = get_product_sku_once(db, update_item.business_id)
+        shelf_ids = get_shelf_ids_by_creator(db, update_item.business_id)
         if db_sku_item.id in shelf_ids:
             raise Exception(400, '该商品已经被上货架，不可以直接下架')
     db_product_item: models.Product = db.query(models.Product).filter(
