@@ -12,6 +12,12 @@ router_virtual_humans = APIRouter(
 )
 
 
+@router_virtual_humans.post("/check_name", summary="校验虚拟人名称是否重复")
+@web_try()
+@sxtimeit
+def check_virtual_human_name(item: schemas.VirtualHumanCheckName, db: Session = Depends(get_db), user=Depends(check_user)):
+    return crud.check_virtual_human_name(db=db, item=item, user=user)
+
 @router_virtual_humans.post("/virtual_human", summary="创建虚拟人")
 @web_try()
 @sxtimeit

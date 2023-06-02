@@ -4,6 +4,14 @@ from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 
 
+# 校验虚拟人名字
+def check_virtual_human_name(db: Session, item: schemas.VirtualHumanCheckName, user: models.User):
+    one_virtual_human = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == item.name).filter(models.VirtualHuman.creator_id == user.id).first()
+    if (item.id is None and one_virtual_human is not None) or (item.id is not None and one_virtual_human is not None and one_virtual_human.id != item.id):
+        raise Exception(f'虚拟人名字已存在')
+    return True
+
+
 def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: models.User):
     if item.sex not in [0, 1, 2]:
         raise Exception(f'虚拟人性别出错 实为{item.sex} 应为 0:未知 1:男 2:女')

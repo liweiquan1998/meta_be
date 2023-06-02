@@ -5,6 +5,14 @@ from faker import Faker
 
 faker = Faker(locale='zh_CN')
 
+class VirtualHumanCheckName(BaseModel):
+    id: Union[int, None] = None
+    name: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "name": faker.name()}}
 
 class VirtualHumanCreate(BaseModel):
     name: str
