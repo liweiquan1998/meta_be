@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from app import schemas, crud
 from utils import web_try, sxtimeit
 from fastapi import APIRouter, WebSocket, Depends
-from app.common.validation import TokenSchemas, OAuth2PasswordRequestForm, check_user, check_user_id, check_user_ws
+from app.common.validation import TokenSchemas, OAuth2PasswordRequestForm, check_user, check_user_ws, fromat_token_to_user
 from app import get_db, models
 
 
@@ -65,7 +65,7 @@ def get_user_once(item_id: int, db: Session = Depends(get_db)):
 @web_try()
 @sxtimeit
 def get_user_id(token: str, db: Session = Depends(get_db)):
-    return check_user_id(token, db)
+    return fromat_token_to_user(token, db)
 
 
 @router_user.websocket("/ws")
