@@ -94,11 +94,11 @@ def fromat_token_to_user(token: str, db: Session = Depends(get_db)):
     except fastapi.exceptions.HTTPException:
         print(f"user token 错误,token:{token}")
     try:
-        userid, expire_time = check_access_token(token, 'customer')
+        customerid, expire_time = check_access_token(token, 'customer')
         # 验证用户是否存在
-        user = db.query(models.User).filter(models.User.id == userid).first()
-        if user:
-            return int(userid)
+        customer = db.query(models.Customer).filter(models.Customer.id == customerid).first()
+        if customer:
+            return int(customerid)
     except fastapi.exceptions.HTTPException:
         print(f"customer token 错误,token:{token}")
     return None
