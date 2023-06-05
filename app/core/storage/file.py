@@ -29,15 +29,16 @@ class NfsStorage(FileStorage):
         end_type = file_name.split('.')[-1]
         if end_type == 'pak':
             result = Path('Pak')
+        # result = Path('MediaAssets') / f'{time.strftime("%Y%m", time.localtime())}'
         else:
             if status == 1:
-                result = Path('MediaAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('MediaAssets')
             elif status == 2:
-                result = Path('ProductAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('ProductAssets')
             elif status == 3:
-                result = Path('TTSAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('TTSAssets')
             else:
-                result = Path('SceneAssets') / f'{time.strftime("%Y%m", time.localtime())}'
+                result = Path('SceneAssets')
         sys_path = nfs_prefix / result
         sys_path.mkdir(parents=True, exist_ok=True)
         real_path = sys_path / file_name
@@ -46,7 +47,10 @@ class NfsStorage(FileStorage):
                 f.write(file_byte)
             real_path.chmod(0o777)
             uri = self.get_uri(str(result / file_name))
-            return {'uri': uri}
+            if end_type == 'fbx':
+                return {'uri': uri, 'fbx_id': uuid.uuid1()}
+            else:
+                return {'uri': uri}
         except Exception as e:
             raise Exception(400, f"上传文件失败{e}")
 
@@ -77,6 +81,13 @@ class MinioStorage(FileStorage):
         path = FMH.put_file(real_path, file_byte)
         uri = self.get_uri(path)
         return {'uri': uri}
+
+    def upload_byte(self, file_byte, file_name) -> dict:
+        result = Path(time.strftime("%Y%m", time.localtime()))
+        real_path = result / file_name
+        path = FMH.put_file(real_path, file_byte)
+        uri = self.get_uri(path)
+        return uri
 
     def get_content(self, path) -> Tuple[io.BytesIO, str]:
         file_byte = FMH.get_file(path)

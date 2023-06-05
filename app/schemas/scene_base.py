@@ -6,6 +6,7 @@ from faker import Faker
 
 faker = Faker(locale='zh_CN')
 
+
 class SceneBaseGet(BaseModel):
     name: Union[str, None] = None
 

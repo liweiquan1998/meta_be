@@ -83,6 +83,28 @@ def check_user_id(token: str, db: Session = Depends(get_db)):
     except fastapi.exceptions.HTTPException:
         return None
 
+# 解析token获取用户信息
+def fromat_token_to_user(token: str, db: Session = Depends(get_db)):
+    print(token)
+    try:
+        userid, expire_time = check_access_token(token, 'user')
+        # 验证用户是否存在
+        user = db.query(models.User).filter(models.User.id == userid).first()
+        if user:
+            print(int(userid))
+            return int(userid)
+    except fastapi.exceptions.HTTPException:
+        print(f"user token 错误,token:{token}")
+    try:
+        customername, expire_time = check_access_token(token, 'customer')
+        # 验证用户是否存在
+        customer = db.query(models.Customer).filter(models.Customer.username == customername).first()
+        if customer:
+            print(int(customer.id))
+            return int(customer.id)
+    except fastapi.exceptions.HTTPException:
+        print(f"customer token 错误,token:{token}")
+    return None
 
 # 验证
 async def check_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):

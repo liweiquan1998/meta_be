@@ -6,7 +6,6 @@ from utils import web_try, sxtimeit
 from fastapi import Depends
 from fastapi import APIRouter
 
-
 router_shelves = APIRouter(
     prefix="/shelves",
     tags=["shelves-货架管理"],
@@ -20,29 +19,24 @@ def add_shelves(item: schemas.ShelvesCreate, db: Session = Depends(get_db), user
     return crud.create_shelves(db=db, item=item)
 
 
-@router_shelves.get("/{shelf_id}", summary="获取货架信息")
+@router_shelves.get("/{shelf_id}", summary="获取一个货架信息")
 @web_try()
 @sxtimeit
-def get_shelves_once(shelf_id: int, db: Session = Depends(get_db), user=Depends(check_user) ):
+def get_shelves_once(shelf_id: str, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.get_shelves_once(db=db, item_id=shelf_id)
 
 
-@router_shelves.get("/{creator_id}/creator_id", summary="由创建者id->获取货架信息")  # todo  这个还没弄清前端用没用，准备删
+@router_shelves.get("/scene/{scene_id}", summary="获取一个场景下的货架列表")
 @web_try()
 @sxtimeit
-def get_shelves_once(creator_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_shelves_once_by_creator_id(db=db, creator_id=creator_id)
-
-
-@router_shelves.get("", summary="获取货架列表")
-@web_try()
-@sxtimeit
-def get_shelves(get_item: schemas.ShelvesGet = Depends(), params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
-    return paginate(crud.get_shelves(db, get_item), params)
+def get_shelves(scene_id: int, params: Params = Depends(), db: Session = Depends(get_db), user=Depends(check_user)):
+    return paginate(crud.get_shelves_all_scene(db, scene_id), params)
 
 
 @router_shelves.put("/{shelf_id}", summary="更新货架信息")
 @web_try()
 @sxtimeit
-def update_shelves(shelf_id: int, update_item: schemas.ShelvesUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_shelves(db=db, item_id=shelf_id, update_item=update_item)
+def update_shelves(shelf_id: str, update_item: schemas.ShelvesUpdate, db: Session = Depends(get_db),
+                   user=Depends(check_user)):
+    one_shelf = crud.get_shelves_once(db=db, item_id=shelf_id)
+    return crud.update_shelves(db=db, item_id=one_shelf.id, update_item=update_item)

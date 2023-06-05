@@ -18,7 +18,7 @@ router_meta_obj_tag = APIRouter(
 @web_try()
 @sxtimeit
 def get_meta_obj_tag(db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.get_meta_obj_tag(db)
+    return crud.get_meta_obj_tag(db,creator_id=user.id)
 
 
 @router_meta_obj_tag.delete('/{tag_id}', summary='删除元对象标签')

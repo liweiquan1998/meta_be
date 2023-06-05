@@ -4,11 +4,22 @@ from sqlalchemy.orm import Session
 from app.crud.basic import update_to_db
 
 
+# 校验虚拟人名字
+def check_virtual_human_name(db: Session, item: schemas.VirtualHumanCheckName, user: models.User):
+    one_virtual_human = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == item.name).filter(models.VirtualHuman.creator_id == user.id).first()
+    if (item.id is None and one_virtual_human is not None) or (item.id is not None and one_virtual_human is not None and one_virtual_human.id != item.id):
+        raise Exception(f'虚拟人名字已存在')
+    return True
+
+
 def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: models.User):
     if item.sex not in [0, 1, 2]:
         raise Exception(f'虚拟人性别出错 实为{item.sex} 应为 0:未知 1:男 2:女')
     if item.status not in [0, 1]:
         raise Exception(f'虚拟人状态出错 实为{item.status} 应为 0:禁用 1:启用')
+    one_virtual_human = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == item.name).first()
+    if one_virtual_human:
+        raise Exception(f'虚拟人名字已存在')
     # 创建
     db_item = models.VirtualHuman(**item.dict(), **{'create_time': int(time.time()),
                                                     'creator_id': user.id
@@ -54,15 +65,15 @@ def delete_virtual_human(db: Session, item_id: int, user: models.User):
     item: models.VirtualHuman = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
     if not item:
         raise Exception(f"虚拟人 {item_id} 不存在")
-    select_vh_ids_sql = '''SELECT json_array_elements(virtual_human_ids) as vh_id,name
-                                 from scene
-                                 where creator_id='{}'
-                                 '''.format(user.id)
-    vh_ids_rows = db.execute(select_vh_ids_sql).fetchall()
-    if vh_ids_rows:
-        scene_names = [row[1] for row in vh_ids_rows if row[0] == item_id]
-        if scene_names:
-            raise Exception(400, f'该虚拟人已经被{scene_names}使用，不可以在本页面下架')
+    # select_vh_ids_sql = '''SELECT json_array_elements(virtual_human_ids) as vh_id,name
+    #                              from scene
+    #                              where creator_id='{}'
+    #                              '''.format(user.id)
+    # vh_ids_rows = db.execute(select_vh_ids_sql).fetchall()
+    # if vh_ids_rows:
+    #     scene_names = [row[1] for row in vh_ids_rows if row[0] == item_id]
+    #     if scene_names:
+    #         raise Exception(400, f'该虚拟人已经被{scene_names}使用，不可以在本页面下架')
     db.delete(item)
     db.commit()
     db.flush()

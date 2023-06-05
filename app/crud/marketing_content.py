@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from app.core.storage.file import MinioStorage
 from app.crud.basic import update_to_db
 from app.crud.aigc import send_tts_request, send_compose_request
+from app.crud.file import nfsTominio
 
 minio = MinioStorage()
 
@@ -51,8 +52,10 @@ def compose_video(db: Session, item: schemas.ComposeVideo):
     res = db.query(models.MarketingContent).filter(models.MarketingContent.id == item.marketing_content_id).first()
     res.status = 3
     db.commit()
+    video_uri = nfsTominio(item.video_uri)
+    print(video_uri)
     threading.Thread(target=send_compose_request,
-                     args=(item.video_uri, res.audio_uri, item.marketing_content_id)).start()
+                     args=(video_uri, res.audio_uri, item.marketing_content_id)).start()
     return True
 
 

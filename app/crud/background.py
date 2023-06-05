@@ -32,7 +32,7 @@ def get_backgrounds(db: Session, item: schemas.BackgroundGet):
         db_query = db_query.filter(models.Background.name.like(f"%{item.name}%"))
     if item.type is not None:
         db_query = db_query.filter(models.Background.type == item.type)
-    return db_query.order_by(models.Background.id).all()
+    return db_query.order_by(-models.Background.create_time).all()
 
 
 def delete_background(db: Session, item_id: int):

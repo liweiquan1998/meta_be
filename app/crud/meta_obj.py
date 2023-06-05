@@ -27,7 +27,7 @@ def meta_obj_add_username(mo, db: Session):
     return res
 
 
-def create_meta_obj(db: Session, item, creator_id, upload_type=None):
+def create_meta_obj(db: Session, item: schemas.MetaObjCreate, creator_id, upload_type=None):
     # sourcery skip: use-named-expression
     def db_save(_item, more_dict):
         _db_item = models.MetaObj(**item.dict(), **more_dict)
@@ -130,7 +130,7 @@ def create_meta_obj(db: Session, item, creator_id, upload_type=None):
     # 场景素材
     elif item.kind == 0:
         # tag处理
-        create_meta_obj_tag(db, item.tag)
+        create_meta_obj_tag(db, item.tag, creator_id)
         # 保存模型
         db_item = model_save(item)
     else:
@@ -174,7 +174,7 @@ def get_meta_objs(db: Session, item: schemas.MetaObjGet):
     if item.creator_id is not None and item.creator_id != -1:
         db_query = db_query.filter(models.MetaObj.creator_id == item.creator_id)
 
-    meta_objs = db_query.order_by(-models.MetaObj.create_time).all()
+    meta_objs = db_query.order_by(models.MetaObj.tag).order_by(-models.MetaObj.create_time).all()
     for mo in meta_objs:
         if mo.aigc:
             mo.aigc = mo.aigc.replace('{', '').replace('}', '').split(',')

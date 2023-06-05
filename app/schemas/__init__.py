@@ -20,4 +20,5 @@ from app.schemas.background import *
 from app.schemas.apparel import *
 from app.schemas.blueprint import *
 from app.schemas.effects import *
+from app.schemas.tts import *
 

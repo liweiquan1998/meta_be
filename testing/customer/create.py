@@ -4,10 +4,12 @@ import unittest
 import requests
 from faker import Faker
 
+
 def send_request(data):
     r = requests.post(f'{url}/create', json=data)
     print(r.json())
     return r.json()
+
 
 class TestIdCardOcr(unittest.TestCase):
 

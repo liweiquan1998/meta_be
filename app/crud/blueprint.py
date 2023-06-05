@@ -10,7 +10,7 @@ def create_blueprint(db: Session, item: schemas.BlueprintCreate):
         raise Exception(f"店铺id {item.store_id} 已有保存的蓝图")
     if db.query(models.User).filter(models.User.id == item.creator_id).first() is None:
         raise Exception(f"创建者id {item.creator_id} 不存在")
-    if db.query(models.Store).filter(models.Store.id == item.store_id).first() is None:
+    if db.query(models.Scene).filter(models.Store.id == item.store_id).first() is None:
         raise Exception(f"店铺 {item.store_id} 不存在")
     # 创建
     db_item = models.BluePrint(**item.dict(), **{"create_time": int(time.time())
@@ -21,7 +21,7 @@ def create_blueprint(db: Session, item: schemas.BlueprintCreate):
     return db_item
 
 
-def update_blueprint(db: Session, item_id: int, update_item: schemas.BlueprintUpdate):
+def update_blueprint(db: Session, item_id: int, update_item: schemas.BlueprintCreate):
     return update_to_db(update_item=update_item, item_id=item_id, db=db, model_cls=models.BluePrint)
 
 

@@ -1,7 +1,8 @@
 # @author: wanjinhong
 # @remarks: sku模块数据库设计为product+sku,目前逻辑为product和sku,所以先临时针对当前业务设计接口
+import json
 import time
-from typing import Union
+from typing import Union, List
 from app import models, schemas
 from sqlalchemy.orm import Session
 from app.crud.sku import delete_sku, get_sku_once
@@ -42,22 +43,28 @@ def create_product_sku(db: Session, item: schemas.ProductSkuCreate,business_id:i
     res.update(db_sku_item.to_dict())
     return res
 
+# 获取上架sku_ids
+def get_shelf_ids_by_creator(db: Session, creator_id: int):
+    store_list: List[models.Store] = db.query(models.Store).filter(
+        models.Store.creator_id == creator_id).all()
+    shelf_sku_ids = []
+    for store_item in store_list:
+        if store_item.sku_ids:
+            sku_ids = json.loads(store_item.sku_ids)
+            shelf_sku_ids.extend([sku_info['sku_id'] if 'sku_id' in dict(sku_info).keys() else 0 for sku_info in sku_ids])
+    return shelf_sku_ids
 
 def update_product_sku(db: Session, item_id: int, update_item: schemas.ProductSkuUpdate):
     product_param, sku_param = split_params(update_item)
     db_sku_item: models.Sku = db.query(models.Sku).filter(models.Sku.id == item_id).first()
+    if not db_sku_item:
+        raise Exception(400, '商品不存在')
     sku_item_original_status = db_sku_item.status
     db_sku_item.set_field(sku_param)
     if sku_item_original_status == 1 and db_sku_item.status == 0:  # 下架某个商品
-        select_sku_ids_sql = '''SELECT json_array_elements(sku_ids) as sku_id,creator_id
-                             from store
-                             where creator_id='{}'
-                             '''.format(update_item.business_id)
-        sku_ids_rows = db.execute(select_sku_ids_sql).fetchall()
-        if sku_ids_rows:
-            sku_ids = [row[0] for row in sku_ids_rows]
-            if item_id in sku_ids:
-                raise Exception(400, '该商品已经被上货架，不可以直接下架')
+        shelf_sku_ids = get_shelf_ids_by_creator(db, update_item.business_id)
+        if db_sku_item.id in shelf_sku_ids:
+            raise Exception(400, '该商品已经被上货架，不可以直接下架')
     db_product_item: models.Product = db.query(models.Product).filter(
         models.Product.id == db_sku_item.product_id).first()
     db_product_item.set_field(product_param)

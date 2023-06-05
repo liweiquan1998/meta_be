@@ -21,7 +21,7 @@ def add_blueprint(item: schemas.BlueprintCreate, db: Session = Depends(get_db), 
         item.creator_id = user.id
         return crud.create_blueprint(db=db, item=item)
     else:
-        return crud.update_blueprint(db, blueprint.id, schemas.BlueprintUpdate(config_uri=item.config_uri))
+        return crud.update_blueprint(db, blueprint.id, item)
 
 
 @router_blueprint.delete("/{blueprint_id}", summary="删除蓝图")
@@ -30,13 +30,6 @@ def add_blueprint(item: schemas.BlueprintCreate, db: Session = Depends(get_db), 
 def delete_blueprint(blueprint_id: int, db: Session = Depends(get_db), user=Depends(check_user)):
     return crud.delete_blueprint(item_id=blueprint_id, db=db)
 
-
-@router_blueprint.put("/{blueprint_id}", summary="更新蓝图信息")
-@web_try()
-@sxtimeit
-def update_blueprint(blueprint_id: int, update_item: schemas.BlueprintUpdate, db: Session = Depends(get_db),
-                     user=Depends(check_user)):
-    return crud.update_blueprint(db=db, item_id=blueprint_id, update_item=update_item)
 
 
 @router_blueprint.get("/{blueprint_id}", summary="获取蓝图信息")
