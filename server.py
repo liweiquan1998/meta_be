@@ -70,7 +70,7 @@ app.include_router(router_blueprint)
 # Get 健康检查
 @app.get("/ping", description="健康检查")
 def ping():
-    return "pong!!!"
+    return "pong!!!～～～～～"
 
 
 # Get 健康检查
