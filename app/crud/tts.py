@@ -10,9 +10,9 @@ from app.crud.aigc import send_tts_request_for_blueprint
 from app.crud.basic import update_to_db
 
 
-def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex, background_tasks):
+def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex, background_tasks, user: models.User):
     db_item = models.TTS(**item.dict(),
-                         **{"create_time": int(time.time()), "update_time": int(time.time()), "text_id": text_id,
+                         **{"create_time": int(time.time()), "creator_id": user.id, "update_time": int(time.time()), "text_id": text_id,
                             "sex": sex, "status": 0})
     db.add(db_item)
     db.commit()
@@ -22,26 +22,18 @@ def create_tts(db: Session, item: schemas.TTSCreate, text_id, sex, background_ta
     return db_item
 
 
-def get_all_tts(db: Session):
-    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).all()
+def get_all_tts(db: Session, user: models.User):
+    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(models.TTS.creator_id == user.id).all()
     return res
 
 
-def get_tts_by_key_and_role(db: Session, key: str, role: int):
-    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
-        models.TTS.text_content.like(f"%{key}%")).filter(models.TTS.role == role).all()
-    return res
-
-
-def get_tts_by_key(db: Session, key: str):
-    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
-        models.TTS.text_content.like(f"%{key}%")).all()
-    return res
-
-
-def get_tts_by_role(db: Session, role: int):
-    res: List[models.TTS] = db.query(models.TTS).order_by(-models.TTS.create_time).filter(
-        models.TTS.role == role).all()
+def get_tts_by_key_and_role(db: Session, user: models.User, key: str = None, role: int = None):
+    query = db.query(models.TTS).order_by(-models.TTS.create_time)
+    if key is not None:
+        query = query.filter(models.TTS.text_content.like(f"%{key}%"))
+    if role is not None:
+        query = query.filter(models.TTS.role == role)
+    res: List[models.TTS] = query.filter(models.TTS.creator_id == user.id).all()
     return res
 
 
@@ -51,9 +43,9 @@ def get_tts_by_text_id(db: Session, text_id: str):
     return res
 
 
-def get_tts_by_text_content(db: Session, text_content: str):
+def get_tts_by_text_content(db: Session, text_content: str, user: models.User):
     res: List[models.TTS] = db.query(models.TTS).order_by(models.TTS.sex).filter(
-        models.TTS.text_content == text_content).all()
+        models.TTS.text_content == text_content).filter(models.TTS.creator_id == user.id).all()
     return res
 
 

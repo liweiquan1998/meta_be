@@ -1,3 +1,6 @@
+-- ----------------------------
+-- SEQUENCE scene_id_seq for relation
+-- ----------------------------
 DROP SEQUENCE IF EXISTS scene_id_seq;
 
 CREATE SEQUENCE scene_id_seq
@@ -45,3 +48,46 @@ COMMENT ON TABLE "public"."scene" IS '场景';
 -- Primary Key structure for table scene
 -- ----------------------------
 ALTER TABLE "public"."scene" ADD CONSTRAINT "scene_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- SEQUENCE relation_id_seq for relation
+-- ----------------------------
+DROP SEQUENCE IF EXISTS relation_id_seq;
+
+CREATE SEQUENCE relation_id_seq
+START WITH 1
+INCREMENT BY 1
+NO MINVALUE
+NO MAXVALUE
+CACHE 1;
+
+-- ----------------------------
+-- Table structure for relation
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."relation";
+CREATE TABLE "public"."relation" (
+  "id" int4 NOT NULL DEFAULT nextval('relation_id_seq'::regclass),
+  "relation_type" varchar(20) COLLATE "pg_catalog"."default",
+  "usage_scenario" varchar(20) COLLATE "pg_catalog"."default",
+  "subject_id" int4,
+  "entity_id" int4
+)
+;
+ALTER TABLE "public"."relation" OWNER TO "sxwldba";
+COMMENT ON COLUMN "public"."relation"."relation_type" IS '关系类型';
+COMMENT ON COLUMN "public"."relation"."usage_scenario" IS '使用情景';
+COMMENT ON COLUMN "public"."relation"."subject_id" IS '主体id：使用者';
+COMMENT ON COLUMN "public"."relation"."entity_id" IS '实体id：被使用者';
+
+-- ----------------------------
+-- Primary Key structure for table relation
+-- ----------------------------
+ALTER TABLE "public"."relation" ADD CONSTRAINT "relation_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Update Add column for tts
+-- ----------------------------
+ALTER TABLE "public"."tts"
+  ADD COLUMN "creator_id" int4;
+
+COMMENT ON COLUMN "public"."tts"."creator_id" IS '创建者';
