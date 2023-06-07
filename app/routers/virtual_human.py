@@ -36,7 +36,7 @@ def delete_virtual_human(item_id: int, db: Session = Depends(get_db), user=Depen
 @web_try()
 @sxtimeit
 def update_virtual_human(item_id: int, update_item: schemas.VirtualHumanUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_virtual_human(db=db, item_id=item_id, update_item=update_item)
+    return crud.update_virtual_human(db=db, item_id=item_id, update_item=update_item, user=user)
 
 
 @router_virtual_humans.get("", summary="获取虚拟人列表")

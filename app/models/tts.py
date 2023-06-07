@@ -11,5 +11,6 @@ class TTS(BaseModel):
     status = Column(Integer, comment='状态')
     config_uri = Column(String(255), comment='音频文件地址')
     create_time = Column(Integer, comment='创建时间')
+    creator_id = Column(Integer, comment='创建者id')
     update_time = Column(Integer, comment='更新时间')
     role = Column(Integer, comment='角色')

@@ -14,13 +14,13 @@ def create_store(db: Session, item: schemas.StoreCreate):
         raise Exception(f"场景id {item.scene_id} 不存在")
     if db.query(models.User).filter(models.User.id == item.creator_id).first() is None:
         raise Exception(f"创建者id {item.creator_id} 不存在")
-    print(item.dict())
     # 创建
     db_item = models.Store(**item.dict(), **{"create_time": int(time.time()),
                                              "creator_name": db.query(models.User).filter(models.User.id == item.creator_id).first().name})
     db.add(db_item)
     db.commit()
     db.refresh(db_item)
+
     return db_item
 
 
