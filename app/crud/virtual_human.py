@@ -37,7 +37,7 @@ def create_virtual_human(db: Session, item: schemas.VirtualHumanCreate, user: mo
 
 def update_virtual_human(db: Session, item_id: int, update_item: schemas.VirtualHumanUpdate,user: models.User):
     one_virtual_human = db.query(models.VirtualHuman).filter(models.VirtualHuman.name == update_item.name,models.VirtualHuman.creator_id == user.id).first()
-    if one_virtual_human:
+    if one_virtual_human and one_virtual_human.id != item_id:
         raise Exception(f'虚拟人名字已存在')
     return update_to_db(update_item=update_item, db=db, item_id=item_id, model_cls=models.VirtualHuman)
 
@@ -73,15 +73,10 @@ def delete_virtual_human(db: Session, item_id: int, user: models.User):
     item: models.VirtualHuman = db.query(models.VirtualHuman).filter(models.VirtualHuman.id == item_id).first()
     if not item:
         raise Exception(f"虚拟人 {item_id} 不存在")
-    # select_vh_ids_sql = '''SELECT json_array_elements(virtual_human_ids) as vh_id,name
-    #                              from scene
-    #                              where creator_id='{}'
-    #                              '''.format(user.id)
-    # vh_ids_rows = db.execute(select_vh_ids_sql).fetchall()
-    # if vh_ids_rows:
-    #     scene_names = [row[1] for row in vh_ids_rows if row[0] == item_id]
-    #     if scene_names:
-    #         raise Exception(400, f'该虚拟人已经被{scene_names}使用，不可以在本页面下架')
+    flag = db.query(models.Relation).filter(models.Relation.entity_id == item_id).filter(models.Relation.usage_scenario=="store").first()
+    if flag:
+        return {"code":400,"msg":f"虚拟人{item_id}被使用"}
+        # raise Exception(f"虚拟人 {item_id} 被使用")
     db.delete(item)
     db.commit()
     db.flush()

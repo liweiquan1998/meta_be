@@ -1,6 +1,7 @@
 from fastapi_pagination import paginate, Params
 from sqlalchemy.orm import Session
 from app import schemas, get_db, crud
+from app import models
 from app.common.validation import check_user
 from utils import web_try, sxtimeit
 from fastapi import Depends
@@ -17,7 +18,7 @@ router_store = APIRouter(
 @sxtimeit
 def add_store(item: schemas.StoreCreate, db: Session = Depends(get_db), user=Depends(check_user)):
     item.creator_id = user.id
-    return crud.create_store(db=db, item=item)
+    return crud.create_store(db=db, item=item,user=user)
 
 
 @router_store.delete("/{store_id}", summary="删除商铺")
@@ -31,7 +32,7 @@ def delete_store(store_id: int, db: Session = Depends(get_db), user=Depends(chec
 @web_try()
 @sxtimeit
 def update_store(store_id: int, update_item: schemas.StoreUpdate, db: Session = Depends(get_db), user=Depends(check_user)):
-    return crud.update_store(db=db, item_id=store_id, update_item=update_item)
+    return crud.update_store(db=db, item_id=store_id, update_item=update_item,user=user)
 
 
 @router_store.get("/{store_id}", summary="获取商铺信息")

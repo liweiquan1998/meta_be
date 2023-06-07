@@ -20,3 +20,4 @@ from app.models.apparel import *
 from app.models.blueprint import *
 from app.models.effects import *
 from app.models.tts import *
+from app.models.relation import *
